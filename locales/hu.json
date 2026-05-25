@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "404": {
@@ -159,9 +150,6 @@
       "taxes_included_but_shipping_at_checkout": "Tartalmazza az áfát és a szállítási költséget a fizetéskor számítjuk ki",
       "taxes_included_and_shipping_policy_html": "Tartalmazza az adót. <a href=\"{{ link }}\">Szállítási költség</a> fizetéskor számítva.",
       "enter_discount_code": "Ide írd be a kedvezménykódot",
-      "remove_discount": "Távolítsa el a {{ code }}",
-      "discount_duplicate_error_message": "A kedvezménykódot már alkalmazták a kosárra.",
-      "discount_apply_error_message": "A kedvezménykód nem alkalmazható a kosárra.",
       "checkout": "Nézze meg",
       "viewcart": "Kosár megtekintése",
       "empty": "A kosarad jelenleg üres.",

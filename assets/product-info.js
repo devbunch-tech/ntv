@@ -24,14 +24,6 @@ if (!customElements.get("product-info")) {
       return this.dataset.disableSelectedVariantDefault === "true" || false;
     }
 
-    get forceSizeSelection() {
-      return this.dataset.forceSizeSelection === "true" || false;
-    }
-
-    get disableUrlVariantPreselect() {
-      return this.dataset.disableUrlVariantPreselect === "true" || false;
-    }
-
     get enableVariantGroupImages() {
       return this.dataset.enableVariantGroupImages === "true" || false;
     }
@@ -98,11 +90,6 @@ if (!customElements.get("product-info")) {
 
       if (this.disableSelectedVariantDefault) {
         this.handleDisableSelectedVariantDefault();
-      }
-
-      if (this.forceSizeSelection) {
-        this.handleForceSizeSelection();
-        this.initSizeValidation();
       }
 
       this.onVariantChangeUnsubscriber = MinimogEvents.subscribe(
@@ -222,11 +209,6 @@ if (!customElements.get("product-info")) {
         updateSourceFromDestination('Price');
         updateSourceFromDestination("Inventory");
         updateSourceFromDestination("Sku");
-        // Atualiza SKU customizado (bloco barcode)
-        const skuDisplay = this.querySelector('[data-sku-display] .m-product-barcode__value');
-        if (skuDisplay && variant.sku && variant.sku.trim() !== '') {
-          skuDisplay.textContent = variant.sku;
-        }
         updateSourceFromDestination("Availability");
         updateSourceFromDestination("Volume");
         updateSourceFromDestination('PricePerItem');
@@ -430,111 +412,6 @@ if (!customElements.get("product-info")) {
 
       this.setUnavailable();
       this.currentVariant = null;
-    }
-
-    handleForceSizeSelection() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const hasUrlVariant = urlParams.has("variant");
-      if (hasUrlVariant && !this.disableUrlVariantPreselect) return;
-
-      const sizeFields = this.querySelectorAll('[data-picker-field][data-is-size="true"]');
-      if (!sizeFields.length) return;
-
-      sizeFields.forEach((field) => {
-        const pickerType = field.dataset.pickerField;
-        if (pickerType === "select") {
-          const selectBox = field.querySelector("select");
-          if (!selectBox) return;
-          const placeholder = document.createElement("option");
-          placeholder.text = this.dataset.variantOptionNoneText;
-          placeholder.setAttribute("disabled", "");
-          placeholder.setAttribute("selected", "");
-          selectBox.add(placeholder, 0);
-        } else {
-          field.querySelectorAll("input:checked").forEach((input) => {
-            input.checked = false;
-            input.removeAttribute("checked");
-          });
-        }
-
-        field.dataset.selectedValue = "";
-        const selectedLabel = field.querySelector(".option-label--selected");
-        if (selectedLabel) selectedLabel.textContent = "";
-      });
-
-      const addButton = this.getAddToCartButton();
-      if (addButton) {
-        this.addButtonInitialClassName = addButton.className;
-        addButton.classList.remove("m-button--primary");
-        addButton.classList.add("m-button--secondary");
-      }
-    }
-
-    initSizeValidation() {
-      this.addEventListener("submit", this.handleSizeValidation.bind(this), true);
-      this.addEventListener("change", (event) => {
-        const field = event.target.closest('[data-picker-field][data-is-size="true"]');
-        if (!field) return;
-        this.clearSizeFieldError(field);
-        this.refreshAddButtonOutlineState();
-      });
-      MinimogEvents.subscribe(MinimogTheme.pubSubEvents.variantChange, (e) => {
-        if (e.data.sectionId !== this.sectionId) return;
-        this.refreshAddButtonOutlineState();
-      });
-    }
-
-    getAddToCartButton() {
-      const productForm = document.getElementById(`product-form-${this.dataset.sectionId}`);
-      return productForm ? productForm.querySelector('[name="add"]') : null;
-    }
-
-    getSizeFields() {
-      return this.querySelectorAll('[data-picker-field][data-is-size="true"]');
-    }
-
-    isSizeFieldMissing(field) {
-      if (field.dataset.pickerField === "select") {
-        const selectBox = field.querySelector("select");
-        return !selectBox || !selectBox.value;
-      }
-      return !field.querySelector("input:checked");
-    }
-
-    showSizeFieldError(field) {
-      if (field.querySelector(".option-label--error")) return;
-      const title = field.querySelector(".option-label--title");
-      if (!title) return;
-      const err = document.createElement("span");
-      err.className = "option-label--error";
-      err.textContent = this.dataset.selectSizePromptText || this.dataset.variantOptionNoneText;
-      title.insertAdjacentElement("afterend", err);
-    }
-
-    clearSizeFieldError(field) {
-      const err = field.querySelector(".option-label--error");
-      if (err) err.remove();
-    }
-
-    refreshAddButtonOutlineState() {
-      const addButton = this.getAddToCartButton();
-      if (!addButton) return;
-      const hasMissing = Array.from(this.getSizeFields()).some((f) => this.isSizeFieldMissing(f));
-      if (hasMissing) {
-        addButton.classList.remove("m-button--primary");
-        addButton.classList.add("m-button--secondary");
-      } else if (this.addButtonInitialClassName) {
-        addButton.className = this.addButtonInitialClassName;
-      }
-    }
-
-    handleSizeValidation(event) {
-      const missing = Array.from(this.getSizeFields()).filter((f) => this.isSizeFieldMissing(f));
-      if (!missing.length) return;
-      event.preventDefault();
-      event.stopPropagation();
-      missing.forEach((f) => this.showSizeFieldError(f));
-      this.refreshAddButtonOutlineState();
     }
 
     handleVariantGroupImage(variant) {

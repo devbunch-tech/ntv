@@ -8,7 +8,6 @@
   - container: {String} (optional)
   - pagination_class: {String} Pagination extra classes (optional)
   - extra_classes: {String} Extra classes (optional)
-  - arrow_style: {String} Accepted value: default/line (optional)
 
   Usage:
   {% render 'slider-controls',
@@ -19,15 +18,13 @@
     container: '',
     absolute: false,
     pagination_class: '',
-    extra_classes: '',
-    arrow_style: 'default'
+    extra_classes: ''
   %}
 {% endcomment %}
 
 {% liquid
   assign pagination_type = pagination_type | default: 'bullets'
   assign position = position | default: 'bottom-center'
-  assign arrow_style = arrow_style | default: 'default'
 
   if show_pagination == null
     assign show_pagination = true
@@ -67,19 +64,12 @@
   <div class="m-slider-controls__wrapper">
     {% if show_nav %}
       <button
-        class="m-slider-controls__button m-slider-controls__button-prev swiper-button-prev {% if arrow_style == 'line' %}m-slider-controls__button--line{% endif %} {{ nav_class }}"
+        class="m-slider-controls__button m-slider-controls__button-prev swiper-button-prev {{ nav_class }}"
         aria-label="Previous"
       >
-        {% if arrow_style == 'line' %}
-          <svg width="28" height="16" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7 1L1 7L7 13" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M1 7H23" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-          </svg>
-        {% else %}
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        {% endif %}
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     {% endif %}
     {% if show_pagination %}
@@ -87,19 +77,12 @@
     {% endif %}
     {% if show_nav %}
       <button
-        class="m-slider-controls__button m-slider-controls__button-next swiper-button-next {% if arrow_style == 'line' %}m-slider-controls__button--line{% endif %} {{ nav_class }}"
+        class="m-slider-controls__button m-slider-controls__button-next swiper-button-next {{ nav_class }}"
         aria-label="Next"
       >
-        {% if arrow_style == 'line' %}
-          <svg width="28" height="16" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17 1L23 7L17 13" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M23 7H1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
-          </svg>
-        {% else %}
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        {% endif %}
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
       </button>
     {% endif %}
   </div>

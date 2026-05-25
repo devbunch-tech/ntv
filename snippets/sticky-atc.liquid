@@ -15,19 +15,6 @@
   endunless
 
   assign image_field = section.blocks | where: 'type', 'image_field'
-  assign buy_buttons_block = section.blocks | where: 'type', 'buy_buttons' | first
-  assign atc_custom_color = false
-  assign atc_bg_color = '#000000'
-  assign atc_text_color = '#ffffff'
-  assign atc_bg_color_hover = '#333333'
-  assign atc_text_color_hover = '#ffffff'
-  if buy_buttons_block.settings.atc_custom_color
-    assign atc_custom_color = true
-    assign atc_bg_color = buy_buttons_block.settings.atc_bg_color | default: '#000000'
-    assign atc_text_color = buy_buttons_block.settings.atc_text_color | default: '#ffffff'
-    assign atc_bg_color_hover = buy_buttons_block.settings.atc_bg_color_hover | default: '#333333'
-    assign atc_text_color_hover = buy_buttons_block.settings.atc_text_color_hover | default: '#ffffff'
-  endif
 
   assign enable_dynamic_checkout = section.settings.enable_dynamic_checkout
 
@@ -44,19 +31,6 @@
   endif
 -%}
 {{ 'sticky-add-to-cart.css' | asset_url | stylesheet_tag }}
-{% if atc_custom_color %}
-  {% style %}
-    #Sticky-Addtocart-{{ section.id }} .m-add-to-cart {
-      background-color: {{ atc_bg_color }};
-      color: {{ atc_text_color }};
-    }
-    #Sticky-Addtocart-{{ section.id }} .m-add-to-cart:hover,
-    #Sticky-Addtocart-{{ section.id }} .m-add-to-cart:focus {
-      background-color: {{ atc_bg_color_hover }};
-      color: {{ atc_text_color_hover }};
-    }
-  {% endstyle %}
-{% endif %}
 <div
   class="m-sticky-addtocart {{ class }}{% if enable_dynamic_checkout %} enable-dynamic-checkout{% endif %}"
   data-show-on-desktop="{{ section.settings.use_sticky_atc }}"
@@ -86,7 +60,7 @@
             {{ product.title }}
           </h3>
           {% if product.has_only_default_variant %}
-            {% render 'product-prices', use_variant: true, product: product, is_product_page: true %}
+            {% render 'product-prices', use_variant: true, product: product %}
           {% endif %}
         </div>
       </div>

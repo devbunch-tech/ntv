@@ -17,7 +17,7 @@
   {% if has_bg %}
     data-bg="{{ bg_color | color_to_hsl }}"
   {% endif %}
-  style="background-color: {{ bg_color }};--section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px; --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;"
+  style="background-color: {{ bg_color }};--section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px;"
 >
   <div class="{{ container }}{% if has_bg == false %} m-section-my{% else %} m-section-py{% endif %}">
     {% render 'index-section-header', section_settings: section.settings %}
@@ -38,7 +38,7 @@
       "content": "Section header"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "heading",
       "label": "Heading"
     },
@@ -129,26 +129,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

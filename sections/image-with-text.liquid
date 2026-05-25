@@ -51,8 +51,6 @@ m-section m-image-with-text {{ section.settings.custom_class }} m-section-{{ sec
   .m-section-{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --column-gap: {{ section.settings.item_gap }}px;
     --row-gap: {{ section.settings.item_gap | divided_by: 2 }}px;
     --column-gap-mobile: {{ section.settings.item_gap_mobile }}px;
@@ -153,7 +151,7 @@ m-section m-image-with-text {{ section.settings.custom_class }} m-section-{{ sec
       "content": "Section header"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "heading",
       "label": "Heading"
     },
@@ -505,26 +503,6 @@ m-section m-image-with-text {{ section.settings.custom_class }} m-section-{{ sec
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

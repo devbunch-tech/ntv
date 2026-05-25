@@ -11,7 +11,6 @@
       {% liquid
         assign li_class = 'm-menu__item'
         assign is_mega = true
-        assign is_mega_list = false
         assign stretch_width = false
 
         assign title_handle = link.title | handleize
@@ -240,10 +239,6 @@
                     </div>
                   {% endif %}
                 {% endcapture %}
-            {% when 'submenu_list' %}
-              {% assign is_mega = false %}
-              {% assign is_mega_list = true %}
-              {%- capture block_type -%}{%- endcapture -%}
             {% else %}
               {%- capture block_type -%}
               {%- endcapture -%}
@@ -267,18 +262,12 @@
           assign li_class = li_class | append: ' m-menu__item--has-submenu'
 
           unless is_mega
-            unless is_mega_list
-              assign li_class = li_class | append: ' m-menu__item--dropdown'
-            endunless
+            assign li_class = li_class | append: ' m-menu__item--dropdown'
           endunless
         endif
 
         if is_mega and has_child
           assign li_class = li_class | append: ' m-menu__item--mega'
-        endif
-
-        if is_mega_list and has_child
-          assign li_class = li_class | append: ' m-menu__item--mega m-menu__item--mega-list'
         endif
       %}
 
@@ -300,19 +289,14 @@
             class="m-mega-menu{% if is_mega and show_menu_column_divider %} m-show-menu-column-divider{% endif %} m-gradient m-color-{{ section.settings.color_scheme }}"
             style="--total-columns: {{ link.links.size }}"
           >
-            <div class="m-mega-menu__container{% if is_mega or is_mega_list %} {{ dropdown_container | default: 'container' }}{% endif %}">
+            <div class="m-mega-menu__container{% if is_mega %} {{ dropdown_container | default: 'container' }}{% endif %}">
               <div class="m-mega-menu__inner{% if stretch_width == true %} m-mega-menu__inner--stretch-width{% endif %}">
-                {% if is_mega_list %}
-                  {%- assign items_per_col = 5 -%}
-                  {%- assign visual_cols = link.links.size | plus: items_per_col | minus: 1 | divided_by: items_per_col -%}
-                  <span class="m-mega-menu__title">{{ link.title }}</span>
-                {% endif %}
-                <ul class="m-sub-menu m-sub-menu--level-1{% if is_mega and block_type == blank or is_mega_list %} m:w-full m:flex-1{% endif %}"{% if is_mega_list %} style="--visual-cols: {{ visual_cols }}"{% endif %}>
+                <ul class="m-sub-menu m-sub-menu--level-1{% if is_mega and block_type == blank %} m:w-full m:flex-1{% endif %}">
                   {% for childlink in link.links %}
                     <li class="m-sub-menu__item m-sub-menu__item--level-1">
                       <a href="{{ childlink.url }}" class="m-menu__link">
                         {{ childlink.title }}
-                        {% if childlink.links != blank and is_mega == false or childlink.links != blank and is_mega_list %}
+                        {% if is_mega == false and childlink.links != blank %}
                           <span class="m-menu__sub-arrow">
                             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                               <path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z" class=""></path>

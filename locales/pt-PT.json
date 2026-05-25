@@ -1,17 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "404": {
       "title": "Ops!",
-      "button": "Ir para a página inicial",
+      "button": "Vá para casa",
       "subtext": "Página não encontrada!"
     },
     "accessibility": {
@@ -159,10 +150,7 @@
       "taxes_included_but_shipping_at_checkout": "Imposto incluído e frete calculado na finalização da compra",
       "taxes_included_and_shipping_policy_html": "Taxas incluídas. <a href=\"{{ link }}\">Frete</a> calculado na finalização da compra.",
       "enter_discount_code": "Insira o código de desconto aqui",
-      "remove_discount": "Remova {{ code }}",
-      "discount_duplicate_error_message": "O código de desconto já foi aplicado ao seu carrinho.",
-      "discount_apply_error_message": "O código de desconto não pode ser aplicado ao seu carrinho.",
-      "checkout": "Checkout",
+      "checkout": "Confira",
       "viewcart": "Ver carrinho",
       "empty": "Seu carrinho está vazio no momento.",
       "coupon_title": "Adicione um código de desconto",

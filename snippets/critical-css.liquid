@@ -5,11 +5,6 @@
     height: 100%;
     scroll-behavior: smooth;
   }
-  @media (max-width: 767px) {
-    html {
-      font-size: calc({{ settings.type_base_size | default: 16 | minus: 2 }} * 1px);
-    }
-  }
   body {
     margin: 0;
     font-family: var(--font-stack-body);
@@ -21,12 +16,6 @@
     background-color: rgb(var(--color-background));
     position: relative;
     min-height: 100%;
-  }
-  @media (max-width: 767px) {
-    body {
-      font-size: calc({{ settings.type_base_size | default: 16 | minus: 2 }} * 1px);
-      line-height: calc(var(--base-line-height) * 1px - 2px);
-    }
   }
 
   body,
@@ -66,14 +55,13 @@
   h2,
   .h2 {
     font-size: calc(((var(--font-h2-mobile)) / (var(--font-base-size))) * 1rem);
-    /* line-height: 1.267; */
-    line-height: 1.1;
+    line-height: 1.267;
   }
 
   h3,
   .h3 {
-    font-size: calc(((var(--font-h3-mobile)) / (var(--font-base-size))) * 1.2rem);
-    line-height: 1.2;
+    font-size: calc(((var(--font-h3-mobile)) / (var(--font-base-size))) * 1rem);
+    line-height: 1.36;
   }
 
   h4,
@@ -130,8 +118,7 @@
     }
     h3,
     .h3 {
-      /* font-size: calc(((var(--font-h3-desktop)) / (var(--font-base-size))) * 1rem); */
-      font-size: calc(((var(--font-h3-desktop)) / (var(--font-base-size))) * .675rem);
+      font-size: calc(((var(--font-h3-desktop)) / (var(--font-base-size))) * 1rem);
       line-height: 1.278;
     }
     h4,

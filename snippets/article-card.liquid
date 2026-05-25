@@ -5,9 +5,6 @@
   if article_show_date == null
     assign article_show_date = settings.article_show_date
   endif
-  if article_show_author == null
-    assign article_show_author = settings.article_show_author
-  endif
   if article_show_tags == null
     assign article_show_tags = settings.article_show_tags
   endif
@@ -24,7 +21,7 @@
     assign article_excerpt = article.content
   endif
 %}
-{% capture date %}{% render 'date-format-br', date: article.published_at %}{% endcapture %}
+{% capture date %}{{ article.published_at | time_tag: format: 'month_day_year' }}{% endcapture %}
 <div
   class="m-article-card m-article-card--view-{{ view }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}"
   {% if animated %}
@@ -45,19 +42,15 @@
         {%- endfor -%}
       </span>
     {%- endif -%}
-    {%- if article_show_date or article_show_author -%}
-      <span class="m-article-card__date m:text-color-body">
-        {%- if article_show_date -%}{{ date }}{%- endif -%}
-        {%- if article_show_date and article_show_author -%}<span style="margin: 0 8px;">•</span>{%- endif -%}
-        {%- if article_show_author -%}{{ article.author }}{%- endif -%}
-      </span>
+    {%- if article_show_date -%}
+      <span class="m-article-card__date m:text-color-body">{{ date }}</span>
     {%- endif -%}
     <h3 class="m-article-card__title">
       <a href="{{ article.url }}">{{ article.title }}</a>
     </h3>
     {%- if article_show_excerpt and article_excerpt != blank -%}
-      <div class="m-article-card__excerpt md:m:block">
-        {{ article_excerpt | strip_html }}
+      <div class="m-article-card__excerpt m:hidden md:m:block">
+        {{ article_excerpt | strip_html | truncatewords: 15, '...' }}
       </div>
     {%- endif -%}
     {%- if article_show_button -%}

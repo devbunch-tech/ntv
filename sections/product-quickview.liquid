@@ -72,8 +72,7 @@
               product: product,
               show_sale_badge: true,
               sale_badge_type: 'text',
-              price_text_size: 'm:text-xl md:m:text-2xl',
-              is_product_page: true
+              price_text_size: 'm:text-xl md:m:text-2xl'
             %}
           </div>
           <div class="main-product__block main-product__block-description">
@@ -89,6 +88,7 @@
               assign inventory_threshold = settings.low_inventory_threshold
               assign inventory_visibility = settings.inventory_visibility
 
+              assign available = current_variant.available
               assign inventory_quantity = current_variant.inventory_quantity
               assign inventory_policy = current_variant.inventory_policy
 
@@ -173,7 +173,7 @@
             current_variant: current_variant,
             show_quantity_selector: true,
             show_sizeguide: false,
-            enable_dynamic_checkout: false,
+            enable_dynamic_checkout: true,
             template: 'quickview'
           %}
         </div>

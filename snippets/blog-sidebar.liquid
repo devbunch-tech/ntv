@@ -114,31 +114,5 @@
           </div>
         </div>
       {%- endif -%}
-    {%- when 'featured_product' -%}
-      {%- assign featured_product = article.metafields.custom.produto.value -%}
-      {%- if featured_product != blank -%}
-        <div class="m-widget m-widget--featured-product">
-          <h3 class="m-widget__title">{{ block.settings.title }}</h3>
-          <div class="m-widget__content">
-            {%- assign pcard_layout = settings.pcard_layout | default: '1' -%}
-            {%- case pcard_layout -%}
-              {%- when '1' -%}
-                {% render 'product-card-1', product: featured_product %}
-              {%- when '2' -%}
-                {% render 'product-card-2', product: featured_product %}
-              {%- when '3' -%}
-                {% render 'product-card-3', product: featured_product %}
-              {%- when '4' -%}
-                {% render 'product-card-4', product: featured_product %}
-              {%- when '5' -%}
-                {% render 'product-card-5', product: featured_product %}
-              {%- when '6' -%}
-                {% render 'product-card-6', product: featured_product %}
-              {%- else -%}
-                {% render 'product-card-1', product: featured_product %}
-            {%- endcase -%}
-          </div>
-        </div>
-      {%- endif -%}
   {%- endcase -%}
 {%- endfor -%}

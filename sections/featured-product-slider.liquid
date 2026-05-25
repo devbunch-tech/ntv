@@ -2,6 +2,13 @@
 {{ 'featured-slider.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'featured-product-slider.js' | asset_url }}" defer="defer"></script>
 {%- liquid
+  assign bg_color = section.settings.background_color
+  assign has_bg = false
+
+  unless bg_color == 'rgba(0,0,0,0)' or bg_color == blank
+    assign has_bg = true
+  endunless
+
   assign image_ratio = section.settings.pcard_image_ratio
   assign show_vendor = section.settings.show_vendor
   assign pcard_alignment = section.settings.pcard_alignment
@@ -37,8 +44,6 @@
     --items: 1;
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 
@@ -93,10 +98,6 @@
                               render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, pcard_alignment: pcard_alignment, index: forloop.index, animated: animated, animation_effect: animation_effect
                             when '5'
                               render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, pcard_alignment: pcard_alignment, index: forloop.index, animated: animated, animation_effect: animation_effect
-                            when '6'
-                              render 'product-card-6', product: product, image_ratio: image_ratio, show_vendor: show_vendor, pcard_alignment: pcard_alignment, index: forloop.index, animated: animated, animation_effect: animation_effect
-                            when '7'
-                              render 'product-card-7', product: product, image_ratio: image_ratio, show_vendor: show_vendor, pcard_alignment: pcard_alignment, index: forloop.index, animated: animated, animation_effect: animation_effect
                           endcase
                         %}
                       </div>
@@ -188,7 +189,7 @@
       "content": "Section header"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Featured products"
@@ -329,67 +330,6 @@
     },
     {
       "type": "select",
-      "id": "button_style_inside3",
-      "label": "Button style",
-      "default": "m-button--primary",
-      "options": [
-        {
-          "value": "m-button--primary",
-          "label": "Primary"
-        },
-        {
-          "value": "m-button--secondary",
-          "label": "Secondary"
-        },
-        {
-          "value": "m-button--white",
-          "label": "White"
-        },
-        {
-          "value": "m-button--link",
-          "label": "Link"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "button_color_inside3",
-      "label": "Button color",
-      "default": "light",
-      "options": [
-        {
-          "value": "light",
-          "label": "Light"
-        },
-        {
-          "value": "dark",
-          "label": "Dark"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "button_text_hover_color_inside3",
-      "label": "Button text color on hover",
-      "default": "light",
-      "options": [
-        {
-          "value": "light",
-          "label": "Light"
-        },
-        {
-          "value": "dark",
-          "label": "Dark"
-        }
-      ]
-    },
-    {
-      "type": "color_background",
-      "id": "background_gradient_inside3",
-      "label": "Background gradient"
-    },
-    {
-      "type": "select",
       "id": "pcard_layout",
       "label": "Design layout",
       "default": "",
@@ -417,14 +357,6 @@
         {
           "value": "5",
           "label": "Style 5"
-        },
-        {
-          "value": "6",
-          "label": "Style 6"
-        },
-        {
-          "value": "7",
-          "label": "Product card 7"
         }
       ]
     },
@@ -467,10 +399,6 @@
           "label": "1:1"
         },
         {
-          "value": "2/3",
-          "label": "2:3"
-        },
-        {
           "value": "3/4",
           "label": "3:4"
         },
@@ -511,26 +439,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

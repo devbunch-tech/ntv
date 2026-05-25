@@ -44,8 +44,6 @@ if (!customElements.get("media-gallery")) {
         this.enableVariantGroupImages = this.dataset.enableVariantGroupImages === "true";
         this.onlyMedia = this.dataset.onlyMedia === "true";
         this.enableDesktopSlider = this.dataset.enableDesktopSlider === 'true';
-        this.enableMobilePhotoPreview = this.dataset.enableMobilePhotoPreview === "true";
-        this.mediaSize = parseInt(this.dataset.mediaSize) || 0;
         this.variantPicker = this.section.querySelector("variant-picker");
 
         this.setSliderOptions();
@@ -100,13 +98,6 @@ if (!customElements.get("media-gallery")) {
           }
         };
 
-        // Check if compact thumbnails are enabled (mobile or desktop)
-        const compactThumbsMobile =
-          this.domNodes.navSlider && this.domNodes.navSlider.closest('.m-compact-thumbs-mobile');
-        const compactThumbsDesktop =
-          this.domNodes.navSlider && this.domNodes.navSlider.closest('.m-compact-thumbs-desktop');
-        const hasCompactThumbs = compactThumbsMobile || compactThumbsDesktop;
-        
         this.thumbsOptions = {
           loop: false,
           slidesPerView: 5,
@@ -122,17 +113,6 @@ if (!customElements.get("media-gallery")) {
           }
         };
 
-        // Adjust for compact thumbnails to prevent overscroll with smaller sizes
-        if (hasCompactThumbs) {
-          this.thumbsOptions.slidesPerView = 'auto';
-          this.thumbsOptions.freeMode = false;
-          this.thumbsOptions.spaceBetween = compactThumbsMobile ? 3 : 4;
-        }
-
-        const compactGalleryDesktop =
-          this.domNodes.galleryInner &&
-          this.domNodes.galleryInner.closest('.m-compact-gallery-desktop');
-
         switch (this.layout) {
           case 'layout-4':
             break;
@@ -145,7 +125,7 @@ if (!customElements.get("media-gallery")) {
                 768: {
                   slidesPerView: 2,
                   slidesPerGroup: 1,
-                  spaceBetween: compactGalleryDesktop ? 0 : 10,
+                  spaceBetween: 10,
                 },
               }
             }
@@ -173,28 +153,6 @@ if (!customElements.get("media-gallery")) {
                 }
               }
             }
-        }
-
-        // Apply mobile photo preview option (after switch to override for mobile)
-        // Only apply if option is enabled AND there are 2 or more photos
-        if (this.enableMobilePhotoPreview && this.mediaSize > 1) {
-          this.sliderOptions.slidesPerView = 1.025;
-          this.sliderOptions.spaceBetween = 5;
-          this.sliderOptions.loop = false;
-          // Ensure breakpoint at 768px resets to normal behavior (desktop)
-          if (!this.sliderOptions.breakpoints) {
-            this.sliderOptions.breakpoints = {};
-          }
-          if (!this.sliderOptions.breakpoints[768]) {
-            this.sliderOptions.breakpoints[768] = {};
-          }
-          // Only override if not already set by layout
-          if (this.sliderOptions.breakpoints[768].slidesPerView === undefined) {
-            this.sliderOptions.breakpoints[768].slidesPerView = 1;
-          }
-          if (this.sliderOptions.breakpoints[768].spaceBetween === undefined) {
-            this.sliderOptions.breakpoints[768].spaceBetween = 0;
-          }
         }
       }
 

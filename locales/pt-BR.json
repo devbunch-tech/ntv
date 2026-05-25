@@ -1,17 +1,8 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin language editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "general": {
     "404": {
       "title": "Ops!",
-      "button": "Ir para a página inicial",
+      "button": "Vá para casa",
       "subtext": "Página não encontrada!"
     },
     "accessibility": {
@@ -37,12 +28,13 @@
       "seconds": "segundos"
     },
     "breadcrumbs": {
-      "home": "Início",
+      "home": "Lar",
       "home_link_title": "Voltar a página inicial"
     },
     "password_page": {
       "opening_soon": "Aberto em breve"
     },
+    "social": {},
     "search": {
       "title": "Pesquise em nossa loja",
       "placeholder": "Procurar produtos",
@@ -65,7 +57,7 @@
       "products": "Produtos"
     },
     "newsletter_form": {
-      "confirmation": "Prontinho! Você será a primeira a saber das novidades."
+      "confirmation": "Grato pela assinatura"
     },
     "payment": {
       "options": "Opções de pagamento"
@@ -117,14 +109,12 @@
   "blogs": {
     "article": {
       "by_author": "por",
-      "posted_in": "em",
+      "posted_in": "sobre",
       "tags": "Tag:",
       "read_more": "Consulte Mais informação",
-      "related_title": "ARTIGOS RELACIONADOS",
+      "related_title": "Artigos relacionados",
       "next_post": "Próximo",
-      "previous_post": "Anterior",
-      "share": "Compartilhar",
-      "link_copied": "Link copiado!"
+      "previous_post": "Anterior"
     },
     "comments": {
       "title": "Deixe um comentário",
@@ -148,26 +138,19 @@
   },
   "cart": {
     "general": {
-      "title": "Meu Carrinho",
+      "title": "Carrinho de compras",
       "remove": "Remover",
       "note": "Instruções especiais para o vendedor",
       "drawer_note": "Observação",
       "shipping": "Envio",
       "drawer_coupon": "Cupom",
-      "subtotal": "Total",
+      "subtotal": "Subtotal",
       "taxes_and_shipping_at_checkout": "Impostos e frete calculados na finalização da compra",
       "taxes_and_shipping_policy_at_checkout_html": "Impostos e <a href=\"{{ link }}\">frete</a> calculados na finalização da compra",
-      "free_shipping_progress": {
-        "success": "Frete grátis Sul/Sudeste e R$9,90 demais regiões",
-        "remaining": "Faltam {{ amount }} para você ganhar o Frete Grátis"
-      },
       "taxes_included_but_shipping_at_checkout": "Imposto incluído e frete calculado na finalização da compra",
       "taxes_included_and_shipping_policy_html": "Taxas incluídas. <a href=\"{{ link }}\">Frete</a> calculado na finalização da compra.",
-      "enter_discount_code": "Insira um cupom",
-      "remove_discount": "Remova {{ code }}",
-      "discount_duplicate_error_message": "O código de desconto já foi aplicado ao seu carrinho.",
-      "discount_apply_error_message": "Cupom inválido ou não aplicável a este pedido.",
-      "checkout": "Finalizar Compra",
+      "enter_discount_code": "Insira o código de desconto aqui",
+      "checkout": "Confira",
       "viewcart": "Ver carrinho",
       "empty": "Seu carrinho está vazio no momento.",
       "coupon_title": "Adicione um código de desconto",
@@ -194,7 +177,7 @@
       "delivery_error": "Escolha o horário atual ou futuro."
     },
     "label": {
-      "product": "Produto",
+      "product": "produtos",
       "price": "Preço",
       "quantity": "Quantidade",
       "qty": "Quantidade",
@@ -208,13 +191,13 @@
   "collections": {
     "general": {
       "no_matches": "Desculpe, não há produtos nesta coleção",
-      "collection_items": "{{ title }} produtos"
+      "collection_items": "{{ title }} itens"
     },
     "sidebar": {
       "clear_all": "Limpar tudo"
     },
     "toolbar": {
-      "show_filter": "Filtrar",
+      "show_filter": "Filtro",
       "view_layout": "Visualizar",
       "view_list": "Lista",
       "grid_2cloumns": "2 colunas",
@@ -236,7 +219,7 @@
       "phone": "Número de telefone",
       "message": "Mensagem",
       "send": "Envie agora",
-      "post_success": "Prontinho! Você será a primeira a saber das novidades.",
+      "post_success": "Obrigado por nos contatar. Entraremos em contato com você o mais breve possível.",
       "save_infor_message": "Salve meu nome, e-mail e site neste navegador para a próxima vez que eu comentar."
     },
     "ask-form": {
@@ -287,7 +270,7 @@
       "address2": "Apartamento, suíte, etc.",
       "city": "Cidade",
       "country": "País",
-      "province": "Estado",
+      "province": "Província",
       "zip": "Código postal",
       "phone": "Telefone",
       "set_default": "Definir como endereço padrão",
@@ -304,7 +287,7 @@
       "forgot_password": "Esqueceu sua senha?",
       "sign_in": "Entrar",
       "new_customer": "Novo cliente",
-      "alternate_provider_separator": "ou"
+      "alternate_provider_separator":"ou"
     },
     "orders": {
       "title": "Histórico de pedidos",
@@ -354,7 +337,7 @@
       "submit": "Redefinir senha"
     },
     "register": {
-      "title": "Crie sua conta",
+      "title": "Registro",
       "description": "Inscreva-se para obter acesso antecipado à venda, além de novidades, tendências e promoções personalizadas. Para cancelar, clique em cancelar em nossos e-mails.",
       "first_name": "Primeiro nome",
       "last_name": "Sobrenome"
@@ -389,9 +372,7 @@
     },
     "customer": {
       "account": "Conta",
-      "log_in": "Entrar",
-      "log_in_or": "Entre ou",
-      "register": "Cadastre-se"
+      "log_in": "Conecte-se"
     }
   },
   "pages": {
@@ -400,7 +381,7 @@
   "products": {
     "product": {
       "regular_price": "Preço regular",
-      "sold_out": "Esgotado",
+      "sold_out": "Vendido",
       "availability": "Disponibilidade",
       "brand": "Marca",
       "colors": "Cores",
@@ -409,17 +390,16 @@
       "low_stock": "Baixo estoque",
       "backordered": "Pedido em espera",
       "unavailable": "Indisponível",
-      "on_sale": "SALE",
+      "on_sale": "À venda",
       "from_text_html": "De {{ price }}",
       "quantity": "Quantidade",
-      "add_to_cart": "Comprar",
+      "add_to_cart": "Adicionar ao carrinho",
       "add_to_wishlist": "Adicionar a lista de desejos",
       "remove_from_wishlist": "Remover da lista de desejos",
       "add_to_compare": "Comparar",
       "add_a_question": "Faça uma pergunta",
       "remove_from_compare": "Remover da comparação",
-      "quick_add": "Comprar",
-      "view_product": "VER PRODUTO",
+      "quick_add": "Adição rápida",
       "zoom_in": "Mais Zoom",
       "quick_view": "Olhada rápida",
       "collection": "Coleção",
@@ -432,7 +412,7 @@
         "regular_price": "Preço regular",
         "sale_price": "Preço de venda",
         "unit_price": "Preço unitário",
-        "save_price_html": "<span data-sale-value>{{ amount }}</span> OFF"
+        "save_price_html": "Economize <span data-sale-value>{{ amount }}</span>"
       },
       "preorder": "Pedido antecipado",
       "product_quantity": "Quantidade de produto",
@@ -451,8 +431,8 @@
       "social_share": "Compartilhar",
       "copy_link": "Link de cópia",
       "unit_price_label": "Preço unitário",
-      "size_guide": "Tabela de Medidas",
-      "save_html": "<span class=\"m-currency--saved m:font-medium\" data-saved-price>{{ amount }}</span> OFF",
+      "size_guide": "Guia de tamanho",
+      "save_html": "Economize <span class=\"m-currency--saved m:font-medium\" data-saved-price>{{ amount }}</span>",
       "recently_viewed_products": "Produtos vistos recentemente",
       "select_options": "Selecione as opções",
       "sold": "Vendido",
@@ -511,7 +491,7 @@
     }
   },
   "date_formats": {
-    "month_day_year": "%d de %B de %Y"
+    "month_day_year": "%B %d, %Y"
   },
   "recipient": {
     "form": {
@@ -530,22 +510,6 @@
     "contact": {
       "form": {
         "error_heading": "Por favor ajuste o seguinte:"
-      }
-    }
-  },
-  "shopify": {
-    "checkout": {
-      "contact": {
-        "company_label": "CPF",
-        "optional_company_label": "CPF (opcional)"
-      },
-      "field_errors": {
-        "address_company_blank": "Por favor, insira o CPF (necessário para o correios)"
-      },
-      "localized_fields": {
-        "additional_information": {
-          "title": "Preencha o seu CPF/CNPJ para o faturamento"
-        }
       }
     }
   }

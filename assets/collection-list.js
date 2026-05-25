@@ -28,7 +28,6 @@ if (!customElements.get("m-collection-list")) {
       this.paginationType = this.dataset.paginationType;
       this.expanded = this.dataset.expanded === "true";
       this.mobileDisableSlider = this.dataset.mobileDisableSlider === "true";
-      this.mobileColumnStyle = this.dataset.mobileColumnStyle || "default";
 
       this.init();
       document.addEventListener("matchMobile", () => {
@@ -55,11 +54,8 @@ if (!customElements.get("m-collection-list")) {
       const nextButton = slideControls && slideControls.querySelector(".m-slider-controls__button-next");
       const paginationIcon = `<svg width="65px" height="65px" viewBox="0 0 72 72" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><circle class="time" stroke-width="5" fill="none" stroke-linecap="round" cx="33" cy="33" r="28"></circle></svg>`;
 
-      // ALOFT CUSTOM: Use 'auto' slidesPerView on mobile when fullwidth mode
-      const mobilePerView = this.mobileColumnStyle === "fullwidth" ? "auto" : 2;
-
       this.options = {
-        slidesPerView: mobilePerView,
+        slidesPerView: 2,
         loop: true,
         slidesPerGroup: 1,
         showNavigation: true,
@@ -96,9 +92,7 @@ if (!customElements.get("m-collection-list")) {
             slidesPerView: 3,
           },
           768: {
-            // No breakpoint 768px, exibe exatamente a quantidade de itens configurada (this.items),
-            // sem limite máximo de 3 slides — permite mostrar mais coleções no tablet.
-            slidesPerView: parseInt(this.items),
+            slidesPerView: parseInt(this.items) >= 3 ? 3 : parseInt(this.items),
           },
           1280: {
             slidesPerView: this.expanded && this.total > this.items ? parseInt(this.items) + 1 : parseInt(this.items),

@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -21,28 +12,28 @@
         "text-block-1": {
           "type": "textblock",
           "settings": {
-            "title": "Endereço",
-            "content": "<p>Rod. BR-101, Km 353, Jaguaruna - SC<br/>CEP: 88715-000</p>"
+            "title": "Address",
+            "content": "<p>7895 Piermont Dr NE Albuquerque, NM 198866, <a href=\"#\">See Our Stores<\/a><\/p>"
           }
         },
         "text-block-2": {
           "type": "textblock",
           "settings": {
-            "title": "Contato",
-            "content": "<p>+55 48 98831-6743</p><p>sac@oncapreta.com.br</p><p><a href=\"https://wa.me/5548988316743\" target=\"_blank\">WhatsApp: +55 48 98831-6743</a></p>"
+            "title": "Information",
+            "content": "<p>+391 (0)35 2568 4593<\/p><p>hello@domain.com<\/p>"
           }
         },
         "text-block-3": {
           "type": "socialmedia",
           "settings": {
-            "title": "Redes Sociais"
+            "title": "Social Media"
           }
         },
         "text-block-4": {
           "type": "textblock",
           "settings": {
-            "title": "Horário de Atendimento",
-            "content": "<p>Seg / Sex - 7h às 12h - 13h às 17h</p><p>Respondemos todas as mensagens!</p>"
+            "title": "We're Open",
+            "content": "<p>Our store has re-opened for shopping, exchanges<\/p><p>Every day 11am to 7pm<\/p>"
           }
         }
       },
@@ -54,11 +45,11 @@
       ],
       "settings": {
         "container": "container",
-        "title": "Fale Conosco",
-        "description": "<p>Tem alguma dúvida ou sugestão? Entre em contato, teremos prazer em ajudar!</p>",
+        "title": "We would love to hear from you.",
+        "description": "<p>If you’ve got great products your making or looking to work with us then drop us a line.<\/p>",
         "show_name": true,
-        "show_phone": true,
-        "show_signup_email": false,
+        "show_phone": false,
+        "show_signup_email": true,
         "animations": "inherit"
       }
     }

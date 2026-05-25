@@ -13,37 +13,12 @@
   if section.settings.image_1 != blank or section.settings.image_2 != blank or section.settings.image_3 != blank
     assign show_image = true
   endif
-
-  comment
-    Verifica se a seção deve ser ocultada:
-    - Se tiver apenas 1 bloco
-    - E esse bloco for collapsible_text
-    - E o conteúdo estiver vazio (incluindo metafields vazios)
-  endcomment
-  assign hide_section = false
-  if section.blocks.size == 1
-    assign single_block = section.blocks[0]
-    if single_block.type == 'collapsible_text'
-      assign content_value = single_block.settings.collapsible_content
-      comment
-        strip_html remove tags HTML e strip remove espaços
-        Isso verifica se o conteúdo é realmente vazio mesmo com tags HTML
-      endcomment
-      assign content_stripped = content_value | strip_html | strip
-      if content_stripped == blank
-        assign hide_section = true
-      endif
-    endif
-  endif
 %}
 
 {%- style -%}
   #m-section-{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
-    {% if hide_section %}display: none;{% endif %}
   }
 {%- endstyle -%}
 
@@ -112,99 +87,6 @@
                 </a>
               </div>
             {%- endif -%}
-          {%- when 'collapsible_text' -%}
-            {%- if block.settings.collapsible_content != blank -%}
-              {%- liquid
-                assign collapsed_height = block.settings.collapsed_height | default: 220
-                assign fade_height = block.settings.fade_height | default: 90
-                assign animation_duration = block.settings.animation_duration | default: 400
-              -%}
-              <div
-                class="m-richtext__collapsible{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}"
-                data-collapsible-block="{{ block.id }}"
-                style="
-                  --rt-collapsed: {{ collapsed_height }}px;
-                  --rt-fade-height: {{ fade_height }}px;
-                  --rt-duration: {{ animation_duration }}ms;
-                  --rt-bg: var(--color-background-rgb, 255,255,255);
-                  {% if animated %}--animation-order: {{ forloop.index }};{% endif %}
-                "
-                {% if animated %}data-cascade{% endif %}
-                {{ block.shopify_attributes }}
-              >
-                <div class="m-richtext__collapsible-wrapper" data-rt-collapsible data-collapsed="{{ collapsed_height }}">
-                  <div class="m-richtext__collapsible-content rte" id="rt-content-{{ block.id }}">
-                    {{ block.settings.collapsible_content }}
-                  </div>
-                  <div class="m-richtext__collapsible-fade" aria-hidden="true"></div>
-                </div>
-                <div class="m-richtext__collapsible-toggle-wrap">
-                  <button
-                    type="button"
-                    class="m-richtext__collapsible-toggle"
-                    aria-controls="rt-content-{{ block.id }}"
-                    aria-expanded="false"
-                    hidden
-                  >
-                    <span class="m-richtext__collapsible-label-more">{{ block.settings.read_more_label | default: 'Ler mais' }}</span>
-                    <span class="m-richtext__collapsible-label-less">{{ block.settings.read_less_label | default: 'Ler menos' }}</span>
-                  </button>
-                </div>
-              </div>
-            {%- endif -%}
-          {%- when 'instagram_header' -%}
-            {%- if block.settings.instagram_image != blank or block.settings.instagram_text != blank or block.settings.instagram_svg != blank -%}
-              <div
-                class="m-richtext__instagram-header{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}"
-                {% if animated %}
-                  data-cascade
-                  style="--animation-order: {{ forloop.index }};"
-                {% endif %}
-                {{ block.shopify_attributes }}
-              >
-                <div class="m-richtext__instagram-header-container">
-                  {%- if block.settings.instagram_link_url != blank -%}
-                    <a 
-                      href="{{ block.settings.instagram_link_url }}" 
-                      class="m-richtext__instagram-header-link-wrapper"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                  {%- endif -%}
-                      {%- if block.settings.instagram_image != blank -%}
-                        <div class="m-richtext__instagram-header-image-wrapper">
-                          <img 
-                            src="{{ block.settings.instagram_image | image_url: width: 50 }}" 
-                            alt="{{ block.settings.instagram_text | default: 'Instagram' }}"
-                            class="m-richtext__instagram-header-image"
-                            loading="lazy"
-                          >
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.instagram_text != blank -%}
-                        <h4 class="heading h3 m-richtext__instagram-header-text">{{ block.settings.instagram_text }}</h4>
-                      {%- endif -%}
-                      {%- if block.settings.instagram_svg != blank -%}
-                        <div class="m-richtext__instagram-header-svg">
-                          {{ block.settings.instagram_svg }}
-                        </div>
-                      {%- endif -%}
-                  {%- if block.settings.instagram_link_url != blank -%}
-                    </a>
-                  {%- endif -%}
-                  {%- if block.settings.instagram_link_text != blank and block.settings.instagram_link_url != blank -%}
-                    <a 
-                      href="{{ block.settings.instagram_link_url }}" 
-                      class="m-richtext__instagram-header-link"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {{ block.settings.instagram_link_text }}
-                    </a>
-                  {%- endif -%}
-                </div>
-              </div>
-            {%- endif -%}
         {%- endcase -%}
       {%- endfor -%}
     </div>
@@ -233,97 +115,6 @@
     </div>
   {% endif %}
 </section>
-
-{%- comment -%} JavaScript para blocos colapsáveis {%- endcomment -%}
-{%- for block in section.blocks -%}
-  {%- if block.type == 'collapsible_text' and block.settings.collapsible_content != blank -%}
-    <script>
-      (function() {
-        var blockEl = document.querySelector('[data-collapsible-block="{{ block.id }}"]');
-        if (!blockEl) return;
-
-        var wrapper = blockEl.querySelector('[data-rt-collapsible]');
-        var content = wrapper && wrapper.querySelector('.m-richtext__collapsible-content');
-        var toggle = blockEl.querySelector('.m-richtext__collapsible-toggle');
-        if (!wrapper || !content || !toggle) return;
-
-        var collapsedHeight = parseInt(wrapper.getAttribute('data-collapsed'), 10) || 220;
-
-        function setMax(h) {
-          wrapper.style.setProperty('--rt-max-height', h + 'px');
-        }
-        function needsTruncate() {
-          return content.scrollHeight > collapsedHeight + 1;
-        }
-        function applyState(expanded) {
-          if (expanded) {
-            wrapper.classList.add('is-expanded');
-            toggle.setAttribute('aria-expanded', 'true');
-            setMax(content.scrollHeight);
-          } else {
-            wrapper.classList.remove('is-expanded');
-            toggle.setAttribute('aria-expanded', 'false');
-            setMax(collapsedHeight);
-          }
-        }
-        function measureAndInit() {
-          if (!needsTruncate()) {
-            toggle.hidden = true;
-            setMax(content.scrollHeight);
-            wrapper.classList.add('is-expanded');
-            return;
-          }
-          toggle.hidden = false;
-          if (toggle.getAttribute('aria-expanded') === 'true') {
-            setMax(content.scrollHeight);
-            wrapper.classList.add('is-expanded');
-          } else {
-            setMax(collapsedHeight);
-            wrapper.classList.remove('is-expanded');
-          }
-        }
-
-        requestAnimationFrame(measureAndInit);
-
-        toggle.addEventListener('click', function() {
-          var expanded = toggle.getAttribute('aria-expanded') === 'true';
-          applyState(!expanded);
-        });
-
-        if ('ResizeObserver' in window) {
-          var ro = new ResizeObserver(function() {
-            if (toggle.getAttribute('aria-expanded') === 'true') {
-              setMax(content.scrollHeight);
-            } else {
-              setMax(collapsedHeight);
-            }
-            if (!needsTruncate()) {
-              toggle.hidden = true;
-              wrapper.classList.add('is-expanded');
-              setMax(content.scrollHeight);
-            } else {
-              toggle.hidden = false;
-            }
-          });
-          ro.observe(content);
-        }
-
-        window.addEventListener('resize', function() {
-          if (toggle.getAttribute('aria-expanded') === 'true') {
-            setMax(content.scrollHeight);
-          }
-        });
-
-        document.addEventListener('shopify:block:select', function(e) {
-          if (e && e.detail && e.detail.blockId === '{{ block.id }}') {
-            measureAndInit();
-          }
-        });
-      })();
-    </script>
-  {%- endif -%}
-{%- endfor -%}
-
 {% schema %}
 {
   "name": "Rich text",
@@ -425,26 +216,6 @@
       "min": 0,
       "max": 200,
       "step": 4,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
       "unit": "px"
     },
     {
@@ -604,101 +375,6 @@
             }
           ],
           "default": ""
-        }
-      ]
-    },
-    {
-      "type": "collapsible_text",
-      "name": "Texto Colapsável",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "richtext",
-          "id": "collapsible_content",
-          "label": "Conteúdo",
-          "default": "<p>Use este espaço para apresentar sua marca com um texto envolvente. Você pode inserir imagens, listas e links.</p><p>Com o Ler mais, a seção permanece compacta e elegante — e expande só quando o cliente quiser continuar lendo.</p>"
-        },
-        {
-          "type": "header",
-          "content": "Configurações do collapse"
-        },
-        {
-          "type": "range",
-          "id": "collapsed_height",
-          "label": "Altura colapsada (px)",
-          "min": 80,
-          "max": 600,
-          "step": 10,
-          "unit": "px",
-          "default": 220
-        },
-        {
-          "type": "range",
-          "id": "fade_height",
-          "label": "Altura do degradê (px)",
-          "min": 24,
-          "max": 150,
-          "step": 6,
-          "unit": "px",
-          "default": 90
-        },
-        {
-          "type": "range",
-          "id": "animation_duration",
-          "label": "Duração da animação (ms)",
-          "min": 200,
-          "max": 1000,
-          "step": 50,
-          "unit": "ms",
-          "default": 400
-        },
-        {
-          "type": "text",
-          "id": "read_more_label",
-          "label": "Texto 'Ler mais'",
-          "default": "Ler mais"
-        },
-        {
-          "type": "text",
-          "id": "read_less_label",
-          "label": "Texto 'Ler menos'",
-          "default": "Ler menos"
-        }
-      ]
-    },
-    {
-      "type": "instagram_header",
-      "name": "Topo Instagram",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "instagram_image",
-          "label": "Foto"
-        },
-        {
-          "type": "text",
-          "id": "instagram_text",
-          "label": "Texto",
-          "default": "nome_instagram"
-        },
-        {
-          "type": "textarea",
-          "id": "instagram_svg",
-          "label": "SVG Verificado",
-          "info": "Cole o código SVG do verificado aqui",
-          "default": "<svg width=\"11\" height=\"12\" viewbox=\"0 0 11 12\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M8.2067 0.507094C8.09747 0.316683 7.93654 0.168162 7.74632 0.082207C7.55609 -0.00374832 7.34604 -0.0228624 7.14539 0.0275271L5.72132 0.384395C5.57538 0.42099 5.42374 0.42099 5.27779 0.384395L3.85373 0.0275271C3.65308 -0.0228624 3.44302 -0.00374832 3.2528 0.082207C3.06257 0.168162 2.90164 0.316683 2.79241 0.507094L2.01623 1.85852C1.93703 1.99677 1.83011 2.11343 1.70339 2.2007L0.464659 3.0475C0.290428 3.16656 0.154491 3.34185 0.0757212 3.54903C-0.00304911 3.7562 -0.0207622 3.98499 0.0250688 4.20364L0.352183 5.759C0.385606 5.91794 0.385606 6.08307 0.352183 6.24202L0.0250688 7.79651C-0.0209403 8.01528 -0.00331869 8.24426 0.0754601 8.45162C0.154239 8.65897 0.290277 8.8344 0.464659 8.95351L1.70339 9.80032C1.83011 9.88672 1.93702 10.0034 2.01702 10.1416L2.79322 11.4931C3.01657 11.8828 3.44267 12.0754 3.85373 11.9726L5.27779 11.6158C5.42374 11.5792 5.57538 11.5792 5.72132 11.6158L7.14619 11.9726C7.34672 12.0228 7.55659 12.0036 7.74665 11.9177C7.93671 11.8317 8.09752 11.6833 8.2067 11.4931L8.98288 10.1416C9.06208 10.0034 9.16902 9.88672 9.29574 9.80032L10.5353 8.95351C10.7096 8.83423 10.8456 8.6586 10.9243 8.45108C11.0029 8.24356 11.0203 8.01445 10.974 7.79564L10.6477 6.24202C10.6142 6.0828 10.6142 5.91735 10.6477 5.75813L10.9748 4.20364C11.0209 3.98496 11.0034 3.75604 10.9248 3.5487C10.8462 3.34135 10.7103 3.16587 10.5361 3.04664L9.29653 2.19983C9.16998 2.11327 9.06303 1.99658 8.98368 1.85852L8.2067 0.507094ZM7.80831 4.07317C7.85729 3.97489 7.86944 3.85972 7.84217 3.75188C7.81491 3.64404 7.75035 3.55194 7.66211 3.49496C7.57387 3.43798 7.46882 3.42057 7.36905 3.44638C7.26928 3.47219 7.18256 3.53921 7.12717 3.63335L5.05603 7.45778L3.80542 6.15129C3.76832 6.10973 3.72391 6.07674 3.67488 6.05431C3.62584 6.03187 3.57317 6.02044 3.51999 6.02069C3.46682 6.02094 3.41422 6.03287 3.36537 6.05578C3.31651 6.07868 3.27239 6.11209 3.23562 6.154C3.19885 6.19591 3.17019 6.24548 3.15136 6.29973C3.13253 6.35399 3.12392 6.41182 3.12602 6.46979C3.12812 6.52776 3.1409 6.58467 3.1636 6.63714C3.18629 6.6896 3.21845 6.73654 3.25813 6.77516L4.86911 8.45926C4.91222 8.50424 4.9641 8.538 5.02086 8.55804C5.07762 8.57808 5.13778 8.58387 5.19687 8.57498C5.25597 8.56609 5.31248 8.54276 5.36215 8.50671C5.41181 8.47066 5.45337 8.42283 5.48372 8.3668L7.80831 4.07317Z\" fill=\"#2CAEFF\"></path></svg>"
-        },
-        {
-          "type": "text",
-          "id": "instagram_link_text",
-          "label": "Texto do link",
-          "default": "Acessar nossa Página"
-        },
-        {
-          "type": "text",
-          "id": "instagram_link_url",
-          "label": "URL do link",
-          "default": "https://instagram.com"
         }
       ]
     }

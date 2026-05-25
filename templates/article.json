@@ -1,66 +1,47 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
-{
+ {
   "sections": {
     "main": {
       "type": "article",
       "blocks": {
-        "tags_kA9ATk": {
-          "type": "tags",
-          "settings": {
-            "title": "Tags"
-          }
-        },
         "50469c40-b191-4cca-ac7c-6a6cd0c7b8b4": {
           "type": "categories",
           "settings": {
-            "title": "Categorias",
-            "list_blog": "menu-principal"
+            "title": "Categories",
+            "list_blog": "collections"
           }
         },
         "bb3e6ad7-c917-47d9-9bce-5edf5ff286f6": {
           "type": "recent_post",
-          "disabled": true,
           "settings": {
-            "title": "Posts recentes",
-            "sidebar_recent_blog_name": "news",
+            "title": "Recent Post",
+            "sidebar_recent_blog_name": "",
             "sidebar_recent_blog_count": "3",
-            "blog_show_tags": false,
-            "blog_show_author": true,
-            "blog_show_date": true,
-            "show_excerpt": true,
-            "truncate_excerpt": true,
-            "truncate": "16",
+            "blog_show_tags": true,
+            "blog_show_author": false,
+            "blog_show_date": false,
+            "show_excerpt": false,
+            "truncate_excerpt": false,
+            "truncate": "15",
             "truncate_last_symbols": "..."
           }
         },
-        "featured_product_mPqEaJ": {
-          "type": "featured_product",
+        "36be080e-5b28-4b62-b5a9-478c96b656e7": {
+          "type": "tags",
           "settings": {
-            "title": ""
+            "title": "Tags"
           }
         }
       },
       "block_order": [
-        "tags_kA9ATk",
         "50469c40-b191-4cca-ac7c-6a6cd0c7b8b4",
         "bb3e6ad7-c917-47d9-9bce-5edf5ff286f6",
-        "featured_product_mPqEaJ"
+        "36be080e-5b28-4b62-b5a9-478c96b656e7"
       ],
       "settings": {
-        "container": "container-fluid",
+        "container": "container",
         "sidebar_show": true,
         "sidebar_position": "right_column",
-        "design": "layout3",
-        "blog_show_breadcrumb": false,
-        "blog_show_blog_title": false,
+        "design": "layout1",
         "blog_show_author": true,
         "blog_show_date": true,
         "blog_show_tags": true,
@@ -69,9 +50,8 @@
         "show_related_articles": true,
         "article_align_content": "text-left",
         "article_show_tags": false,
-        "article_show_date": true,
-        "article_show_author": true,
-        "article_show_excerpt": true,
+        "article_show_date": false,
+        "article_show_excerpt": false,
         "article_show_button": false
       }
     }

@@ -85,8 +85,7 @@ class Collection {
   };
 
   initGridView = () => {
-    // Se o switcher de colunas estiver desativado, sempre usa o valor configurado no tema
-    this.toggleView(this.isDesignMode || !this.showColSwitchers ? this.initialCol : this.cachedCol);
+    this.toggleView(this.isDesignMode ? this.initialCol : this.cachedCol);
     this.updateViewByScreen();
     addEventDelegate({
       selector: this.selectors.cols[0],

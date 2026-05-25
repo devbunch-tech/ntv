@@ -7,7 +7,6 @@
     endif
   -%}
   <div class="m-footer--middle{% if bordered %} m-footer--middle-bordered{% endif %} m-gradient m-color-{{ section.settings.color_scheme }}">
-  <div class="m-footer--middle-top-line"></div>
     <div class="{{ container }}">
       <div class="m-footer--accordion">
         {% for block in blocks %}
@@ -93,6 +92,11 @@
                   {% endif %}
                 {% when 'our_store' %}
                   <div class="{% if block.settings.title != blank %}m-accordion--item-content{% endif %} m-footer--block-content">
+                    {% unless block.settings.description == blank %}
+                      <div class="block-text rte">
+                        {{ block.settings.description }}
+                      </div>
+                    {% endunless %}
                     <div class="block-text">
                       {% if settings.contact_phone_number and block.settings.show_phone %}
                         <a class="m:block" href="tel:{{ settings.contact_phone_number }}">
@@ -108,25 +112,14 @@
                         {% render 'social-media-links', size: 'm-svg-icon--medium' %}
                       {% endif %}
                     </div>
-                    {% unless block.settings.description == blank %}
-                      <div class="block-text rte">
-                        {{ block.settings.description }}
-                      </div>
-                    {% endunless %}
                   </div>
-                {% when 'brand_contact' %}
-                  {% render 'footer-block__brand-contact', block: block %}
                 {% when 'newsletter' %}
-                  <div class="{% if block.settings.title != blank %}m-accordion--item-content{% else %}newsletter-block-padding-mobile{% endif %} m-footer--block-content">
+                  <div class="{% if block.settings.title != blank %}m-accordion--item-content{% endif %} m-footer--block-content">
                     <p class="m-footer--block-newsletter-desc">{{ block.settings.description }}</p>
                     {% liquid
                       assign button_type = 'icon'
                       if block.settings.button_label != blank
                         assign button_type = 'text'
-                      endif
-                      assign image_below_width = block.settings.image_below_max_width | default: 0
-                      if image_below_width == 0
-                        assign image_below_width = 500
                       endif
                     %}
                     {% render 'newsletter-form',
@@ -144,17 +137,6 @@
                     {% if block.settings.show_social %}
                       {% render 'social-media-links' %}
                     {% endif %}
-                    {% if block.settings.image_below != blank %}
-                      <div class="m-footer--newsletter-image m:mt-4"{% if block.settings.image_below_max_width > 0 %} style="max-width: {{ block.settings.image_below_max_width }}px; width: 100%;"{% endif %}>
-                        {{
-                          block.settings.image_below
-                          | image_url: width: image_below_width
-                          | image_tag:
-                            loading: 'lazy',
-                            alt: block.settings.image_below.alt | default: block.settings.title
-                        }}
-                      </div>
-                    {% endif %}
                   </div>
                 {% when 'custom_text' %}
                   {% render 'footer-block__text', block: block %}
@@ -166,26 +148,7 @@
             </div>
           </div>
         {% endfor %}
-        {% liquid
-          assign custom_html_social_mobile = false
-          for block in blocks
-            if block.type == 'custom_html' and block.settings.show_social_icons
-              assign custom_html_social_mobile = true
-              break
-            endif
-          endfor
-        %}
-        {% if custom_html_social_mobile %}
-          <div class="m-footer--block m-footer--custom-html-social-mobile md:m:hidden m:w-full" style="margin-top: 8px;">
-            <div class="m-footer--block-inner">
-              <div class="m-footer--block-content block-text m:py-2">
-                {% render 'social-media-links', size: 'm-svg-icon--medium', extra_classes: 'justify-center' %}
-              </div>
-            </div>
-          </div>
-        {% endif %}
       </div>
     </div>
-  <div class="m-footer--middle-bottom-line"></div>
   </div>
 {% endif %}

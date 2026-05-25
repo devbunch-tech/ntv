@@ -28,7 +28,7 @@
           <h1 class="m-page-header__title">{{ 'general.search.title' | t }}</h1>
         {% endif %}
         <form
-          action="{{ routes.search_url }}"
+          action="/search"
           method="GET"
           novalidate
           class="m-search--form"
@@ -111,10 +111,6 @@
                             render 'product-card-4', product: item, section: section, context: search
                           when '5'
                             render 'product-card-5', product: item, section: section, context: search
-                          when '6'
-                            render 'product-card-6', product: item, section: section, context: search
-                          when '7'
-                            render 'product-card-7', product: item, section: section, context: search
                         endcase
                       %}
                     </div>

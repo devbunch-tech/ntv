@@ -119,66 +119,6 @@
               {{ title | default: collection.title }}
             </a>
           </div>
-          
-        {% when 'inside-3' %}
-          {% liquid
-            assign button_style_inside3 = section.settings.button_style_inside3 | default: 'm-button--white'
-            assign title_color_inside3 = section.settings.title_color_inside3 | default: 'light'
-            assign button_color_inside3 = section.settings.button_color_inside3 | default: 'light'
-            assign background_gradient_inside3 = section.settings.background_gradient_inside3
-            
-            assign title_color_class = ''
-            if title_color_inside3 == 'light'
-              assign title_color_class = 'm:text-white'
-            else
-              assign title_color_class = 'm:text-black'
-            endif
-            
-            assign button_color_class = ''
-            if button_color_inside3 == 'light'
-              assign button_color_class = 'm:text-white'
-            else
-              assign button_color_class = 'm:text-black'
-            endif
-          %}
-          <a
-            href="{{ collection.url | default: "#" }}"
-            class="m-collection-card__image m:block m:w-full{% if image_rounded %} m-collection-card__image-rounded m:rounded-full{% else %} m:blocks-radius{% endif %}"
-            aria-label="{{ collection.title | default: "collection"  }}"
-          >
-            <div class="m-hover-box__wrapper">
-              {% if image != blank %}
-                {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
-              {% else %}
-                <div style="--aspect-ratio: 1/1;">
-                  {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
-                </div>
-              {% endif %}
-            </div>
-          </a>
-          <div class="m-collection-card__info m:text-{{ text_alignment }}">
-            <h3 class="m-collection-card__title">
-              <a
-                class="m-collection-card__link m:block"
-                href="{{ collection.url | default: "#" }}"
-                style="color: {% if title_color_inside3 == 'light' %}rgb(var(--text-white)){% else %}rgb(var(--text-black)){% endif %};"
-              >
-                {{ title | default: collection.title }}
-              </a>
-            </h3>
-            {% if section.settings.button_text != blank %}
-            <a
-              class="m-button {{ button_style_inside3 }} m:justify-center m:items-center {{ button_color_class }}"
-              href="{{ collection.url }}"
-              {% if background_gradient_inside3 != blank %}
-                style="background: {{ background_gradient_inside3 }};"
-              {% endif %}
-            >
-                {{ section.settings.button_text }}
-                <svg class="m-collection-card__btn-arrow" width="16" height="10" viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17 1L23 7L17 13" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M23 7H1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
-            </a>
-            {% endif %}
-          </div>
 
         {% when 'boxed' %}
           <h3 class="m-collection-card__title m:text-{{ text_alignment }}">

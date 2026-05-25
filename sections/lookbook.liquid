@@ -32,8 +32,6 @@
   #m-lookbook--{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --column-gap: 30px;
     --column-gap-mobile: 16px;
     --row-gap: 30px;
@@ -88,7 +86,6 @@
           <div class="{{ block_classes }}">
             {% render 'lookbook-card-slider',
               block: block,
-              section: section,
               image_aspect_ratio: section.settings.image_aspect_ratio,
               index: forloop.index,
               animated: animated,
@@ -99,7 +96,6 @@
           <div class="m-lookbook__col-full">
             {% render 'lookbook-hero',
               block: block,
-              section: section,
               image_aspect_ratio: section.settings.image_aspect_ratio,
               index: forloop.index,
               animated: animated,
@@ -131,7 +127,7 @@
       "content": "Section header"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Hand-picked"
@@ -222,10 +218,6 @@
           "label": "1:1"
         },
         {
-          "value": "2/3",
-          "label": "2:3"
-        },
-        {
           "value": "3/4",
           "label": "3:4"
         },
@@ -271,26 +263,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },
@@ -879,67 +851,6 @@
         },
         {
           "type": "select",
-          "id": "button_style_inside3",
-          "label": "Button style",
-          "default": "m-button--primary",
-          "options": [
-            {
-              "value": "m-button--primary",
-              "label": "Primary"
-            },
-            {
-              "value": "m-button--secondary",
-              "label": "Secondary"
-            },
-            {
-              "value": "m-button--white",
-              "label": "White"
-            },
-            {
-              "value": "m-button--link",
-              "label": "Link"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "button_color_inside3",
-          "label": "Button color",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "button_text_hover_color_inside3",
-          "label": "Button text color on hover",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ]
-        },
-        {
-          "type": "color_background",
-          "id": "background_gradient_inside3",
-          "label": "Background gradient"
-        },
-        {
-          "type": "select",
           "id": "pcard_layout",
           "label": "Design layout",
           "default": "",
@@ -967,10 +878,6 @@
             {
               "value": "5",
               "label": "Style 5"
-            },
-            {
-              "value": "6",
-              "label": "Style 6"
             }
           ]
         },
@@ -991,10 +898,6 @@
             {
               "value": "1/1",
               "label": "1:1"
-            },
-            {
-              "value": "2/3",
-              "label": "2:3"
             },
             {
               "value": "3/4",
@@ -1122,11 +1025,6 @@
           "label": "Mobile image"
         },
         {
-          "type": "url",
-          "id": "image_link",
-          "label": "Image link",
-        },
-        {
           "type": "select",
           "id": "button_style",
           "label": "Button style",
@@ -1146,12 +1044,6 @@
           "id": "color_scheme_hovered",
           "label": "Color scheme",
           "info": "Adjust color scheme for hovered product cards."
-        },
-        {
-          "type": "checkbox",
-          "id": "hide_wrapper_desktop",
-          "label": "Hide products wrapper on desktop",
-          "default": false
         },
         {
           "type": "header",
@@ -1429,75 +1321,8 @@
           "default": true
         },
         {
-          "type": "checkbox",
-          "id": "hide_controls_mobile",
-          "label": "Hide controls on mobile",
-          "default": false
-        },
-        {
           "type": "header",
           "content": "Product card settings"
-        },
-        {
-          "type": "select",
-          "id": "button_style_inside3",
-          "label": "Button style",
-          "default": "m-button--primary",
-          "options": [
-            {
-              "value": "m-button--primary",
-              "label": "Primary"
-            },
-            {
-              "value": "m-button--secondary",
-              "label": "Secondary"
-            },
-            {
-              "value": "m-button--white",
-              "label": "White"
-            },
-            {
-              "value": "m-button--link",
-              "label": "Link"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "button_color_inside3",
-          "label": "Button color",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "button_text_hover_color_inside3",
-          "label": "Button text color on hover",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ]
-        },
-        {
-          "type": "color_background",
-          "id": "background_gradient_inside3",
-          "label": "Background gradient"
         },
         {
           "type": "select",
@@ -1528,10 +1353,6 @@
             {
               "value": "5",
               "label": "Style 5"
-            },
-            {
-              "value": "6",
-              "label": "Style 6"
             }
           ]
         },
@@ -1552,10 +1373,6 @@
             {
               "value": "1/1",
               "label": "1:1"
-            },
-            {
-              "value": "2/3",
-              "label": "2:3"
             },
             {
               "value": "3/4",

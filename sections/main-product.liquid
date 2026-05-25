@@ -21,19 +21,6 @@
   endif
   assign first_3d_model = product.media | where: 'media_type', 'model' | first
 
-  comment
-    Aspect ratio settings for media
-  endcomment
-  assign media_ratio_desktop = section.settings.media_aspect_ratio_desktop
-  assign media_ratio_mobile = section.settings.media_aspect_ratio_mobile
-
-  if media_ratio_desktop == 'inherit'
-    assign media_ratio_desktop = settings.pcard_image_ratio
-  endif
-  if media_ratio_mobile == 'inherit'
-    assign media_ratio_mobile = settings.pcard_image_ratio
-  endif
-
   assign animation_effect = settings.animations
   assign animated = false
   if animation_effect != 'none'
@@ -46,22 +33,10 @@
   endif
 
   assign disable_selected_variant_default = section.settings.disable_selected_variant_default
-  assign force_size_selection = section.settings.force_size_selection
-  assign disable_url_variant_preselect = section.settings.disable_url_variant_preselect
 
   if product.has_only_default_variant
     assign enable_variant_group_img = false
     assign disable_selected_variant_default = false
-    assign force_size_selection = false
-    assign disable_url_variant_preselect = false
-  endif
-
-  unless product.available
-    assign force_size_selection = false
-  endunless
-
-  if disable_selected_variant_default
-    assign force_size_selection = false
   endif
 -%}
 
@@ -74,66 +49,8 @@
     onload="this.media='all'"
   >
 {%- endif -%}
-
-{%- comment -%} Media aspect ratio styles {%- endcomment -%}
-{%- if media_ratio_mobile != 'original' or media_ratio_desktop != 'original' -%}
-  <style>
-    {%- if media_ratio_mobile != 'original' -%}
-      @media (max-width: 767px) {
-        #MainProduct-{{ section.id }} .m-product-media .m-image,
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media {
-          --aspect-ratio: {{ media_ratio_mobile }} !important;
-          aspect-ratio: {{ media_ratio_mobile }};
-        }
-        #MainProduct-{{ section.id }} .m-product-media .m-image img,
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media img,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media img {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-        }
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media {
-          padding-top: 0 !important;
-        }
-      }
-    {%- endif -%}
-    {%- if media_ratio_desktop != 'original' -%}
-      @media (min-width: 768px) {
-        #MainProduct-{{ section.id }} .m-product-media .m-image,
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media {
-          --aspect-ratio: {{ media_ratio_desktop }} !important;
-          aspect-ratio: {{ media_ratio_desktop }};
-        }
-        #MainProduct-{{ section.id }} .m-product-media .m-image img,
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media img,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media img {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-        }
-        #MainProduct-{{ section.id }} .m-product-media--video .deferred-media,
-        #MainProduct-{{ section.id }} .m-product-media--external_video .deferred-media {
-          padding-top: 0 !important;
-        }
-      }
-    {%- endif -%}
-  </style>
-{%- endif -%}
-<style>
-  #MainProduct-{{ section.id }} .option-label--error {
-    color: rgb(var(--color-error));
-    margin-left: 6px;
-    font-weight: 500;
-  }
-</style>
 {%- capture variant_option_none_text -%}
   {%- render 'new-locale', key: 'products.product.choose_an_option' -%}
-{%- endcapture -%}
-{%- capture select_size_prompt_text -%}
-  {%- render 'new-locale', key: 'products.product.select_size_prompt' -%}
 {%- endcapture -%}
 <product-info
   id="MainProduct-{{ section.id }}"
@@ -148,9 +65,6 @@
   data-container="{{ container }}"
   data-enable-variant-group-images="{{ enable_variant_group_img }}"
   data-disable-selected-variant-default="{{ disable_selected_variant_default }}"
-  data-force-size-selection="{{ force_size_selection }}"
-  data-disable-url-variant-preselect="{{ disable_url_variant_preselect }}"
-  data-select-size-prompt-text="{{ select_size_prompt_text | strip }}"
   data-variant-option-none-text="{{ variant_option_none_text }}"
   data-show-featured-media="{{ section.settings.show_featured_media }}"
   class="m-main-product m-gradient m-color-{{ settings.default_color_scheme }} m:block"
@@ -162,16 +76,16 @@
       assign wrapper_class = 'm:flex m:flex-wrap'
       case layout
         when 'layout-2'
-          assign media_class = 'm:w-full md:m:w-8/12'
-          assign info_class = 'm:w-full md:m:w-4/12'
+          assign media_class = 'm:w-full md:m:w-7/12'
+          assign info_class = 'm:w-full md:m:w-5/12'
           assign column_gap = '70px'
         when 'layout-3'
-          assign media_class = 'm-layout3-media'
-          assign info_class = 'm-layout3-info'
+          assign media_class = 'm:w-full md:m:w-7/12'
+          assign info_class = 'm:w-full md:m:w-5/12'
           assign column_gap = '70px'
         when 'layout-5'
-          assign media_class = 'm:w-full md:m:w-8/12'
-          assign info_class = 'm:w-full md:m:w-4/12 '
+          assign media_class = 'm:w-full md:m:w-7/12'
+          assign info_class = 'm:w-full md:m:w-5/12 '
           assign column_gap = '70px'
         when 'layout-7'
           assign media_class = 'm:w-full'
@@ -190,23 +104,12 @@
     >
       <product-recently-viewed data-product-id="{{ product.id }}" class="m:hidden"></product-recently-viewed>
       <div class="m-main-product--media m:column {{ media_class }}">
-        {%- capture product_tags_html -%}
-          {% render 'product-tags', product: product %}
-        {%- endcapture -%}
-        {% if product_tags_html != blank %}
-          <div class="m-main-product--tags">
-            {{ product_tags_html }}
-          </div>
-        {% endif %}
         <div class="m-product-media--desktop m-product-media--wrapper m-product-media--{{ section.settings.layout }} m:justify-end">
           {% render 'product-media',
             section: section,
             template_product: true,
             show_thumbnails_mobile: section.settings.show_nav_media_mobile,
-            show_pagination_mobile: section.settings.show_pagination_mobile,
-            enable_mobile_photo_preview: section.settings.enable_mobile_photo_preview,
-            compact_thumbnails_mobile: section.settings.compact_thumbnails_mobile,
-            compact_thumbnails_desktop: section.settings.compact_thumbnails_desktop
+            show_pagination_mobile: section.settings.show_pagination_mobile
           %}
 
           {% if section.settings.show_atwl %}
@@ -217,7 +120,7 @@
               {% comment %}theme-check-disable MissingTemplate{% endcomment %}
               {% capture the_snippet_fave_icon %}{% render 'ssw-widget-faveicon' with product.id %}{% endcapture %}
               {% comment %}theme-check-enable MissingTemplate{% endcomment %}
-              <div class="m-product-media--mobile__atwl-button{% unless section.settings.atwl_on_media_desktop %} md:m:hidden{% endunless %}{% if section.settings.atwl_on_media_desktop %} m-product-media--atwl-on-media{% endif %}">
+              <div class="m-product-media--mobile__atwl-button md:m:hidden">
                 {% unless the_snippet_fave_icon contains 'Liquid error' %}
                   {{ the_snippet_fave_icon }}
                 {% else %}
@@ -225,57 +128,12 @@
                 {% endunless %}
               </div>
             {% else %}
-              {%- liquid
-                assign tooltip_class = 'm-tooltip--top m-product-media--mobile__atwl-button'
-                unless section.settings.atwl_on_media_desktop
-                  assign tooltip_class = tooltip_class | append: ' !md:m:hidden'
-                endunless
-                if section.settings.atwl_on_media_desktop
-                  assign tooltip_class = tooltip_class | append: ' m-product-media--atwl-on-media'
-                endif
-              -%}
               {% render 'tooltip',
                 type: 'wishlist',
                 product: product,
-                class_name: tooltip_class,
-                style: 2
+                class_name: 'm-tooltip--top m-product-media--mobile__atwl-button !md:m:hidden'
               %}
             {% endif %}
-          {% endif %}
-          {% if section.settings.show_share_on_media %}
-            <div class="m-product-media--share-button">
-              <m-sharing class="m-product-media--share-wrapper">
-                <button
-                  class="m-tooltip m-button--icon m-tooltip--top m-tooltip--style-1"
-                  type="button"
-                  data-open-share
-                  aria-label="{{ 'products.product.social_share' | t }}"
-                >
-                  <span class="m-tooltip-icon m:block">
-                    <svg class="m-svg-icon--medium" width="14" height="16" fill="none" viewBox="0 0 14 16">
-                      <path fill="currentColor" d="M11 10c.8333 0 1.5417.2917 2.125.875.5833.5833.875 1.2917.875 2.125 0 .8333-.2917 1.5417-.875 2.125-.5833.5833-1.2917.875-2.125.875-.8333 0-1.54167-.2917-2.125-.875C8.29167 14.5417 8 13.8333 8 13c0-.3125.04167-.6146.125-.9062l-3.0625-1.9063C4.47917 10.7292 3.79167 11 3 11c-.83333 0-1.54167-.2917-2.125-.875C.291667 9.54167 0 8.83333 0 8c0-.83333.291667-1.54167.875-2.125C1.45833 5.29167 2.16667 5 3 5c.79167 0 1.47917.27083 2.0625.8125L8.125 3.90625C8.04167 3.61458 8 3.3125 8 3c0-.83333.29167-1.54167.875-2.125C9.45833.291667 10.1667 0 11 0c.8333 0 1.5417.291667 2.125.875C13.7083 1.45833 14 2.16667 14 3c0 .83333-.2917 1.54167-.875 2.125C12.5417 5.70833 11.8333 6 11 6c-.7917 0-1.47917-.27083-2.0625-.8125L5.875 7.09375c.1875.60417.1875 1.20833 0 1.8125l3.0625 1.90625C9.52083 10.2708 10.2083 10 11 10zm1.0625-8.0625C11.7708 1.64583 11.4167 1.5 11 1.5c-.4167 0-.7708.14583-1.0625.4375C9.64583 2.22917 9.5 2.58333 9.5 3s.14583.77083.4375 1.0625c.2917.29167.6458.4375 1.0625.4375.4167 0 .7708-.14583 1.0625-.4375.2917-.29167.4375-.64583.4375-1.0625s-.1458-.77083-.4375-1.0625zm-10.125 7.125C2.22917 9.35417 2.58333 9.5 3 9.5s.77083-.14583 1.0625-.4375S4.5 8.41667 4.5 8s-.14583-.77083-.4375-1.0625S3.41667 6.5 3 6.5s-.77083.14583-1.0625.4375S1.5 7.58333 1.5 8s.14583.77083.4375 1.0625zm8 5c.2917.2917.6458.4375 1.0625.4375.4167 0 .7708-.1458 1.0625-.4375.2917-.2917.4375-.6458.4375-1.0625 0-.4167-.1458-.7708-.4375-1.0625-.2917-.2917-.6458-.4375-1.0625-.4375-.4167 0-.7708.1458-1.0625.4375C9.64583 12.2292 9.5 12.5833 9.5 13c0 .4167.14583.7708.4375 1.0625z"/>
-                    </svg>
-                  </span>
-                  <span class="m-tooltip__content">{{ 'products.product.social_share' | t }}</span>
-                </button>
-                <div class="m-product-addon--sharing m:hidden">
-                  <div
-                    class="m-product-addon--sharing__copy-link"
-                    data-color-scheme="m-color-{{ settings.drawer_popup_color_scheme }}"
-                  >
-                    <label>{{ 'products.product.copy_link' | t }}</label>
-                    <input
-                      class="form-field form-field--input"
-                      type="text"
-                      value="{{ shop.secure_url }}/products/{{ product.handle }}"
-                    >
-                  </div>
-                  {% assign url = shop.url | append: product.url %}
-                  {% render 'social-sharing', url: url %}
-                </div>
-              </m-sharing>
-              <script src="{{ 'sharing.js' | asset_url }}" defer="defer"></script>
-            </div>
           {% endif %}
           {%- if first_3d_model -%}
             <div class="m-product-media__xr-button md:m:hidden">
@@ -417,37 +275,9 @@
     },
     {
       "type": "checkbox",
-      "id": "show_nav_media_desktop",
-      "label": "Show thumbnails on desktop",
-      "default": false,
-      "visible_if": "{{ section.settings.layout == 'layout-5' }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "compact_thumbnails_desktop",
-      "label": "Compact thumbnails on desktop",
-      "default": false,
-    },
-    {
-      "type": "checkbox",
       "id": "show_atwl",
       "label": "Show Add to wishlist",
       "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "atwl_on_media_desktop",
-      "label": "Show wishlist button on media (desktop)",
-      "info": "When enabled, the wishlist button will appear on the top left of the product media instead of next to the title",
-      "default": false,
-      "visible_if": "{{ section.settings.show_atwl == true }}"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_share_on_media",
-      "label": "Show share button on media",
-      "info": "Display a share button on the product media. Appears below wishlist if both are enabled",
-      "default": false
     },
     {
       "type": "checkbox",
@@ -469,94 +299,8 @@
       "default": false
     },
     {
-      "type": "checkbox",
-      "id": "force_size_selection",
-      "label": "Force manual size selection",
-      "info": "Customer must manually pick a size. Color (and other non-size options) stay pre-selected on the first available value.",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "disable_url_variant_preselect",
-      "label": "Disable variant pre-selection via URL",
-      "info": "When enabled, the '?variant=' URL parameter will not pre-select the size option.",
-      "default": false
-    },
-    {
       "type": "header",
       "content": "Product media"
-    },
-    {
-      "type": "select",
-      "id": "media_aspect_ratio_desktop",
-      "label": "Image aspect ratio (Desktop)",
-      "default": "original",
-      "options": [
-        {
-          "value": "original",
-          "label": "Original aspect ratio"
-        },
-        {
-          "value": "inherit",
-          "label": "Inherit from product card settings"
-        },
-        {
-          "value": "1/1",
-          "label": "1:1"
-        },
-        {
-          "value": "2/3",
-          "label": "2:3"
-        },
-        {
-          "value": "3/4",
-          "label": "3:4"
-        },
-        {
-          "value": "4/3",
-          "label": "4:3"
-        },
-        {
-          "value": "16/9",
-          "label": "16:9"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "media_aspect_ratio_mobile",
-      "label": "Image aspect ratio (Mobile)",
-      "default": "original",
-      "options": [
-        {
-          "value": "original",
-          "label": "Original aspect ratio"
-        },
-        {
-          "value": "inherit",
-          "label": "Inherit from product card settings"
-        },
-        {
-          "value": "1/1",
-          "label": "1:1"
-        },
-        {
-          "value": "2/3",
-          "label": "2:3"
-        },
-        {
-          "value": "3/4",
-          "label": "3:4"
-        },
-        {
-          "value": "4/3",
-          "label": "4:3"
-        },
-        {
-          "value": "16/9",
-          "label": "16:9"
-        }
-      ]
     },
     {
       "type": "checkbox",
@@ -585,23 +329,9 @@
     },
     {
       "type": "checkbox",
-      "id": "compact_thumbnails_mobile",
-      "label": "Compact thumbnails on mobile",
-      "default": false,
-      "visible_if": "{{ section.settings.show_nav_media_mobile }}"
-    },
-    {
-      "type": "checkbox",
       "id": "show_pagination_mobile",
       "label": "Show pagination on mobile",
       "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_mobile_photo_preview",
-      "label": "Show next photo preview on mobile",
-      "default": false,
-      "info": "When enabled, a portion of the next photo will be visible on mobile devices"
     },
     {
       "type": "header",
@@ -701,13 +431,6 @@
           "content": "[Watch tutorial](https://foxecom.link/bqhGMd) or [read How-to](https://foxecom.link/F7UNEx)"
         },
         {
-          "type": "checkbox",
-          "id": "button_style_rectangular",
-          "label": "Use rectangular button style",
-          "info": "When enabled, variant buttons will have a rectangular style with distinct borders instead of the default pill style",
-          "default": false
-        },
-        {
           "type": "header",
           "content": "Size guide settings"
         },
@@ -733,94 +456,9 @@
         },
         {
           "type": "checkbox",
-          "id": "hide_quantity_label",
-          "default": true,
-          "label": "Hide quantity label",
-          "visible_if": "{{ block.settings.show_quantity_selector }}"
-        },
-        {
-          "type": "checkbox",
-          "id": "quantity_and_cart_same_line",
-          "default": true,
-          "label": "Quantity and cart button on same line",
-          "visible_if": "{{ block.settings.show_quantity_selector }}"
-        },
-        {
-          "type": "select",
-          "id": "quantity_color_style",
-          "label": "Quantity selector color",
-          "default": "normal",
-          "options": [
-            {
-              "value": "normal",
-              "label": "Normal"
-            },
-            {
-              "value": "button",
-              "label": "Button color"
-            }
-          ],
-          "visible_if": "{{ block.settings.show_quantity_selector }}"
-        },
-        {
-          "type": "range",
-          "id": "button_height_desktop",
-          "label": "Button height (desktop)",
-          "min": 40,
-          "max": 80,
-          "step": 1,
-          "default": 43,
-          "unit": "px"
-        },
-        {
-          "type": "range",
-          "id": "button_height_mobile",
-          "label": "Button height (mobile)",
-          "min": 40,
-          "max": 80,
-          "step": 1,
-          "default": 43,
-          "unit": "px"
-        },
-        {
-          "type": "checkbox",
           "id": "show_atc_button",
           "default": true,
           "label": "Show Add-to-cart button"
-        },
-        {
-          "type": "checkbox",
-          "id": "atc_custom_color",
-          "default": false,
-          "label": "Custom Add-to-cart button color"
-        },
-        {
-          "type": "color",
-          "id": "atc_bg_color",
-          "label": "Button background",
-          "default": "#000000",
-          "visible_if": "{{ block.settings.atc_custom_color }}"
-        },
-        {
-          "type": "color",
-          "id": "atc_text_color",
-          "label": "Button text",
-          "default": "#ffffff",
-          "visible_if": "{{ block.settings.atc_custom_color }}"
-        },
-        {
-          "type": "color",
-          "id": "atc_bg_color_hover",
-          "label": "Button background (hover)",
-          "default": "#333333",
-          "visible_if": "{{ block.settings.atc_custom_color }}"
-        },
-        {
-          "type": "color",
-          "id": "atc_text_color_hover",
-          "label": "Button text (hover)",
-          "default": "#ffffff",
-          "visible_if": "{{ block.settings.atc_custom_color }}"
         },
         {
           "type": "checkbox",
@@ -1008,30 +646,6 @@
               "value": "end"
             }
           ]
-        },
-        {
-          "type": "header",
-          "content": "Spacing"
-        },
-        {
-          "type": "range",
-          "id": "padding_top",
-          "label": "Padding top",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        },
-        {
-          "type": "range",
-          "id": "padding_bottom",
-          "label": "Padding bottom",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
         }
       ]
     },
@@ -1180,22 +794,6 @@
           "default": "Collapsible tab"
         },
         {
-          "type": "select",
-          "id": "style",
-          "label": "Style",
-          "default": "default",
-          "options": [
-            {
-              "value": "default",
-              "label": "Default"
-            },
-            {
-              "value": "bordered",
-              "label": "Bordered"
-            }
-          ]
-        },
-        {
           "type": "richtext",
           "label": "Content",
           "id": "content"
@@ -1211,58 +809,6 @@
           "label": "Default open",
           "id": "default_open",
           "default": false
-        },
-        {
-          "type": "checkbox",
-          "label": "Remove top margin",
-          "id": "remove_top_margin",
-          "default": false,
-          "info": "Removes the top margin to eliminate spacing from the previous block"
-        },
-        {
-          "type": "header",
-          "content": "Bordered Style Colors",
-          "info": "These options only apply when Style is set to 'Bordered'",
-          "visible_if": "{{ block.settings.style == 'bordered' }}"
-        },
-        {
-          "type": "color",
-          "id": "border_color",
-          "label": "Border color",
-          "default": "#B5B5B5",
-          "visible_if": "{{ block.settings.style == 'bordered' }}"
-        },
-        {
-          "type": "color",
-          "id": "text_color",
-          "label": "Text and icon color",
-          "default": "#777",
-          "info": "Color for the heading text and arrow icon",
-          "visible_if": "{{ block.settings.style == 'bordered' }}"
-        },
-        {
-          "type": "header",
-          "content": "Spacing"
-        },
-        {
-          "type": "range",
-          "id": "padding_top",
-          "label": "Padding top",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        },
-        {
-          "type": "range",
-          "id": "padding_bottom",
-          "label": "Padding bottom",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
         }
       ]
     },
@@ -1412,191 +958,6 @@
       "limit": 1
     },
     {
-      "type": "barcode",
-      "name": "SKU",
-      "limit": 1,
-      "settings": []
-    },
-    {
-      "type": "product_benefits",
-      "name": "Product benefits",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "header",
-          "content": "Cupom"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_coupon",
-          "label": "Ativar seção cupom",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "coupon_title",
-          "label": "Título do cupom",
-          "default": "Ganhe 10% OFF na primeira compra"
-        },
-        {
-          "type": "text",
-          "id": "coupon_code",
-          "label": "Código do cupom",
-          "default": "BEMVINDA10"
-        },
-        {
-          "type": "header",
-          "content": "Troca"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_exchange",
-          "label": "Ativar seção troca",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "exchange_title",
-          "label": "Título da troca",
-          "default": "Troca descomplicada"
-        },
-        {
-          "type": "text",
-          "id": "exchange_desc",
-          "label": "Descrição da troca",
-          "default": "30 dias para trocar ou devolver, sem perguntas ou burocracia"
-        },
-        {
-          "type": "header",
-          "content": "Parcelamento"
-        },
-        {
-          "type": "checkbox",
-          "id": "enable_installment",
-          "label": "Ativar seção parcelamento",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "installment_title",
-          "label": "Título do parcelamento",
-          "default": "Parcelamento flexivel"
-        },
-        {
-          "type": "text",
-          "id": "installment_desc",
-          "label": "Descrição do parcelamento",
-          "default": "Parcele todas as suas compras em até 6x sem juros."
-        }
-      ]
-    },
-    {
-      "type": "description_tabs",
-      "name": "Description tabs",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "tab1_title",
-          "label": "Título da tab 1 (Descrição)",
-          "default": "Descrição da peça"
-        },
-        {
-          "type": "text",
-          "id": "tab2_title",
-          "label": "Título da tab 2",
-          "default": "Composição & Modelagem"
-        },
-        {
-          "type": "richtext",
-          "id": "tab2_content",
-          "label": "Conteúdo da tab 2"
-        }
-      ]
-    },
-    {
-      "type": "whatsapp_button",
-      "name": "WhatsApp button",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Texto do botão",
-          "default": "FALE COM UMA VENDEDORA"
-        },
-        {
-          "type": "text",
-          "id": "message_prefix",
-          "label": "Prefixo da mensagem",
-          "default": "Olá, gostaria de saber mais sobre o produto:"
-        }
-      ]
-    },
-    {
-      "type": "trust_icons",
-      "name": "Trust icons",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "header",
-          "content": "Item 1 - Guarantee"
-        },
-        {
-          "type": "inline_richtext",
-          "id": "text_1",
-          "label": "Text",
-          "default": "Compra garantida: receba seu produto ou seu dinheiro de volta."
-        },
-        {
-          "type": "html",
-          "id": "icon_1",
-          "label": "Custom SVG icon",
-          "info": "Leave empty to use default shield icon"
-        },
-        {
-          "type": "header",
-          "content": "Item 2 - Shipping"
-        },
-        {
-          "type": "inline_richtext",
-          "id": "text_2",
-          "label": "Text",
-          "default": "Frete grátis para todo o Brasil nas compras acima de R$250!"
-        },
-        {
-          "type": "html",
-          "id": "icon_2",
-          "label": "Custom SVG icon",
-          "info": "Leave empty to use default shipping icon"
-        },
-        {
-          "type": "header",
-          "content": "Spacing"
-        },
-        {
-          "type": "range",
-          "id": "padding_top",
-          "label": "Padding top",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        },
-        {
-          "type": "range",
-          "id": "padding_bottom",
-          "label": "Padding bottom",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        }
-      ]
-    },
-    {
       "type": "complementary",
       "name": "Complementary products",
       "limit": 1,
@@ -1641,27 +1002,6 @@
         },
         {
           "type": "select",
-          "id": "pcard_layout",
-          "label": "Layout",
-          "default": "6",
-          "options": [
-            {
-              "value": "1",
-              "label": "Layout 1"
-            },
-            {
-              "value": "6",
-              "label": "Layout 6"
-            }
-          ]
-        },
-        {
-          "type": "color_scheme",
-          "id": "pcard_color_scheme",
-          "label": "Color scheme"
-        },
-        {
-          "type": "select",
           "id": "pcard_image_ratio",
           "label": "Aspect ratio",
           "default": "original",
@@ -1673,10 +1013,6 @@
             {
               "value": "1/1",
               "label": "1:1"
-            },
-            {
-              "value": "2/3",
-              "label": "2:3"
             },
             {
               "value": "3/4",
@@ -1721,149 +1057,6 @@
           "id": "enable_wishlist",
           "label": "Enable wishlist button",
           "default": false
-        },
-        {
-          "type": "header",
-          "content": "Button style",
-          "visible_if": "{{ block.settings.pcard_layout == '6' }}"
-        },
-        {
-          "type": "select",
-          "id": "button_style_inside3",
-          "label": "Button style",
-          "default": "m-button--primary",
-          "options": [
-            {
-              "value": "m-button--primary",
-              "label": "Primary"
-            },
-            {
-              "value": "m-button--secondary",
-              "label": "Secondary"
-            },
-            {
-              "value": "m-button--white",
-              "label": "White"
-            },
-            {
-              "value": "m-button--link",
-              "label": "Link"
-            }
-          ],
-          "visible_if": "{{ block.settings.pcard_layout == '6' }}"
-        },
-        {
-          "type": "select",
-          "id": "button_color_inside3",
-          "label": "Button color",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ],
-          "visible_if": "{{ block.settings.pcard_layout == '6' }}"
-        },
-        {
-          "type": "select",
-          "id": "button_text_hover_color_inside3",
-          "label": "Button text color on hover",
-          "default": "light",
-          "options": [
-            {
-              "value": "light",
-              "label": "Light"
-            },
-            {
-              "value": "dark",
-              "label": "Dark"
-            }
-          ],
-          "visible_if": "{{ block.settings.pcard_layout == '6' }}"
-        },
-        {
-          "type": "color_background",
-          "id": "background_gradient_inside3",
-          "label": "Background gradient",
-          "visible_if": "{{ block.settings.pcard_layout == '6' }}"
-        },
-        {
-          "type": "header",
-          "content": "Spacing"
-        },
-        {
-          "type": "range",
-          "id": "padding_top",
-          "label": "Padding top",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        },
-        {
-          "type": "range",
-          "id": "padding_bottom",
-          "label": "Padding bottom",
-          "min": 0,
-          "max": 100,
-          "step": 2,
-          "unit": "px",
-          "default": 0
-        }
-      ]
-    },
-    {
-      "type": "shipping_calculator",
-      "name": "Calculadora de frete",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Título",
-          "default": "Cálcule seu Frete"
-        },
-        {
-          "type": "checkbox",
-          "id": "show_free_shipping_link",
-          "label": "Mostrar mensagem de frete grátis",
-          "default": true
-        },
-        {
-          "type": "text",
-          "id": "free_shipping_link_text",
-          "label": "Texto do link de frete grátis",
-          "default": "Frete grátis acima de R$ 299"
-        },
-        {
-          "type": "text",
-          "id": "placeholder",
-          "label": "Placeholder do campo CEP",
-          "default": "Digite seu CEP"
-        },
-        {
-          "type": "text",
-          "id": "button_text",
-          "label": "Texto do botão",
-          "default": "CALCULAR"
-        },
-        {
-          "type": "text",
-          "id": "free_shipping_text",
-          "label": "Texto para frete grátis nos resultados",
-          "default": "Grátis"
-        },
-        {
-          "type": "text",
-          "id": "error_message",
-          "label": "Mensagem de erro",
-          "default": "CEP não encontrado, tente novamente."
         }
       ]
     },

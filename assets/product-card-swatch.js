@@ -1,14 +1,3 @@
-/**
- * Product card swatch: seleção de variantes, preço e imagem no card.
- *
- * Modificações em relação ao tema base:
- * - keepFeaturedImage (data-keep-featured-image="true"): mantém a imagem principal fixa;
- *   não atualiza opções/imagem ao carregar nem ao trocar variante (útil em listagens).
- * - Sale badge: removido deste componente (seletor saleBadge e updateSaleBadge);
- *   selo de promoção não é mais gerenciado aqui.
- * - Desconto Pix: em updatePrice(), exibe preço com pix_discount_percentage e usa
- *   spaceBeforePix só quando não há preço comparativo, para não duplicar o gap do flex.
- */
 if (!customElements.get("pcard-swatch")) {
   class ProductCardColorSwatch extends HTMLElement {
     constructor() {
@@ -197,24 +186,13 @@ if (!customElements.get("pcard-swatch")) {
           target = target.closest(".m-product-option--node__label");
           if (!target) console.error("Unable to find option node!");
         }
-        const { optionPosition, value } = target.dataset;
+        const { optionPosition } = target.dataset;
 
         const currActiveOptNode = this.activeOptionNodeByPosition[optionPosition];
         this.toggleOptionNodeActive(currActiveOptNode, false);
         this.toggleOptionNodeActive(target, true);
-        const pos = Number(optionPosition) - 1;
         newVariant = this.getVariantFromActiveOptions();
-
-        // Fallback: se não encontrou, ou encontrou variante com a cor ERRADA
-        // (hideUnavailableOptions pode fazer pop() na cor e retornar variante errada)
-        if (!newVariant || newVariant.options[pos] !== value) {
-          const variants = Array.isArray(this.variantData) ? this.variantData : [];
-          newVariant = variants.find((v) => v.options[pos] === value && v.available)
-            || variants.find((v) => v.options[pos] === value);
-        }
       }
-
-      if (!newVariant) return;
 
       const { variantIdNode } = this;
       if (variantIdNode) {
@@ -251,30 +229,13 @@ if (!customElements.get("pcard-swatch")) {
     };
 
     updateProductImage(variant) {
-      const { featuredImage, pcard, productData } = this;
-      const featImg = variant && variant.featured_image;
-      const src = featImg && featImg.src;
+      const src = variant && variant.featured_image && variant.featured_image.src;
+      const { featuredImage } = this;
+      const img = featuredImage && featuredImage.querySelector("img");
 
-      // Update main image
-      const mainImg = featuredImage && featuredImage.querySelector("img");
-      if (mainImg && src) {
-        mainImg.src = `${src}&width=533`;
-        mainImg.removeAttribute("srcset");
-      }
-
-      // Update hover image with the next product image after the variant's featured image
-      const hoverDiv = pcard && pcard.querySelector(".m-product-card__hover-image");
-      if (hoverDiv && featImg && productData && productData.images) {
-        const hoverImg = hoverDiv.querySelector("img");
-        if (hoverImg) {
-          const pos = featImg.position; // 1-based
-          const images = productData.images;
-          if (pos > 0 && pos < images.length) {
-            const sep = images[pos].includes("?") ? "&" : "?";
-            hoverImg.src = `${images[pos]}${sep}width=533`;
-            hoverImg.removeAttribute("srcset");
-          }
-        }
+      if (img && src) {
+        img.src = `${src}&width=533`;
+        img.removeAttribute("srcset");
       }
     }
 
@@ -305,17 +266,12 @@ if (!customElements.get("pcard-swatch")) {
       }
 
       priceWrapper && priceWrapper.classList.remove("visibility-hidden");
-      const pixPct = (window.MinimogSettings && window.MinimogSettings.pix_discount_percentage) || 0;
-      const displayPrice = pixPct > 0 ? Math.round((price * (100 - pixPct)) / 100) : price;
-      // Só adiciona espaço antes do "no Pix" quando não há preço comparativo (bloco regular visível).
-      // Com preço comparativo o flex já dá o gap; o espaço extra deixaria preço e "no Pix" muito afastados.
-      const spaceBeforePix = pixPct > 0 && !onSale ? '\u00A0' : '';
-      if (salePrice) salePrice.innerHTML = formatMoney(displayPrice, moneyFormat) + spaceBeforePix;
+      if (salePrice) salePrice.innerHTML = formatMoney(price, moneyFormat);
 
       if (compareAtPrice && compareAtPrice.length && compare_at_price > price) {
         compareAtPrice.forEach((item) => (item.innerHTML = formatMoney(compare_at_price, moneyFormat)));
       } else {
-        compareAtPrice.forEach((item) => (item.innerHTML = formatMoney(displayPrice, moneyFormat) + spaceBeforePix));
+        compareAtPrice.forEach((item) => (item.innerHTML = formatMoney(price, moneyFormat)));
       }
 
       if (unit_price_measurement && unitPrice && this.currentVariant) {

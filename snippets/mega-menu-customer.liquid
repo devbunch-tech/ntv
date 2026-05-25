@@ -1,59 +1,7 @@
 <div class="m-menu-customer">
-  {% if section.settings.mobile_menu_secondary != blank %}
-    <ul class="m-menu-drawer__navigation-secondary m-menu-mobile-secondary">
-      {% for link in linklists[section.settings.mobile_menu_secondary].links %}
-        <li class="m-menu-mobile-secondary__item">
-          <a href="{{ link.url }}" class="m-menu-mobile-secondary__link">
-            {{ link.title }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  {% if section.settings.menu_drawer_show_contact %}
-  {% if settings.contact_phone_number != blank or settings.contact_email != blank %}
-    <div class="m-menu-customer__contact">
-      {% if settings.contact_phone_number != blank %}
-        <a href="tel:{{ settings.contact_phone_number | replace: ' ', '' | replace: '(', '' | replace: ')', '' | replace: '-', '' }}" class="m-menu-customer__contact-item m-menu-customer__contact-item--phone">
-          <svg xmlns="http://www.w3.org/2000/svg" width="9" height="14" viewBox="0 0 9 14" fill="none">
-            <path d="M3.86 11.0405H5.14M2.42 0.5H6.58C7.64039 0.5 8.5 1.44383 8.5 2.60811V11.3919C8.5 12.5562 7.64039 13.5 6.58 13.5H2.42C1.35961 13.5 0.5 12.5562 0.5 11.3919V2.60811C0.5 1.44383 1.35961 0.5 2.42 0.5Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>{{ settings.contact_phone_number }}</span>
-        </a>
-      {% endif %}
-      {% if settings.contact_email != blank %}
-        <a href="mailto:{{ settings.contact_email }}" class="m-menu-customer__contact-item m-menu-customer__contact-item--email">
-          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
-            <path d="M2.724 5.088C2.724 3.492 3.624 2.652 5.1 2.652C5.928 2.652 6.42 2.952 6.684 3.492V2.796H7.464V5.376C7.464 6.228 7.86 6.54 8.352 6.54C9.264 6.54 9.348 5.844 9.348 4.704C9.348 1.812 7.644 0.744 5.1 0.744C2.544 0.744 0.84 2.448 0.84 4.992C0.84 7.524 2.448 9.672 5.22 9.672C6.816 9.672 7.896 9.06 7.896 8.112H8.628C8.628 10.116 6.336 10.416 5.184 10.416C1.98 10.416 0 8.04 0 5.028C0 2.016 2.04 0 5.1 0C8.148 0 10.188 1.572 10.188 4.572C10.188 6.624 9.54 7.272 8.34 7.272C7.5 7.272 7.032 6.828 6.828 6.264C6.612 6.996 6.132 7.512 5.124 7.512C3.708 7.512 2.724 6.672 2.724 5.088ZM3.564 5.064C3.564 6.168 4.152 6.756 5.172 6.756C6.204 6.756 6.684 6.192 6.684 5.1C6.684 3.972 6.18 3.408 5.136 3.408C3.984 3.408 3.564 3.96 3.564 5.064Z" fill="currentColor"/>
-          </svg>
-          <span>{{ settings.contact_email }}</span>
-        </a>
-      {% endif %}
-    </div>
-    {% endif %}
-  {% endif %}
-  {% liquid
-    assign has_social = false
-    if settings.social_instagram_link != blank or settings.social_facebook_link != blank or settings.social_tiktok_link != blank or settings.social_twitter_link != blank or settings.social_pinterest_link != blank or settings.social_youtube_link != blank or settings.social_snapchat_link != blank or settings.social_tumblr_link != blank or settings.social_vimeo_link != blank or settings.social_discord_link != blank or settings.social_whatsapp_link != blank or settings.social_spotify_link != blank or settings.social_linkedin_link != blank or settings.social_line_link != blank
-      assign has_social = true
-    endif
-  %}
-  {% capture menu_customer_social %}
-  {% if has_social %}
-    <div class="m-menu-customer__social">
-      {% render 'social-media-links', size: 'm-svg-icon--small', extra_classes: 'm-menu-customer__social-links' %}
-    </div>
-    {% endif %}
-  {% endcapture %}
-  {% if section.settings.menu_drawer_account_style != 'icon_text' and section.settings.menu_drawer_account_style != 'none' %}
-    {{ menu_customer_social }}
-  {% endif %}
-  {% unless section.settings.menu_drawer_account_style == 'none' %}
   {% if shop.customer_accounts_enabled or shop.customer_accounts_optional %}
-    <div class="m-menu-customer__wrapper{% if section.settings.menu_drawer_account_style == 'compact' or section.settings.menu_drawer_account_style == 'icon_text' %} m-menu-customer__wrapper--compact{% endif %}">
-      {% if section.settings.menu_drawer_account_style == 'expanded' %}
+    <div class="m-menu-customer__wrapper">
       <div class="m-menu-customer__label">{{ 'customer.account.title' | t }}</div>
-      {% endif %}
       {% if customer %}
         <a href="{{ routes.account_url }}" class="m-menu-customer__name">
           <svg
@@ -70,39 +18,6 @@
           {{- 'customer.account.log_out' | t -}}
         </a>
       {% else %}
-        {% if section.settings.menu_drawer_account_style == 'compact' %}
-          <a
-            href="{{ routes.account_login_url }}"
-            class="m-menu-customer__compact-link"
-            data-tab="signin"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M6 0C6.79565 0 7.55871 0.31607 8.12132 0.87868C8.68393 1.44129 9 2.20435 9 3C9 3.79565 8.68393 4.55871 8.12132 5.12132C7.55871 5.68393 6.79565 6 6 6C5.20435 6 4.44129 5.68393 3.87868 5.12132C3.31607 4.55871 3 3.79565 3 3C3 2.20435 3.31607 1.44129 3.87868 0.87868C4.44129 0.31607 5.20435 0 6 0ZM6 1.5C5.60218 1.5 5.22064 1.65804 4.93934 1.93934C4.65804 2.22064 4.5 2.60218 4.5 3C4.5 3.39782 4.65804 3.77936 4.93934 4.06066C5.22064 4.34196 5.60218 4.5 6 4.5C6.39782 4.5 6.77936 4.34196 7.06066 4.06066C7.34196 3.77936 7.5 3.39782 7.5 3C7.5 2.60218 7.34196 2.22064 7.06066 1.93934C6.77936 1.65804 6.39782 1.5 6 1.5ZM6 6.75C8.0025 6.75 12 7.7475 12 9.75V12H0V9.75C0 7.7475 3.9975 6.75 6 6.75ZM6 8.175C3.7725 8.175 1.425 9.27 1.425 9.75V10.575H10.575V9.75C10.575 9.27 8.2275 8.175 6 8.175Z" fill="currentColor"/>
-            </svg>
-            <span>{{ 'layout.customer.log_in' | t }}</span>
-          </a>
-          <a
-            href="{{ routes.account_register_url }}"
-            class="m-menu-customer__compact-link m-menu-customer__compact-link--register"
-            data-tab="register"
-          >
-            {{ 'customer.register.title' | t }}
-        </a>
-        {% elsif section.settings.menu_drawer_account_style == 'icon_text' %}
-          <a
-            href="{{ routes.account_login_url }}"
-            class="m-menu-customer__compact-link m-menu-customer__icon-link"
-            data-tab="signin"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="19" viewBox="0 0 17 19" fill="none">
-              <path d="M0.75 18.0833V17C0.75 14.9888 1.54896 13.0599 2.97111 11.6378C4.39326 10.2156 6.32211 9.41667 8.33333 9.41667M8.33333 9.41667C10.3446 9.41667 12.2734 10.2156 13.6956 11.6378C15.1177 13.0599 15.9167 14.9888 15.9167 17V18.0833M8.33333 9.41667C9.4826 9.41667 10.5848 8.96012 11.3975 8.14746C12.2101 7.33481 12.6667 6.2326 12.6667 5.08333C12.6667 3.93406 12.2101 2.83186 11.3975 2.0192C10.5848 1.20655 9.4826 0.75 8.33333 0.75C7.18406 0.75 6.08186 1.20655 5.2692 2.0192C4.45655 2.83186 4 3.93406 4 5.08333C4 6.2326 4.45655 7.33481 5.2692 8.14746C6.08186 8.96012 7.18406 9.41667 8.33333 9.41667Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            <span class="m-menu-customer__icon-text">
-              <span>{{ 'layout.customer.log_in_or' | t }}</span>
-              <span>{{ 'layout.customer.register' | t }}</span>
-            </span>
-        </a>
-      {% else %}
         <a
           href="{{ routes.account_login_url }}"
           class="m-button m-button--primary m-signin-button"
@@ -117,18 +32,8 @@
         >
           {{ 'customer.register.title' | t }}
         </a>
-        {% endif %}
       {% endif %}
     </div>
-  {% endif %}
-  {% endunless %}
-  {% if section.settings.menu_drawer_account_style == 'icon_text' %}
-    {{ menu_customer_social }}
-  {% endif %}
-  {% if section.settings.menu_drawer_show_wishlist %}
-    <a href="{{ section.settings.menu_drawer_wishlist_url | default: '/pages/wishlist' }}" class="m-menu-customer__wishlist-link">
-      {{ section.settings.menu_drawer_wishlist_label | default: 'Lista de Desejos' }}
-    </a>
   {% endif %}
   <div class="m-menu-customer__language-currency">
     {%- liquid

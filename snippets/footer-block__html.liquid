@@ -4,9 +4,4 @@
       {{ block.settings.html }}
     </div>
   {% endif %}
-  {% if block.settings.show_social_icons %}
-    <div class="block-text m:hidden md:m:block{% if block.settings.html != blank %} m:mt-4{% endif %}">
-      {% render 'social-media-links', size: 'm-svg-icon--medium', extra_classes: 'justify-center md:justify-start' %}
-    </div>
-  {% endif %}
 </div>

@@ -40,19 +40,6 @@
       endif
     endfor
 
-    if selected_color contains '|'
-      assign sc_colors = selected_color | split: '|'
-      assign sc_count = sc_colors.size
-      assign sc_gradient = 'linear-gradient(to right'
-      for c in sc_colors
-        assign c_stripped = c | strip
-        assign stop_start = forloop.index0 | times: 100 | divided_by: sc_count
-        assign stop_end = forloop.index | times: 100 | divided_by: sc_count
-        assign sc_gradient = sc_gradient | append: ', ' | append: c_stripped | append: ' ' | append: stop_start | append: '%, ' | append: c_stripped | append: ' ' | append: stop_end | append: '%'
-      endfor
-      assign selected_color = sc_gradient | append: ')'
-    endif
-
     for i in (1..100)
       assign key = 'filter_color' | append: i
       assign key_second = 'filter_color' | append: i | append: '.png'
@@ -138,13 +125,7 @@
       </div>
     {%- when 'color' -%}
       {% liquid
-        if selected_image != ''
-          assign style = 'background-image: url(' | append: selected_image | append: '); background-size: cover; background-position: center;'
-        elsif selected_color contains 'linear-gradient'
-          assign style = 'background: ' | append: selected_color | append: ';'
-        else
-          assign style = 'background-color: ' | append: selected_color | append: ';'
-        endif
+        assign style = 'background-color: ' | append: selected_color | append: ';'
       %}
       <div
         class="m-product-option--node m-tooltip m-tooltip--top{% if option_disabled %} m-product-option--node__unavailable{% endif %}"
@@ -193,8 +174,6 @@
         else
           if value.swatch.color
             assign style = style | append: 'background-color: ' | append: value.swatch.color | append: ';'
-          elsif selected_color contains 'linear-gradient'
-            assign style = style | append: 'background: ' | append: selected_color | append: ';'
           else
             assign style = style | append: 'background-color: ' | append: selected_color | append: ';'
           endif
@@ -302,19 +281,6 @@
               assign swatch_value = color
             endif
           endfor
-
-          if swatch_value contains '|'
-            assign swatch_colors = swatch_value | split: '|'
-            assign swatch_color_count = swatch_colors.size
-            assign swatch_gradient = 'linear-gradient(to right'
-            for c in swatch_colors
-              assign c_stripped = c | strip
-              assign stop_start = forloop.index0 | times: 100 | divided_by: swatch_color_count
-              assign stop_end = forloop.index | times: 100 | divided_by: swatch_color_count
-              assign swatch_gradient = swatch_gradient | append: ', ' | append: c_stripped | append: ' ' | append: stop_start | append: '%, ' | append: c_stripped | append: ' ' | append: stop_end | append: '%'
-            endfor
-            assign swatch_value = swatch_gradient | append: ')'
-          endif
         else
           if value.swatch.image
             assign image_url = value.swatch.image | image_url: width: 52

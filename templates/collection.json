@@ -1,26 +1,11 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "collection-header": {
       "type": "collection-page-header",
-      "custom_css": [
-        ".container-full {padding: 0;}"
-      ],
       "settings": {
         "color_scheme": "dark",
-        "container": "w-full",
+        "container": "container-fluid",
         "layout": "inside",
-        "bg_image": "{{ collection.image }}",
-        "show_overlay": true,
-        "overlay_opacity": 25,
         "image_position": "background",
         "enable_parallax": false,
         "parallax_direction": "vertical",
@@ -29,97 +14,34 @@
         "upper_title": false,
         "show_desc": true,
         "collection_all_desc": "",
-        "padding_top": 30,
-        "padding_bottom": 30,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20,
+        "padding_top": 36,
+        "padding_bottom": 50,
         "enable_bg_zoom_effect": true
-      }
-    },
-    "trust_bar": {
-      "type": "trust-bar",
-      "blocks": {
-        "trust_cupom": {
-          "type": "item",
-          "settings": {
-            "image": "shopify://shop_images/cupom.svg",
-            "custom_svg": "",
-            "text": "CUPOM PRIMEIRA COMPRA: BEMVINDA10"
-          }
-        },
-        "trust_troca": {
-          "type": "item",
-          "settings": {
-            "image": "shopify://shop_images/return.svg",
-            "custom_svg": "",
-            "text": "PRIMEIRA TROCA GRÁTIS"
-          }
-        },
-        "trust_parcelamento": {
-          "type": "item",
-          "settings": {
-            "image": "shopify://shop_images/card.svg",
-            "custom_svg": "",
-            "text": "PARCELAMENTO 6X SEM JUROS"
-          }
-        }
-      },
-      "block_order": [
-        "trust_cupom",
-        "trust_troca",
-        "trust_parcelamento"
-      ],
-      "settings": {
-        "container": "container",
-        "color_scheme": "",
-        "item_gap": 100,
-        "item_gap_mobile": 40,
-        "mobile_text_size": 12,
-        "direction": "left",
-        "speed": 16,
-        "padding_top": 20,
-        "padding_bottom": 20,
-        "padding_top_mobile": 16,
-        "padding_bottom_mobile": 4,
-        "custom_class": ""
       }
     },
     "main": {
       "type": "main-collection-product-grid",
       "blocks": {
-        "collections_jVNdwN": {
-          "type": "collections",
-          "disabled": true,
-          "settings": {
-            "title": "Categorias",
-            "menu": "",
-            "show_image": false,
-            "use_accordion": true,
-            "open_filtergroup": false
-          }
-        },
-        "banner_promotion_iHfDbF": {
+        "banner_promotion_KppNc9": {
           "type": "banner_promotion",
           "settings": {
-            "color_scheme": "",
+            "color_scheme": "dark",
             "text_size": "medium",
             "text_color": "white",
-            "image": "shopify://shop_images/Veja_tambem_os_mais_vendidos_-_Categoria.png",
-            "link": "shopify://collections",
-            "content_position": "center_center",
+            "link": "",
+            "content_position": "bottom_center",
             "content_alignment": "center",
-            "title": "",
-            "subtitle": "",
-            "button_label": "",
-            "button_style": "m-button--link",
+            "title": "SALE UP TO 25% OFF",
+            "subtitle": "Online Exclusive",
+            "button_label": "Shop The Sale",
+            "button_style": "m-button--primary",
             "button_size": "",
             "button_fixed": false
           }
         }
       },
       "block_order": [
-        "collections_jVNdwN",
-        "banner_promotion_iHfDbF"
+        "banner_promotion_KppNc9"
       ],
       "custom_css": [
         ".m-banner-promotion {order: 3 !important; margin-top: 30px; margin-bottom: 0;}",
@@ -129,58 +51,21 @@
         "container": "container-fluid",
         "grid_layout": "grid",
         "grid_columns": "4",
-        "show_columns_switcher": false,
-        "hide_columns_switcher_mobile": false,
-        "pagination_limit": 32,
+        "show_columns_switcher": true,
+        "pagination_limit": 12,
         "paginate_type": "paginate",
         "show_sorting": true,
         "show_filter": true,
         "filters_type": "storefront_filters",
-        "sidebar": "fixed",
-        "sidebar_title": "Filtros",
+        "sidebar": "leftColumn",
+        "sidebar_title": "Filters",
         "limit_height_widget": true,
         "limit_height": 300,
         "change_product_variant_on_fitlering": true,
-        "split_by_color_variant": false,
         "show_product_count": true,
-        "collapsed_groups": "",
-        "color_swatches": "Cor",
-        "color_swatches_design": "list",
-        "button_style_inside3": "m-button--primary",
-        "button_color_inside3": "light",
-        "button_text_hover_color_inside3": "light",
-        "background_gradient_inside3": ""
-      }
-    },
-    "rich_text_akB6fh": {
-      "type": "rich-text",
-      "blocks": {
-        "collapsible_text_fd43nW": {
-          "type": "collapsible_text",
-          "settings": {
-            "collapsible_content": "{{ collection.metafields.custom.seo_text | metafield_tag }}",
-            "collapsed_height": 220,
-            "fade_height": 90,
-            "animation_duration": 400,
-            "read_more_label": "Ler mais",
-            "read_less_label": "Ler menos"
-          }
-        }
-      },
-      "block_order": [
-        "collapsible_text_fd43nW"
-      ],
-      "name": "Rich text SEO",
-      "settings": {
-        "container": "container",
-        "color_scheme": "",
-        "content_alignment": "center",
-        "padding_top": 52,
-        "padding_bottom": 52,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20,
-        "custom_class": "",
-        "animations": "inherit"
+        "collapsed_groups": "Product type, Brand, Vendor, Size",
+        "color_swatches": "color,colour,couleur,farbe",
+        "color_swatches_design": "list"
       }
     },
     "recent-viewed": {
@@ -188,17 +73,12 @@
       "settings": {
         "container": "container-fluid",
         "color_scheme": "",
-        "heading": "Vistos recentemente",
+        "heading": "Recently Viewed Products",
         "heading_size": "h3",
-        "text_align": "center",
-        "show_title_divider": false,
+        "text_align": "left",
         "limit": 8,
         "columns": 5,
-        "column_gap": 20,
-        "button_style_inside3": "m-button--primary",
-        "button_color_inside3": "light",
-        "button_text_hover_color_inside3": "light",
-        "background_gradient_inside3": "",
+        "column_gap": 30,
         "pcard_layout": "",
         "pcard_image_ratio": "",
         "show_vendor": false,
@@ -211,8 +91,6 @@
         "item_gap_mobile": 16,
         "padding_top": 40,
         "padding_bottom": 100,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20,
         "custom_class": "",
         "animations": "inherit"
       }
@@ -220,9 +98,7 @@
   },
   "order": [
     "collection-header",
-    "trust_bar",
     "main",
-    "rich_text_akB6fh",
     "recent-viewed"
   ]
 }

@@ -11,40 +11,26 @@
 -%}
 <div class="m-collection-toolbar">
   <div class="m-collection-toolbar--wrapper">
-    <div class="m-toolbar--left m:flex{% unless st.sidebar == 'fixed' %} xl:m:hidden{% endunless %}{% if st.hide_columns_switcher_mobile %} m-toolbar--buttons-wrapper{% endif %}">
+    <div class="m-toolbar--left m:flex{% unless st.sidebar == 'fixed' %} xl:m:hidden{% endunless %}">
       {%- if st.show_filter -%}
-        <button class="m-sidebar--open m-toolbar--filter-btn m:flex m:items-center{% if st.hide_columns_switcher_mobile %} m-toolbar--button-mobile{% endif %}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="8" viewBox="0 0 11 8" fill="none" class="m-toolbar--filter-icon">
-            <path d="M0.5 0.5H10.5M2.16667 3.83333H8.83333M4.16667 7.16667H6.83333" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+        <button class="m-sidebar--open m:flex m:items-center">
           <span>{{ 'collections.toolbar.show_filter' | t }}</span>
+          <svg class="m-svg-icon--small" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M441.9 167.3l-19.8-19.8c-4.7-4.7-12.3-4.7-17 0L224 328.2 42.9 147.5c-4.7-4.7-12.3-4.7-17 0L6.1 167.3c-4.7 4.7-4.7 12.3 0 17l209.4 209.4c4.7 4.7 12.3 4.7 17 0l209.4-209.4c4.7-4.7 4.7-12.3 0-17z"/>
+          </svg>
         </button>
       {%- endif -%}
-      {% if st.show_sorting and st.hide_columns_switcher_mobile %}
-        <button class="m-sortby--open md:m:hidden m:flex m:items-center m-toolbar--button-mobile">
-          <span data-sortby-option>{{ 'collections.sorting.title' | t }}</span>
+      {% if st.show_sorting %}
+        <button class="m-sortby--open md:m:hidden m:flex m:items-center">
+          <span data-sortby-option>{{ sort_by_name }}</span>
+          <svg class="m-svg-icon--small" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path d="M441.9 167.3l-19.8-19.8c-4.7-4.7-12.3-4.7-17 0L224 328.2 42.9 147.5c-4.7-4.7-12.3-4.7-17 0L6.1 167.3c-4.7 4.7-4.7 12.3 0 17l209.4 209.4c4.7 4.7 12.3 4.7 17 0l209.4-209.4c4.7-4.7 4.7-12.3 0-17z"/>
+          </svg>
         </button>
       {% endif %}
     </div>
-    <div class="m-toolbar--center m:hidden md:m:flex m:items-center m:justify-center">
-      <span class="m-toolbar--product-count">{{ 'collections.general.collection_items' | t: title: results.products_count }}</span>
-    </div>
-    {% unless st.hide_columns_switcher_mobile %}
-      <div class="m-toolbar--mobile-bottom md:m:hidden">
-        <span class="m-toolbar--product-count">{{ 'collections.general.collection_items' | t: title: results.products_count }}</span>
-        {% if st.show_sorting %}
-          <button class="m-sortby--open m:flex m:items-center">
-            <span>{{ 'collections.sorting.title' | t }}:</span>
-            <span data-sortby-option>{{ sort_by_name }}</span>
-            <svg class="m-svg-icon--small" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-              <path d="M441.9 167.3l-19.8-19.8c-4.7-4.7-12.3-4.7-17 0L224 328.2 42.9 147.5c-4.7-4.7-12.3-4.7-17 0L6.1 167.3c-4.7 4.7-4.7 12.3 0 17l209.4 209.4c4.7 4.7 12.3 4.7 17 0l209.4-209.4c4.7-4.7 4.7-12.3 0-17z"/>
-            </svg>
-          </button>
-        {% endif %}
-      </div>
-    {% endunless %}
     {%- if st.show_sorting or st.show_columns_switcher -%}
-      <div class="m-toolbar--right m:flex m:items-center m:justify-end{% if st.hide_columns_switcher_mobile %} m:hidden md:m:flex{% endif %}">
+      <div class="m-toolbar--right m:flex m:flex-1 m:items-center m:justify-end md:m:justify-between">
         {% if st.show_sorting %}
           <div class="m-toolbar--sortby m:hidden md:m:block" data-toolbar-sorting>
             <m-select-component>
@@ -64,7 +50,6 @@
               </select>
               <div class="m-select-custom js-selectCustom" aria-hidden="true">
                 <div class="m-select-custom--trigger">
-                  <span class="m-select-custom--trigger-label">{{ 'collections.sorting.title' | t }}:</span>
                   <span class="m-select-custom--trigger-text"></span>
                   <span class="m-select-custom--trigger-icon">
                     <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">

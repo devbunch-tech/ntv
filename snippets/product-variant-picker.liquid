@@ -1,50 +1,40 @@
 {% liquid
-  if button_style_rectangular == null
-    assign button_style_rectangular = false
-  endif
   assign is_size = false
   assign size_title_downcase = size_title | downcase
   assign picker_types = ''
   assign option_labels = ''
-  assign image_round_options = ''
 
   for option in product.options_with_values
     assign found_option = false
     assign option_design = ''
     assign option_label = option.name
-    assign image_round = false
 
     for i in (1..5)
       unless found_option == true
         assign option_name_key = 'variant_option_title' | append: i
         assign option_design_key = 'variant_option_design' | append: i
         assign option_label_key = 'variant_option_display_name' | append: i
-        assign option_image_round_key = 'variant_option_image_round' | append: i
 
         assign option_name = settings[option_name_key]
         if option_name == option.name
           assign found_option = true
           assign option_design = settings[option_design_key]
           assign option_label = settings[option_label_key] | default: option.name
-          assign image_round = settings[option_image_round_key]
         endif
       endunless
     endfor
 
     assign design = option_design | prepend: ','
     assign option_label = option_label | prepend: ','
-    assign image_round_flag = image_round | prepend: ','
     if found_option == false or option_design == ''
       assign design = settings.variant_option_design_default | prepend: ','
     endif
 
     assign picker_types = picker_types | append: design
     assign option_labels = option_labels | append: option_label
-    assign image_round_options = image_round_options | append: image_round_flag
   endfor
   assign picker_types = picker_types | remove_first: ',' | split: ','
   assign option_labels = option_labels | remove_first: ',' | split: ','
-  assign image_round_options = image_round_options | remove_first: ',' | split: ','
 %}
 
 <variant-picker
@@ -54,14 +44,12 @@
   data-update-url="{{ update_browser_history }}"
   data-product-url="{{ product.url }}"
   data-has-only-default-variant="{{ product.has_only_default_variant }}"
-  {% if button_style_rectangular %}class="variant-picker--rectangular-style"{% endif %}
 >
   {%- unless product.has_only_default_variant -%}
     {%- for option in product.options_with_values -%}
       {% liquid
         assign picker_type = picker_types[forloop.index0]
         assign option_label = option_labels[forloop.index0]
-        assign is_image_round = image_round_options[forloop.index0]
         assign option_name_downcase = option.name | downcase
         if size_title_downcase contains option_name_downcase
           assign is_size = true
@@ -80,12 +68,11 @@
         endif
       %}
       <div
-        class="m-product-option m-product-option--{{ picker_type }}{% if is_image_round == 'true' %}{% if picker_type == 'image' or picker_type == 'color' %} m-product-option--image-round{% endif %}{% endif %}"
+        class="m-product-option m-product-option--{{ picker_type }}"
         data-picker-type="{{ picker_type }}"
       >
         <div
           data-picker-field="{% if picker_type == 'dropdown' or picker_type == 'swatch_dropdown' %}select{% else %}radio{% endif %}"
-          data-is-size="{{ is_size }}"
           data-option-name="{{ option.name }}"
           data-selected-value="{{ option.selected_value }}"
           class="m-product-option__inner"
@@ -96,7 +83,7 @@
               <span class="option-label--selected">{{ option.selected_value }}</span>
             </label>
             {% if is_size %}
-              <button data-open-sizeguide class="foxkit-sizechart-button m:inline-flex m:items-center">
+              <button data-open-sizeguide class="foxkit-sizechart-button m:inline-flex m:items-center m:hidden">
                 <svg
                   class="m-svg-icon--large"
                   fill="currentColor"

@@ -86,27 +86,9 @@
   .m-collection-page-header--{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --align-items: {{ section.settings.vertical_alignment }};
     {% if bg_image != blank %}--bg-image: url({{ bg_image | image_url }});{% endif %}
   }
-  {% if section.settings.show_overlay %}
-    .m-collection-page-header--{{ section.id }} .m-collection-page-header__overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(0, 0, 0, {{ section.settings.overlay_opacity | divided_by: 100.0 }});
-      z-index: 1;
-      pointer-events: none;
-    }
-    .m-collection-page-header--{{ section.id }} .m-collection-page-header__inner {
-      position: relative;
-      z-index: 2;
-    }
-  {% endif %}
 {%- endstyle -%}
 
 <div class="{{ main_classes }}" data-section-type="collection-header" data-section-id="{{ section.id }}">
@@ -132,9 +114,6 @@
                 alt: alt_image
             }}
           </div>
-          {% if section.settings.show_overlay %}
-            <div class="m-collection-page-header__overlay"></div>
-          {% endif %}
         </div>
       </m-parallax>
     {% endif %}
@@ -156,9 +135,6 @@
             }}
           </div>
         {% endif %}
-        {% if section.settings.show_overlay and bg_image != blank %}
-          <div class="m-collection-page-header__overlay"></div>
-        {% endif %}
         <div class="m-collection-page-header__inner m-section-py m:text-{{ text_color }} m:text-{{ text_alignment }}">
           {% if show_breadcrumb and layout == 'inside' %}
             {% assign justify = text_alignment | replace: 'right', 'end' | replace: 'left', 'start' %}
@@ -173,7 +149,6 @@
             {{ collection.title }}
           </h1>
           {% if section.settings.show_desc and collection_desc != blank %}
-            <hr class="m-collection-page-header__separator">
             <div class="m-collection-page-header__description rte {{ desc_color }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
               {{ collection_desc }}
             </div>
@@ -260,23 +235,6 @@
       "type": "image_picker",
       "id": "bg_image",
       "label": "Image"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_overlay",
-      "label": "Show overlay",
-      "default": false
-    },
-    {
-      "type": "range",
-      "id": "overlay_opacity",
-      "label": "Overlay opacity",
-      "min": 0,
-      "max": 100,
-      "step": 5,
-      "unit": "%",
-      "default": 50,
-      "visible_if": "{{ section.settings.show_overlay }}"
     },
     {
       "type": "select",
@@ -419,26 +377,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

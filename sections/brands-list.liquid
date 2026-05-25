@@ -4,7 +4,7 @@
 {% liquid
   assign blocks = section.blocks
   assign items_per_row = section.settings.item_per_row
-  assign items_per_row_tablet = items_per_row | divided_by: 1.0 | ceil
+  assign items_per_row_tablet = items_per_row | divided_by: 2.0 | ceil
   assign enable_slider = false
   if section.blocks.size > items_per_row and section.settings.enable_slider
     assign enable_slider = true
@@ -93,8 +93,6 @@
     --row-gap-mobile: {{ row_gap_mobile }}px;
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 <section
@@ -118,7 +116,7 @@
       <div class="m-mixed-layout">
         <div class="m-brands-list__wrapper{% if enable_slider %} swiper-container swiper--equal-height{% endif %}">
           <div
-            class="m-brands-list__inner m:grid m:grid-{{ items_per_row }}-cols md:m:grid-{{ items_per_row_tablet }}-cols lg:m:grid-{{ items_per_row }}-cols"
+            class="m-brands-list__inner m:grid m:grid-2-cols md:m:grid-{{ items_per_row_tablet }}-cols lg:m:grid-{{ items_per_row }}-cols"
             data-wrapper
           >
             {% for block in blocks %}
@@ -199,7 +197,7 @@
       "content": "Section header"
     },
     {
-      "type": "textarea",
+      "type": "text",
       "id": "heading",
       "label": "Heading",
       "default": "Brand list"
@@ -383,26 +381,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

@@ -33,7 +33,7 @@
                   data-block-type="collections"
                   style="order: {{ forloop.index }}"
                 >
-                  <span class="m-filter--widget-title h5{% if use_accordion %} m-accordion--item-button {% endif %}">
+                  <h4 class="m-filter--widget-title h5{% if use_accordion %} m-accordion--item-button {% endif %}">
                     {{ block.settings.title }}
                     {% if use_accordion %}
                       <span class="m-accordion--item-icon">
@@ -42,7 +42,7 @@
                         </svg>
                       </span>
                     {% endif %}
-                  </span>
+                  </h4>
                   <div class="m-filter--widget-content {% if use_accordion %} m-accordion--item-content{% endif %}"{%- if open_filtergroup -%} style="opacity: 1;"{%- endif -%}>
                     {% if menu.links != blank %}
                     <ul class="m-link-lists">

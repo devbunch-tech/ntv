@@ -44,8 +44,6 @@
   #m-section-{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
-    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --column-gap: {{ section.settings.column_gap }}px;
     --row-gap: {{ section.settings.row_gap }}px;
     --column-gap-mobile: {{ section.settings.mobile_gap }}px;
@@ -64,15 +62,15 @@
       or section.settings.button_label != blank
     %}
       <div class="m-section__header m:text-{{ section.settings.header_alignment }}{% unless layout == 'grid' %} lg:m:hidden{% endunless %}">
-        {% if section.settings.heading != blank %}
-          <h2 class="m-section__heading {{ section.settings.heading_size | default: 'h3' }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
-            {{ section.settings.heading }}
-          </h2>
-        {% endif %}
         {% if section.settings.subheading != blank %}
           <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
             {{ section.settings.subheading }}
           </p>
+        {% endif %}
+        {% if section.settings.heading != blank %}
+          <h2 class="m-section__heading {{ section.settings.heading_size | default: 'h3' }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+            {{ section.settings.heading }}
+          </h2>
         {% endif %}
         {% if section.settings.description != blank %}
           <div class="m-section__description{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
@@ -110,15 +108,15 @@
       <div class="m-gallery__wrapper m:display-grid m:grid-{{ section.settings.columns_mobile }}-cols md:m:grid-{{ columns_tablet }}-cols lg:m:grid-{{ columns }}-cols{% if enable_swipe_mobile %} swipe-mobile__inner{% endif %}">
         {% unless layout == 'grid' %}
           <div class="m-gallery__item m-gallery__info m:text-center m:hidden lg:m:flex m:row-end-{{ row | plus: 1 }}{% if layout == 'metro' %} m:col-{{ columns | divided_by: 2 }}-{{ columns | divided_by: 2 | plus: 2 }}{% else %} m:col-1-3{% endif %} m:blocks-radius m-gradient m-color-{{ section.settings.color_scheme_content }}">
-            {% if section.settings.heading != blank %}
-              <h2 class="m-section__heading {{ section.settings.heading_size | default: 'h3' }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
-                {{ section.settings.heading }}
-              </h2>
-            {% endif %}  
             {% if section.settings.subheading != blank %}
               <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
                 {{ section.settings.subheading }}
               </p>
+            {% endif %}
+            {% if section.settings.heading != blank %}
+              <h2 class="m-section__heading {{ section.settings.heading_size | default: 'h3' }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+                {{ section.settings.heading }}
+              </h2>
             {% endif %}
             {% if section.settings.description != blank %}
               <div class="m-section__description{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
@@ -454,26 +452,6 @@
       "default": 50,
       "min": 0,
       "max": 100,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_top_mobile",
-      "label": "Padding Top (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
-      "step": 2,
-      "unit": "px"
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_mobile",
-      "label": "Padding Bottom (Mobile)",
-      "default": 20,
-      "min": 0,
-      "max": 60,
       "step": 2,
       "unit": "px"
     },

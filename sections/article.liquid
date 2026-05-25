@@ -39,71 +39,48 @@
   <div class="{{ container }}">
     <div class="m-row{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
       <div class="m-article__wrapper">
-        {%- if design == 'layout3' -%}
-          {%- comment -%}Layout 3: Breadcrumbs > Blog Title > Article Title > Image > Meta+Social > Content > Tags > Comments > Related{%- endcomment -%}
-          {% if section.settings.blog_show_breadcrumb %}
-            {% render 'breadcrumb', justify: 'start' %}
-          {% endif %}
-          {% if section.settings.blog_show_blog_title %}
-            <a class="m-article__blog" href="{{ blog.url }}">{{ blog.title }}</a>
-          {% endif %}
-          <div role="article" class="m-article__inner">
-            <article>
-              <div class="m-article__header m:text-left">
-                <h1 class="m-article__title">{{ article.title }}</h1>
-              </div>
-
-              {%- if article.image -%}
-                <div class="m-article__feature-image m:blocks-radius">
-                  {% render 'responsive-image', image: article.image, image_class: 'w-full' %}
-                </div>
-              {%- endif -%}
-
-              {% if section.settings.blog_show_author or section.settings.blog_show_date or section.settings.blog_show_social %}
-                <div class="m-article__meta-row m:flex m:items-center m:justify-between m:gap-4">
-                  <div class="m-article__meta m:flex m:items-center m:justify-between sm:m:justify-start m:gap-2 m:w-full sm:m:w-auto">
-                    {% if section.settings.blog_show_date %}
-                      <span>{% render 'date-format-br', date: article.published_at %}</span>
-                    {% endif %}
-                    {% if section.settings.blog_show_date and section.settings.blog_show_author %}
-                      <span>•</span>
-                    {% endif %}
-                    {% if section.settings.blog_show_author %}
-                      <span>{{ article.author }}</span>
-                    {% endif %}
-                  </div>
-                  {% if section.settings.blog_show_social %}
-                    <div class="m-article__share m:hidden sm:m:flex">
-                      <span class="m-article__share-label">{{ 'blogs.article.share' | t }}</span>
-                      <button type="button" class="m-article__share-btn" data-share-url="{{ shop.url | append: article.url }}" data-share-title="{{ article.title | escape }}" data-share-text="{{ article.excerpt | strip_html | truncate: 100 | escape }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                          <path d="M8.09688 2.64271L9.65521 1.08438C10.4344 0.305208 11.9927 0.305208 12.7719 1.08438L13.551 1.86354C14.3302 2.64271 14.3302 4.20104 13.551 4.98021L9.65521 8.87604C8.87604 9.65521 7.31771 9.65521 6.53854 8.87604M6.53854 11.9927L4.98021 13.551C4.20104 14.3302 2.64271 14.3302 1.86354 13.551L1.08438 12.7719C0.305208 11.9927 0.305208 10.4344 1.08438 9.65521L4.98021 5.75938C5.75938 4.98021 7.31771 4.98021 8.09688 5.75938" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                      </button>
-                    </div>
+        {% if section.settings.blog_show_breadcrumb %}
+          {% render 'breadcrumb', justify: 'center' %}
+        {% endif %}
+        {%- if design == 'layout2' and article.image -%}
+          <div class="m-article__feature-image m:blocks-radius">
+            {% render 'responsive-image', image: article.image, image_class: 'w-full' %}
+          </div>
+        {%- endif -%}
+        <div role="article" class="m-article__inner">
+          <article>
+            <div class="m-article__header m:text-center">
+              <a class="m-article__blog" href="{{ blog.url }}">{{ blog.title }}</a>
+              <h1 class="m-article__title">{{ article.title }}</h1>
+              {% if section.settings.blog_show_author or section.settings.blog_show_date %}
+                <div class="m-article__meta">
+                  {% if section.settings.blog_show_author %}
+                    {{ 'blogs.article.by_author' | t }}
+                    <span>{{ article.author }}</span>
+                  {% endif %}
+                  {% if section.settings.blog_show_date %}
+                    {% if section.settings.blog_show_author %}{{ 'blogs.article.posted_in' | t }}{% endif %}
+                    <span>{{ article.published_at | date: '%b %d, %Y' }}</span>
                   {% endif %}
                 </div>
               {% endif %}
+            </div>
 
-              {% if article.content != blank %}
-                <div class="m-article__content rte">
-                  {{ article.content }}
-                </div>
-              {% endif %}
+            {%- if design == 'layout1' and article.image -%}
+              <div class="m-article__feature-image m:blocks-radius">
+                {% render 'responsive-image', image: article.image, image_class: 'w-full' %}
+              </div>
+            {%- endif -%}
 
-              {% if section.settings.blog_show_social %}
-                <div class="m-article__share m:flex sm:m:hidden m:mb-8">
-                  <span class="m-article__share-label">{{ 'blogs.article.share' | t }}</span>
-                  <button type="button" class="m-article__share-btn" data-share-url="{{ shop.url | append: article.url }}" data-share-title="{{ article.title | escape }}" data-share-text="{{ article.excerpt | strip_html | truncate: 100 | escape }}">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                      <path d="M8.09688 2.64271L9.65521 1.08438C10.4344 0.305208 11.9927 0.305208 12.7719 1.08438L13.551 1.86354C14.3302 2.64271 14.3302 4.20104 13.551 4.98021L9.65521 8.87604C8.87604 9.65521 7.31771 9.65521 6.53854 8.87604M6.53854 11.9927L4.98021 13.551C4.20104 14.3302 2.64271 14.3302 1.86354 13.551L1.08438 12.7719C0.305208 11.9927 0.305208 10.4344 1.08438 9.65521L4.98021 5.75938C5.75938 4.98021 7.31771 4.98021 8.09688 5.75938" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </button>
-                </div>
-              {% endif %}
+            {% if article.content != blank %}
+              <div class="m-article__content rte">
+                {{ article.content }}
+              </div>
+            {% endif %}
 
-              {% if article.tags.size > 0 and section.settings.blog_show_tags %}
-                <div class="m-article__footer">
+            {%- if section.settings.blog_show_social or section.settings.blog_show_tags -%}
+              <div class="m-article__footer">
+                {% if article.tags.size > 0 and section.settings.blog_show_tags %}
                   <div class="m-article-tags">
                     <span class="m-article-tags__heading">{{ 'blogs.article.tags' | t }}</span>
                     {% for tag in article.tags %}
@@ -111,69 +88,13 @@
                       {%- unless forloop.last %},{% endunless %}
                     {% endfor %}
                   </div>
-                </div>
-              {% endif %}
-            </article>
-          </div>
-        {%- else -%}
-          {%- comment -%}Layout 1 and Layout 2{%- endcomment -%}
-          {% if section.settings.blog_show_breadcrumb %}
-            {% render 'breadcrumb', justify: 'center' %}
-          {% endif %}
-          {%- if design == 'layout2' and article.image -%}
-            <div class="m-article__feature-image m:blocks-radius">
-              {% render 'responsive-image', image: article.image, image_class: 'w-full' %}
-            </div>
-          {%- endif -%}
-          <div role="article" class="m-article__inner">
-            <article>
-              <div class="m-article__header m:text-center">
-                <a class="m-article__blog" href="{{ blog.url }}">{{ blog.title }}</a>
-                <h1 class="m-article__title">{{ article.title }}</h1>
-                {% if section.settings.blog_show_author or section.settings.blog_show_date %}
-                  <div class="m-article__meta">
-                    {% if section.settings.blog_show_author %}
-                      {{ 'blogs.article.by_author' | t }}
-                      <span>{{ article.author }}</span>
-                    {% endif %}
-                    {% if section.settings.blog_show_date %}
-                      {% if section.settings.blog_show_author %}{{ 'blogs.article.posted_in' | t }}{% endif %}
-                      <span>{% render 'date-format-br', date: article.published_at %}</span>
-                    {% endif %}
-                  </div>
+                {% endif %}
+                {% if section.settings.blog_show_social %}
+                  {% assign url = shop.url | append: article.url %}
+                  {% render 'social-sharing', url: url, class: 'm:flex m:items-center' %}
                 {% endif %}
               </div>
-
-              {%- if design == 'layout1' and article.image -%}
-                <div class="m-article__feature-image m:blocks-radius">
-                  {% render 'responsive-image', image: article.image, image_class: 'w-full' %}
-                </div>
-              {%- endif -%}
-
-              {% if article.content != blank %}
-                <div class="m-article__content rte">
-                  {{ article.content }}
-                </div>
-              {% endif %}
-
-              {%- if section.settings.blog_show_social or section.settings.blog_show_tags -%}
-                <div class="m-article__footer">
-                  {% if article.tags.size > 0 and section.settings.blog_show_tags %}
-                    <div class="m-article-tags">
-                      <span class="m-article-tags__heading">{{ 'blogs.article.tags' | t }}</span>
-                      {% for tag in article.tags %}
-                        <a href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
-                        {%- unless forloop.last %},{% endunless %}
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-                  {% if section.settings.blog_show_social %}
-                    {% assign url = shop.url | append: article.url %}
-                    {% render 'social-sharing', url: url, class: 'm:flex m:items-center' %}
-                  {% endif %}
-                </div>
-              {% endif %}
-        {%- endif -%}
+            {% endif %}
 
             {%- comment -%}Navigation{%- endcomment -%}
             {% liquid
@@ -212,37 +133,35 @@
               {% endif %}
             </div>
 
-            {%- comment -%}Related Posts - Layout 1/2 (before comments){%- endcomment -%}
-            {%- if design != 'layout3' -%}
-              {% if section.settings.show_related_articles %}
-                <div class="m-related-posts">
-                  <h3 class="m-related-posts__heading">{{ 'blogs.article.related_title' | t }}</h3>
-                  <div class="m-related-posts__wrapper m-mixed-layout m-mixed-layout--mobile-scroll">
-                    <div class="m-mixed-layout__inner m:grid m:grid-2-cols md:m:grid-3-cols">
-                      {% liquid
-                        assign currentID = article.id
-                        assign counter = 0
+            {%- comment -%}Related Posts{%- endcomment -%}
+            {% if section.settings.show_related_articles %}
+              <div class="m-related-posts">
+                <h3 class="m-related-posts__heading">{{ 'blogs.article.related_title' | t }}</h3>
+                <div class="m-related-posts__wrapper m-mixed-layout m-mixed-layout--mobile-scroll">
+                  <div class="m-mixed-layout__inner m:grid m:grid-2-cols md:m:grid-3-cols">
+                    {% liquid
+                      assign currentID = article.id
+                      assign counter = 0
 
-                        for article in blog.articles limit: 4
-                          if counter > 3
-                            break
-                          endif
+                      for article in blog.articles limit: 4
+                        if counter > 3
+                          break
+                        endif
 
-                          if article.id == currentID
-                            continue
-                          endif
+                        if article.id == currentID
+                          continue
+                        endif
 
-                          echo '<div class="m:column">'
-                          render 'article-card', article: article, view: 'grid', content_align: section.settings.article_align_content, article_show_date: section.settings.article_show_date, article_show_author: section.settings.article_show_author, article_show_tags: section.settings.article_show_tags, article_show_excerpt: section.settings.article_show_excerpt, article_show_button: section.settings.article_show_button, animated: animated, animation_effect: animation_effect
-                          echo '</div>'
-                          assign counter = counter | plus: 1
-                        endfor
-                      %}
-                    </div>
+                        echo '<div class="m:column">'
+                        render 'article-card', article: article, view: 'grid', content_align: section.settings.article_align_content, article_show_date: section.settings.article_show_date, article_show_tags: section.settings.article_show_tags, article_show_excerpt: section.settings.article_show_excerpt, article_show_button: section.settings.article_show_button, animated: animated, animation_effect: animation_effect
+                        echo '</div>'
+                        assign counter = counter | plus: 1
+                      endfor
+                    %}
                   </div>
                 </div>
-              {% endif %}
-            {%- endif -%}
+              </div>
+            {% endif %}
 
             {%- comment -%}Comment{%- endcomment -%}
             {%- if blog.comments_enabled? and section.settings.blog_show_comment -%}
@@ -412,38 +331,6 @@
                 {% endform %}
               </div>
             {%- endif -%}
-
-            {%- comment -%}Related Posts - Layout 3 (after comments){%- endcomment -%}
-            {%- if design == 'layout3' -%}
-              {% if section.settings.show_related_articles %}
-                <div class="m-related-posts">
-                  <h3 class="m-related-posts__heading h3">{{ 'blogs.article.related_title' | t }}</h3>
-                  <div class="m-related-posts__wrapper m-mixed-layout m-mixed-layout--mobile-scroll">
-                    <div class="m-mixed-layout__inner m:grid m:grid-2-cols md:m:grid-3-cols">
-                      {% liquid
-                        assign currentID = article.id
-                        assign counter = 0
-
-                        for article in blog.articles limit: 4
-                          if counter > 3
-                            break
-                          endif
-
-                          if article.id == currentID
-                            continue
-                          endif
-
-                          echo '<div class="m:column">'
-                          render 'article-card', article: article, view: 'grid', content_align: section.settings.article_align_content, article_show_date: section.settings.article_show_date, article_show_author: section.settings.article_show_author, article_show_tags: section.settings.article_show_tags, article_show_excerpt: section.settings.article_show_excerpt, article_show_button: section.settings.article_show_button, animated: animated, animation_effect: animation_effect
-                          echo '</div>'
-                          assign counter = counter | plus: 1
-                        endfor
-                      %}
-                    </div>
-                  </div>
-                </div>
-              {% endif %}
-            {%- endif -%}
           </article>
         </div>
       </div>
@@ -456,125 +343,45 @@
     </div>
   </div>
 </section>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const shareBtns = document.querySelectorAll('.m-article__share-btn');
-    const linkCopiedText = '{{ "blogs.article.link_copied" | t | default: "Link copiado!" }}';
-    shareBtns.forEach(function(shareBtn) {
-      shareBtn.addEventListener('click', async function() {
-        const url = this.dataset.shareUrl;
-        const title = this.dataset.shareTitle;
-        const text = this.dataset.shareText;
-        const shareBlock = this.closest('.m-article__share');
-        const labelEl = shareBlock ? shareBlock.querySelector('.m-article__share-label') : null;
-
-        if (navigator.share) {
-          try {
-            await navigator.share({
-              title: title,
-              text: text,
-              url: url
-            });
-          } catch (err) {
-            if (err.name !== 'AbortError') {
-              console.log('Share error:', err);
-            }
-          }
-        } else {
-          try {
-            await navigator.clipboard.writeText(url);
-            if (labelEl) {
-              var originalLabel = labelEl.textContent;
-              labelEl.textContent = linkCopiedText;
-              setTimeout(function() {
-                labelEl.textContent = originalLabel;
-              }, 2000);
-            }
-          } catch (err) {
-            console.log('Clipboard error:', err);
-          }
-        }
-      });
-    });
-  });
-</script>
-
-{%- comment -%}
-  ===== STRUCTURED DATA: Article (schema.org 2026 best practices) =====
-  - URL corrigido no mainEntityOfPage (article.url ao invés de page.url)
-  - dateModified adicionado (updated_at)
-  - inLanguage pt-BR
-  - wordCount automático
-  - Image como ImageObject com dimensões
-  - Publisher com @id referenciando Organization e URL
-  - author com URL do blog
-{%- endcomment -%}
-{%- assign article_word_count = article.content | strip_html | split: ' ' | size -%}
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": {{ request.origin | append: article.url | json }}
-  },
-  "headline": {{ article.title | json }},
-  {%- if article.excerpt != blank -%}
-    "description": {{ article.excerpt | strip_html | truncate: 300 | json }},
-  {%- endif -%}
-  {%- if article.content != blank -%}
-    "articleBody": {{ article.content | strip_html | truncate: 5000 | json }},
-    "wordCount": {{ article_word_count }},
-  {%- endif -%}
-  "inLanguage": "pt-BR",
-  {% if article.image %}
-    "image": {
-      "@type": "ImageObject",
-      "url": {{ article | image_url: width: article.image.width | prepend: "https:" | json }},
-      "width": {{ article.image.width }},
-      "height": {{ article.image.height }}
+  {
+    "@context": "http://schema.org",
+    "@type": "Article",
+    "articleBody": {{ article.content | strip_html | json }},
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": {{ shop.url | append: page.url | json }}
     },
-  {% endif %}
-  "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  "dateModified": {{ article.updated_at | default: article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
-  {%- if article.author != blank -%}
+    "headline": {{ article.title | json }},
+    {% if article.excerpt != blank %}
+      "description": {{ article.excerpt | strip_html | json }},
+    {% endif %}
+    {% if article.image %}
+  {% assign image_size = article.image.width %}
+      "image": [
+        {{ article | image_url: width: image_size | prepend: "https:" | json }}
+      ],
+    {% endif %}
+    "datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
+    "dateCreated": {{ article.created_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }},
     "author": {
       "@type": "Person",
-      "name": {{ article.author | json }},
-      "url": {{ request.origin | append: blog.url | json }}
+      "name": {{ article.author | json }}
     },
-  {%- else -%}
-    "author": {
+    "publisher": {
       "@type": "Organization",
+      {% if page_image %}
+  {% assign image_size = page_image.width %}
+        "logo": {
+          "@type": "ImageObject",
+          "height": {{ page_image.height | json }},
+          "url": {{ page_image | image_url: width: image_size | prepend: "https:" | json }},
+          "width": {{ page_image.width | json }}
+        },
+      {% endif %}
       "name": {{ shop.name | json }}
-    },
-  {%- endif -%}
-  "publisher": {
-    "@type": "Organization",
-    "@id": {{ request.origin | append: '/#organization' | json }},
-    "name": {{ shop.name | json }},
-    "url": {{ shop.url | json }}
-    {%- if page_image -%}
-      {%- assign pub_img_size = page_image.width -%}
-      ,"logo": {
-        "@type": "ImageObject",
-        "url": {{ page_image | image_url: width: pub_img_size | prepend: "https:" | json }},
-        "width": {{ page_image.width }},
-        "height": {{ page_image.height }}
-      }
-    {%- endif -%}
-  },
-  {%- if blog -%}
-    "isPartOf": {
-      "@type": "Blog",
-      "@id": {{ request.origin | append: blog.url | append: '#blog' | json }},
-      "name": {{ blog.title | json }},
-      "url": {{ request.origin | append: blog.url | json }}
     }
-  {%- endif -%}
-}
+  }
 </script>
 {% schema %}
 {
@@ -650,10 +457,6 @@
         {
           "label": "Layout 2",
           "value": "layout2"
-        },
-        {
-          "label": "Layout 3",
-          "value": "layout3"
         }
       ],
       "default": "layout1"
@@ -663,13 +466,6 @@
       "id": "blog_show_breadcrumb",
       "label": "Show breadcrumb",
       "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "blog_show_blog_title",
-      "label": "Show blog title",
-      "default": true,
-      "visible_if": "{{ section.settings.design == 'layout3' }}"
     },
     {
       "type": "checkbox",
@@ -742,12 +538,6 @@
       "id": "article_show_date",
       "label": "Show publised date",
       "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "article_show_author",
-      "label": "Show author",
-      "default": false
     },
     {
       "type": "checkbox",
@@ -863,23 +653,6 @@
           "id": "truncate_last_symbols",
           "label": "Last Symbols",
           "default": "..."
-        }
-      ]
-    },
-    {
-      "type": "featured_product",
-      "name": "Widget featured product",
-      "limit": 1,
-      "settings": [
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title",
-          "default": "Produto em Destaque"
-        },
-        {
-          "type": "paragraph",
-          "content": "This widget displays the product from the article metafield 'custom.produto' when available."
         }
       ]
     }

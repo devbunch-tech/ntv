@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -15,29 +6,25 @@
         "d3edb8bc-04ea-4ca1-90c7-408677484928": {
           "type": "categories",
           "settings": {
-            "title": "Categorias",
-            "list_blog": "menu-principal"
+            "title": "Categories",
+            "list_blog": "collections"
           }
         },
         "261dcbb3-347b-4fc0-bdb9-897faf531886": {
           "type": "recent_post",
-          "disabled": true,
           "settings": {
-            "title": "Posts recentes",
-            "sidebar_recent_blog_name": "news",
+            "title": "Recent Post",
+            "sidebar_recent_blog_name": "",
             "sidebar_recent_blog_count": "3",
             "blog_show_tags": true,
-            "blog_show_author": true,
-            "blog_show_date": true,
-            "show_excerpt": true,
-            "truncate_excerpt": true,
-            "truncate": "15",
-            "truncate_last_symbols": "..."
+            "blog_show_author": false,
+            "blog_show_date": false,
+            "show_excerpt": false,
+            "truncate": "15"
           }
         },
         "c1f05653-bae3-4ede-96e8-9b0c3b4d2d9a": {
           "type": "tags",
-          "disabled": true,
           "settings": {
             "title": "Tags"
           }

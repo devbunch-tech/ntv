@@ -11,8 +11,6 @@
   - show_compare_button: {Boolean} Show Compare button (optional)
   - column_wrapper: {Boolean} Wrap product card (optional)
   - remove_params: {Boolean} Remove url params (optional)
-  - forced_variant: {Object} Force a specific variant to display (optional)
-  - forced_color: {String} The color name being displayed (optional)
 
   Usage:
   {% render 'product-card-3', product: product %}
@@ -22,11 +20,6 @@
   if show_variant_options == null
     assign show_variant_options = settings.show_swatch_option
   endif
-
-  if forced_color != blank
-    assign show_variant_options = false
-  endif
-
   if show_inventory == null
     assign show_inventory = settings.pcard_show_inventory
   endif
@@ -53,22 +46,13 @@
   endif
 
   assign sold_out = false
-  if forced_variant != blank
-    if forced_variant.available == false
-      assign sold_out = true
-    endif
-  elsif product.available == false
+  if product.available == false
     assign sold_out = true
   endif
 
   assign discount = ''
-  if forced_variant != blank
-    assign compare_at_price = forced_variant.compare_at_price
-    assign price = forced_variant.price
-  else
-    assign compare_at_price = product.compare_at_price
-    assign price = product.price
-  endif
+  assign compare_at_price = product.compare_at_price
+  assign price = product.price
   assign on_sale = false
   if compare_at_price > price
     assign on_sale = true
@@ -88,16 +72,9 @@
   endunless
 
   assign sold_number = product.metafields.foxkit.sold_number
+  assign selected_variant = product.selected_or_first_available_variant
 
-  if forced_variant != blank
-    assign selected_variant = forced_variant
-  else
-    assign selected_variant = product.selected_or_first_available_variant
-  endif
-
-  if forced_variant != blank
-    assign variant_id = forced_variant.id
-  elsif product.available
+  if product.available
     assign variant_id = product.first_available_variant.id
   else
     assign variant_id = product.selected_or_first_available_variant.id
@@ -134,10 +111,7 @@
   endif
 
   assign preview_image = product.media[0].preview_image
-
-  if forced_variant != blank and forced_variant.image != null
-    assign preview_image = forced_variant.image
-  elsif section.settings.change_product_variant_on_fitlering == true and product.selected_variant.image != null
+  if section.settings.change_product_variant_on_fitlering == true and product.selected_variant.image != null
     assign preview_image = product.selected_variant.image
   endif
 
@@ -146,18 +120,7 @@
   endif
 
   assign second_image = ''
-  if forced_variant != blank and forced_variant.image != null
-    assign found_first = false
-    for img in product.images
-      if found_first
-        assign second_image = img
-        break
-      endif
-      if img.id == forced_variant.image.id
-        assign found_first = true
-      endif
-    endfor
-  elsif settings.show_second_img and product.images.size > 1 and product.images[1] != blank
+  if settings.show_second_img and product.images.size > 1 and product.images[1] != blank
     assign second_image = product.images[1]
   endif
 
@@ -175,14 +138,6 @@
   assign product_url = product.url
   if remove_params
     assign product_url = product.url | split: '?' | first
-  endif
-
-  if forced_variant != blank
-    if product_url contains '?'
-      assign product_url = product_url | append: '&variant=' | append: forced_variant.id
-    else
-      assign product_url = product_url | append: '?variant=' | append: forced_variant.id
-    endif
   endif
 
   assign first_media_type = product.media.first.media_type
@@ -318,7 +273,7 @@
         {% endif %}
       {% endif %}
     </a>
-    <div class="m-product-card__tags{% if settings.pcard_tags_vertical_layout %} m-product-card__tags--vertical{% endif %}">
+    <div class="m-product-card__tags">
       {% if settings.show_badge_sale %}
         {% for tag in product.tags %}
           {% if tag contains 'tag__' %}
@@ -428,11 +383,7 @@
             href="{{ product_url }}"
             class="m-product-card__name{% if settings.uppercase_prd_name %} m:uppercase{% endif %}"
           >
-            {%- if forced_color != blank -%}
-              {{ product.title }} - {{ forced_color }}
-            {%- else -%}
-              {{ product.title }}
-            {%- endif -%}
+            {{ product.title }}
           </a>
         </h3>
       {% endif %}
@@ -443,11 +394,7 @@
       {% endif %}
 
       <div class="m-product-card__price">
-        {%- if forced_variant != blank -%}
-          {% render 'product-prices', product: product, selected_variant: forced_variant, use_variant: true, is_product_card: true %}
-        {%- else -%}
-          {% render 'product-prices', product: product, is_product_card: true %}
-        {%- endif -%}
+        {% render 'product-prices', product: product, is_product_card: true %}
       </div>
       {% if product.has_only_default_variant == false and show_variant_options %}
         {% render 'product-card-option',
@@ -550,7 +497,7 @@
       {%- endif -%}
       {%- if show_quickview_button or show_wishlist_button or show_compare_button or show_cart_button -%}
         <div class="m-product-card__action">
-          {% render 'product-card-quick-add-btn', product: product, quick_add_text: quick_add_text, section: section, block: block %}
+          {% render 'product-card-quick-add-btn', product: product, quick_add_text: quick_add_text, section: section %}
           <div class="m-product-card__action-icons">
             {% liquid
               assign tooltips = 'compare,quickview,'

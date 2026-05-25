@@ -1,55 +1,15 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
+  "name": "Cart template",
   "sections": {
     "main": {
-      "type": "cart-template",
-      "settings": {}
+      "type": "cart-template"
     },
-    "recent-viewed": {
-      "type": "recent-viewed-products",
-      "settings": {
-        "container": "container-fluid",
-        "color_scheme": "",
-        "heading": "Vistos recentemente",
-        "heading_size": "h3",
-        "text_align": "center",
-        "show_title_divider": false,
-        "limit": 8,
-        "columns": 5,
-        "column_gap": 20,
-        "button_style_inside3": "m-button--primary",
-        "button_color_inside3": "light",
-        "button_text_hover_color_inside3": "light",
-        "background_gradient_inside3": "",
-        "pcard_layout": "",
-        "pcard_image_ratio": "",
-        "show_vendor": false,
-        "hide_title": false,
-        "enable_slider": true,
-        "show_pagination": false,
-        "show_navigation": false,
-        "mobile_disable_slider": false,
-        "use_scroll_mobile": true,
-        "item_gap_mobile": 16,
-        "padding_top": 40,
-        "padding_bottom": 100,
-        "padding_top_mobile": 20,
-        "padding_bottom_mobile": 20,
-        "custom_class": "",
-        "animations": "inherit"
-      }
+    "recent-viewed-products": {
+      "type": "recent-viewed-products"
     }
   },
   "order": [
     "main",
-    "recent-viewed"
+    "recent-viewed-products"
   ]
 }
