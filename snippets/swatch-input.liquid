@@ -39,6 +39,19 @@
         assign swatch_value = color
       endif
     endfor
+
+    if swatch_value contains '|'
+      assign swatch_colors = swatch_value | split: '|'
+      assign swatch_color_count = swatch_colors.size
+      assign swatch_gradient = 'linear-gradient(to right'
+      for c in swatch_colors
+        assign c_stripped = c | strip
+        assign stop_start = forloop.index0 | times: 100 | divided_by: swatch_color_count
+        assign stop_end = forloop.index | times: 100 | divided_by: swatch_color_count
+        assign swatch_gradient = swatch_gradient | append: ', ' | append: c_stripped | append: ' ' | append: stop_start | append: '%, ' | append: c_stripped | append: ' ' | append: stop_end | append: '%'
+      endfor
+      assign swatch_value = swatch_gradient | append: ')'
+    endif
   else
     if swatch.image
       assign image_url = swatch.image | image_url: width: 52

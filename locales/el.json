@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "Ο φόρος περιλαμβάνεται και η αποστολή υπολογίζεται στο ταμείο",
       "taxes_included_and_shipping_policy_html": "Συμπεριλαμβανομένου του φόρου. Η <a href=\"{{ link }}\">Αποστολή</a> υπολογίζεται στο ταμείο.",
       "enter_discount_code": "Εισαγάγετε τον κωδικό έκπτωσης εδώ",
+      "remove_discount": "Αφαιρέστε {{ code }}",
+      "discount_duplicate_error_message": "Ο κωδικός έκπτωσης έχει ήδη εφαρμοστεί στο καλάθι σας.",
+      "discount_apply_error_message": "Ο κωδικός έκπτωσης δεν μπορεί να εφαρμοστεί στο καλάθι σας.",
       "checkout": "Ολοκλήρωση αγοράς",
       "viewcart": "Προβολή καλαθιού",
       "empty": "Το καλάθι σας είναι άδειο.",

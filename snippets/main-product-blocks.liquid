@@ -20,6 +20,7 @@
   for block in section.blocks
     if block.type == 'variant_picker'
       assign size_title = block.settings.size_title | default: 'size'
+      assign button_style_rectangular = block.settings.button_style_rectangular
       break
     endif
   endfor
@@ -40,7 +41,7 @@
 {% comment %} End comment {% endcomment %}
 {%- for block in section.blocks -%}
   <div
-    class="main-product__block main-product__block-{{ block.type }}"
+    class="main-product__block main-product__block-{{ block.type }}{% if block.type == 'collapsible_tab' and block.settings.remove_top_margin %} main-product__block--no-margin-top{% endif %}"
     {{ block.shopify_attributes }}
   >
     {%- case block.type -%}
@@ -61,7 +62,77 @@
           </div>
         {% endif %}
       {%- when 'breadcrumb' -%}
-        {% render 'breadcrumb', container: 'container', justify: align_breadcrumb, hide_current: true %}
+        {% render 'breadcrumb', container: 'container', justify: align_breadcrumb, hide_current: false, class: 'm-breadcrumb--product' %}
+      {%- when 'barcode' -%}
+        {% if selected_variant.sku != blank %}
+          <p class="m-product-barcode" data-sku-display>
+            <span class="m-product-barcode__prefix">SKU:</span>
+            <span class="m-product-barcode__value">{{ selected_variant.sku }}</span>
+          </p>
+        {% endif %}
+      {%- when 'product_benefits' -%}
+        {% render 'product-benefits',
+          enable_coupon: block.settings.enable_coupon,
+          coupon_title: block.settings.coupon_title,
+          coupon_code: block.settings.coupon_code,
+          enable_exchange: block.settings.enable_exchange,
+          exchange_title: block.settings.exchange_title,
+          exchange_desc: block.settings.exchange_desc,
+          enable_installment: block.settings.enable_installment,
+          installment_title: block.settings.installment_title,
+          installment_desc: block.settings.installment_desc
+        %}
+      {%- when 'description_tabs' -%}
+        {% render 'product-description-tabs',
+          tab1_title: block.settings.tab1_title,
+          tab2_title: block.settings.tab2_title,
+          tab2_content: block.settings.tab2_content
+        %}
+      {%- when 'whatsapp_button' -%}
+        {%- liquid
+          assign wpp_base = settings.social_whatsapp_link
+          assign wpp_prefix = block.settings.message_prefix | default: 'Olá, gostaria de saber mais sobre o produto:'
+          assign wpp_msg = wpp_prefix | append: ' ' | append: product.title | url_encode
+          assign wpp_url = wpp_base | append: '?text=' | append: wpp_msg
+        -%}
+        <a href="{{ wpp_url }}" target="_blank" rel="noopener" class="m-product-whatsapp-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M14.2871 3.68254C13.5994 2.98812 12.7804 2.43752 11.8777 2.06281C10.9751 1.68811 10.0069 1.4968 9.02961 1.50004C4.93461 1.50004 1.59711 4.83754 1.59711 8.93254C1.59711 10.245 1.94211 11.52 2.58711 12.645L1.53711 16.5L5.47461 15.465C6.56211 16.0575 7.78461 16.3725 9.02961 16.3725C13.1246 16.3725 16.4621 13.035 16.4621 8.94004C16.4621 6.95254 15.6896 5.08504 14.2871 3.68254ZM9.02961 15.1125C7.91961 15.1125 6.83211 14.8125 5.87961 14.25L5.65461 14.115L3.31461 14.73L3.93711 12.45L3.78711 12.2175C3.17027 11.2328 2.8428 10.0945 2.84211 8.93254C2.84211 5.52754 5.61711 2.75254 9.02211 2.75254C10.6721 2.75254 12.2246 3.39754 13.3871 4.56754C13.9628 5.14044 14.4191 5.82195 14.7293 6.57254C15.0396 7.32313 15.1978 8.12785 15.1946 8.94004C15.2096 12.345 12.4346 15.1125 9.02961 15.1125ZM12.4196 10.4925C12.2321 10.4025 11.3171 9.95254 11.1521 9.88504C10.9796 9.82504 10.8596 9.79504 10.7321 9.97504C10.6046 10.1625 10.2521 10.5825 10.1471 10.7025C10.0421 10.83 9.92961 10.845 9.74211 10.7475C9.55461 10.6575 8.95461 10.455 8.24961 9.82504C7.69461 9.33004 7.32711 8.72254 7.21461 8.53504C7.10961 8.34754 7.19961 8.25004 7.29711 8.15254C7.37961 8.07004 7.48461 7.93504 7.57461 7.83004C7.66461 7.72504 7.70211 7.64254 7.76211 7.52254C7.82211 7.39504 7.79211 7.29004 7.74711 7.20004C7.70211 7.11004 7.32711 6.19504 7.17711 5.82004C7.02711 5.46004 6.86961 5.50504 6.75711 5.49754H6.39711C6.26961 5.49754 6.07461 5.54254 5.90211 5.73004C5.73711 5.91754 5.25711 6.36754 5.25711 7.28254C5.25711 8.19754 5.92461 9.08254 6.01461 9.20254C6.10461 9.33004 7.32711 11.205 9.18711 12.0075C9.62961 12.2025 9.97461 12.315 10.2446 12.3975C10.6871 12.54 11.0921 12.5175 11.4146 12.4725C11.7746 12.42 12.5171 12.0225 12.6671 11.5875C12.8246 11.1525 12.8246 10.785 12.7721 10.7025C12.7196 10.62 12.6071 10.5825 12.4196 10.4925Z" fill="#0A0A0A"/>
+          </svg>
+          <span>{{ block.settings.button_text | default: 'FALE COM UMA VENDEDORA' }}</span>
+        </a>
+      {%- when 'trust_icons' -%}
+        <div class="m-product-trust-icons" style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
+          {% if block.settings.text_1 != blank %}
+            <div class="m-product-trust-icons__item">
+              <span class="m-product-trust-icons__icon">
+                {% if block.settings.icon_1 != blank %}
+                  {{ block.settings.icon_1 }}
+                {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                    <path d="M6.99682 0.0582368C6.80482 -0.0194123 6.59264 -0.0194123 6.40064 0.0582368L0.539318 2.4281C0.378912 2.49295 0.241155 2.60857 0.144703 2.7593C0.0482505 2.91003 -0.00223757 3.08859 7.61083e-05 3.2708C0.0314418 5.74372 0.61149 8.17398 1.69316 10.3644C2.76932 12.5453 4.32034 14.422 6.21726 15.8384C6.35826 15.9435 6.52639 16 6.69873 16C6.87106 16 7.0392 15.9435 7.18019 15.8384C9.07671 14.4221 10.6274 12.5457 11.7035 10.3653C12.7855 8.17467 13.3659 5.7441 13.3974 3.2708C13.3999 3.08844 13.3495 2.90969 13.253 2.75878C13.1565 2.60787 13.0187 2.49212 12.8581 2.42721L6.99682 0.0582368Z" fill="currentColor"/>
+                    <path d="M5.98468 10.667L3.3494 8.13889L4.00822 7.50685L5.98468 9.40297L10.2266 5.33352L10.8854 5.96556L5.98468 10.667Z" fill="white"/>
+                  </svg>
+                {% endif %}
+              </span>
+              <span class="m-product-trust-icons__text">{{ block.settings.text_1 }}</span>
+            </div>
+          {% endif %}
+          {% if block.settings.text_2 != blank %}
+            <div class="m-product-trust-icons__item">
+              <span class="m-product-trust-icons__icon">
+                {% if block.settings.icon_2 != blank %}
+                  {{ block.settings.icon_2 }}
+                {% else %}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                    <path d="M8.30265 0.415849C8.79471 2.36254 12.1322 3.00053 14.3511 4.25667C14.4 5.42026 13.911 6.65657 12.6182 7.63834C12.7068 9.9589 11.3406 11.2812 9.1248 12.015C9.11563 13.1125 8.73664 14.1306 7.67916 15L5.87592 13.7967L7.32462 12.6662C7.26961 11.82 7.03121 10.9374 5.64364 10.4415L4.83983 7.36067C3.17413 7.01688 3.25359 6.326 3.11911 5.6781L1.13464 6.35245C-0.367668 5.3277 -0.451656 3.85999 1.32597 3.59554L1.5396 1.1897L3.10383 1.49117L3.41863 0.261146L4.93457 0L5.56723 1.234L8.30265 0.415849Z" fill="currentColor"/>
+                  </svg>
+                {% endif %}
+              </span>
+              <span class="m-product-trust-icons__text">{{ block.settings.text_2 }}</span>
+            </div>
+          {% endif %}
+        </div>
       {%- when 'title' -%}
         <div class="product-block-group product-block-group--title">
           {% if is_featured == true %}
@@ -69,7 +140,7 @@
           {% else %}
             <h1 class="m-product-title">{{ product.title }}</h1>
           {% endif %}
-          {% if section.settings.show_atwl and section.settings.layout != 'layout-7' %}
+          {% if section.settings.show_atwl and section.settings.layout != 'layout-7' and section.settings.atwl_on_media_desktop != true %}
             <div class="m-product-wishlist m:hidden md:m:block">
               {% if wishlist_app == 'growave' %}
                 {% comment %} theme-check-disable {% endcomment %}
@@ -85,7 +156,7 @@
                 {% endunless %}
                 {% comment %} theme-check-enable {% endcomment %}
               {% else %}
-                {% render 'tooltip', type: 'wishlist', product: product, class_name: 'm-tooltip--left', style: style %}
+                {% render 'tooltip', type: 'wishlist', product: product, class_name: 'm-tooltip--left', style: 2 %}
               {% endif %}
             </div>
           {% endif %}
@@ -100,7 +171,8 @@
             product: product,
             show_sale_badge: block.settings.show_saving,
             price_text_size: 'm:text-xl md:m:text-2xl',
-            sale_badge_type: block.settings.sale_badge_type
+            sale_badge_type: block.settings.sale_badge_type,
+            is_product_page: true
           %}
         </div>
         {%- if shop.taxes_included -%}
@@ -120,20 +192,8 @@
           <div class="m-product-description">{{ product.metafields.descriptor.short_description }}</div>
         {% endif %}
       {%- when 'description' -%}
-        {% liquid
-          assign description_to_show = product.description
-          for b in section.blocks
-            if b.type == 'tech_data' and b.settings.hide_from_description
-              assign tech_marker = b.settings.marker | default: 'Dados Técnicos pra frente'
-              if description_to_show contains tech_marker
-                assign description_to_show = description_to_show | split: tech_marker | first
-              endif
-              break
-            endif
-          endfor
-        %}
         <div class="m-product-description rte">
-          {{ description_to_show }}
+          {{ product.description }}
         </div>
       {%- when 'rating' -%}
         {% render 'product-reviews-app__badge', product: product %}
@@ -325,7 +385,8 @@
           product: product,
           section: section,
           size_title: size_title,
-          product_form_id: product_form_id
+          product_form_id: product_form_id,
+          button_style_rectangular: button_style_rectangular
         %}
       {%- when 'buy_buttons' -%}
         {% liquid
@@ -338,7 +399,40 @@
           if image_field.size > 0 or gift_card_recipient_feature_active == true
             assign show_dynamic_checkout = false
           endif
+          
+          assign button_height_desktop = block.settings.button_height_desktop | default: 43
+          assign button_height_mobile = block.settings.button_height_mobile | default: 43
+          assign atc_custom_color = block.settings.atc_custom_color
+          assign atc_bg_color = block.settings.atc_bg_color | default: '#000000'
+          assign atc_text_color = block.settings.atc_text_color | default: '#ffffff'
+          assign atc_bg_color_hover = block.settings.atc_bg_color_hover | default: '#333333'
+          assign atc_text_color_hover = block.settings.atc_text_color_hover | default: '#ffffff'
         %}
+        {% style %}
+          .m-main-product .m-product-form--wrapper .m-quantity,
+          .m-main-product .m-product-form--wrapper .m-add-to-cart,
+          .m-main-product .m-product-form--wrapper .m-product-dynamic-checkout button {
+            min-height: {{ button_height_mobile }}px;
+          }
+          @media screen and (min-width: 768px) {
+            .m-main-product .m-product-form--wrapper .m-quantity,
+            .m-main-product .m-product-form--wrapper .m-add-to-cart,
+            .m-main-product .m-product-form--wrapper .m-product-dynamic-checkout button {
+              min-height: {{ button_height_desktop }}px;
+            }
+          }
+          {% if atc_custom_color %}
+            #MainProduct-{{ section.id }} .m-product-form--wrapper .m-add-to-cart {
+              background-color: {{ atc_bg_color }};
+              color: {{ atc_text_color }};
+            }
+            #MainProduct-{{ section.id }} .m-product-form--wrapper .m-add-to-cart:hover,
+            #MainProduct-{{ section.id }} .m-product-form--wrapper .m-add-to-cart:focus {
+              background-color: {{ atc_bg_color_hover }};
+              color: {{ atc_text_color_hover }};
+            }
+          {% endif %}
+        {% endstyle %}
         <product-form class="m-product-form m-product-form--main" data-product-id="{{ product.id }}">
           {%- form 'product',
             product,
@@ -614,12 +708,15 @@
             {% endif %}
 
             <div
-              class="m-product-form--wrapper m:display-flex m:flex-wrap m:items-end"
+              class="m-product-form--wrapper m:display-flex m:flex-wrap m:items-end{% if block.settings.quantity_and_cart_same_line %} m-product-form--same-line{% endif %}"
               id="QuantityForm-{{ section.id }}"
             >
+              {% if block.settings.quantity_and_cart_same_line %}
+                <div class="m-product-form--same-line-group">
+              {% endif %}
               {% if block.settings.show_quantity_selector and product.quantity_price_breaks_configured? != true %}
-                <div class="m-product-form--input">
-                  <label class="m-product-option--label">
+                <div class="m-product-form--input{% if block.settings.quantity_color_style == 'button' %} m-quantity--button-color{% endif %}">
+                  <label class="m-product-option--label{% if block.settings.hide_quantity_label %} !m:hidden{% endif %}">
                     {{ 'products.product.quantity' | t }}
                   </label>
                   {% render 'product-qty-input',
@@ -674,6 +771,9 @@
                     {% render 'tooltip', type: 'wishlist', class_name: 'm-tooltip--top' %}
                   </div>
                 {% endif %}
+              {% endif %}
+              {% if block.settings.quantity_and_cart_same_line %}
+                </div>
               {% endif %}
               {% liquid
                 assign show_terms = false
@@ -739,9 +839,31 @@
 
       {%- when 'collapsible_tab' -%}
         {% if block.settings.heading != blank %}
-          <div class="m-product-collapsible">
+          {%- liquid
+            assign border_style = ''
+            assign text_style = ''
+            assign has_custom_colors = false
+            assign border_color_valid = false
+            
+            if block.settings.style == 'bordered'
+              if block.settings.border_color != blank and block.settings.border_color != 'transparent' and block.settings.border_color != 'rgba(0,0,0,0)' and block.settings.border_color != '#00000000'
+                assign border_style = '--custom-border-color: ' | append: block.settings.border_color | append: ';'
+                assign has_custom_colors = true
+                assign border_color_valid = true
+              endif
+              
+              if block.settings.text_color != blank and block.settings.text_color != 'transparent' and block.settings.text_color != 'rgba(0,0,0,0)' and block.settings.text_color != '#00000000'
+                assign text_style = '--custom-text-color: ' | append: block.settings.text_color | append: ';'
+                assign has_custom_colors = true
+              elsif border_color_valid
+                assign text_style = '--custom-text-color: ' | append: block.settings.border_color | append: ';'
+                assign has_custom_colors = true
+              endif
+            endif
+          -%}
+          <div class="m-product-collapsible{% if block.settings.style == 'bordered' %} m-product-collapsible--bordered{% endif %}{% if has_custom_colors %} m-product-collapsible--custom-colors{% endif %}" style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;{% if border_style != blank %} {{ border_style }}{% endif %}{% if text_style != blank %} {{ text_style }}{% endif %}">
             <collapsible-tab
-              class="m-collapsible no-js-hidden"
+              class="m-collapsible no-js-hidden{% if block.settings.style == 'bordered' %} m-collapsible--bordered{% endif %}"
               data-block-id="collapsible-tab-{{ block.id }}"
               {% if block.settings.default_open %}
                 open="true"
@@ -791,7 +913,7 @@
       {%- when 'image' -%}
         {% if block.settings.image != blank %}
           {% assign image_link = block.settings.image_link %}
-          <div class="m:display-flex m:justify-{{ block.settings.image_alignment }}">
+          <div class="m:display-flex m:justify-{{ block.settings.image_alignment }}" style="padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;">
             <div class="m-product-image m:blocks-radius" style="width: {{ block.settings.image_width }}%">
               {% if image_link != blank %}<a href="{{ image_link }}" class="m:block">{% endif %}
               {% render 'responsive-image', image: block.settings.image %}
@@ -926,94 +1048,6 @@
             {% endif %}
           {% endif %}
         </div>
-      {%- when 'tech_data' -%}
-        {%- assign marker = block.settings.marker | default: 'Dados Técnicos pra frente' -%}
-        {%- assign tech_raw = '' -%}
-        {%- if product.description contains marker -%}
-          {%- assign tech_raw = product.description | split: marker | last -%}
-        {%- endif -%}
-        {%- assign tech_normalized = tech_raw | replace: '</p>', '|NL|' | replace: '<br/>', '|NL|' | replace: '<br />', '|NL|' | replace: '<br>', '|NL|' | replace: '</li>', '|NL|' | replace: '</div>', '|NL|' -%}
-        {%- assign tech_text = tech_normalized | strip_html | strip -%}
-        {% if tech_text != blank %}
-          <ul class="m-product-tech-data">
-            {% assign tech_lines = tech_text | split: '|NL|' %}
-            {% for line in tech_lines %}
-              {% assign line_clean = line | strip %}
-              {% if line_clean != blank and line_clean contains ':' %}
-                {% assign label = line_clean | split: ':' | first | strip %}
-                {% assign value = line_clean | remove_first: label | remove_first: ':' | strip %}
-                {% if label != blank and value != blank %}
-                  <li class="m-product-tech-data__item">
-                    <span class="m-product-tech-data__label">{{ label }}:</span>
-                    <span class="m-product-tech-data__value">{{ value }}</span>
-                  </li>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% endif %}
-      {%- when 'installments' -%}
-        {% liquid
-          assign max_installments = block.settings.max_installments | default: 3
-          assign current_variant = product.selected_or_first_available_variant
-          assign price_cents = current_variant.price | default: 0
-          assign installment_value_cents = price_cents | divided_by: max_installments
-        %}
-        <div class="m-product-installments" data-installments-block data-max="{{ max_installments }}">
-          <span class="m-product-installments__text">
-            <span data-installments-count>{{ max_installments }}</span>X de
-            <strong data-installments-value>{{ installment_value_cents | money }}</strong>
-            <span class="m-product-installments__suffix">{{ block.settings.suffix_text }}</span>
-          </span>
-          {% if block.settings.link_label != blank %}
-            <a href="{{ block.settings.link_url | default: '#' }}" class="m-product-installments__link"{% if block.settings.link_url == blank %} aria-disabled="true"{% endif %}>
-              <svg class="m-product-installments__icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              <span>{{ block.settings.link_label }}</span>
-            </a>
-          {% endif %}
-        </div>
-      {%- when 'shipping_calc' -%}
-        <div class="m-product-shipping-calc">
-          {% if block.settings.title != blank %}
-            <h4 class="m-product-shipping-calc__title">{{ block.settings.title }}</h4>
-          {% endif %}
-          {% if block.settings.subtitle != blank %}
-            <div class="m-product-shipping-calc__subtitle rte">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
-              {{ block.settings.subtitle }}
-            </div>
-          {% endif %}
-          <form class="m-product-shipping-calc__form" data-shipping-calc>
-            <input
-              type="text"
-              name="cep"
-              class="m-product-shipping-calc__input"
-              placeholder="{{ block.settings.placeholder | default: 'Digite seu CEP' | escape }}"
-              inputmode="numeric"
-              maxlength="9"
-              autocomplete="postal-code"
-              data-cep-input
-              required
-            >
-            <button type="submit" class="m-product-shipping-calc__button" data-cep-button data-original-label="{{ block.settings.button_label | default: 'CALCULAR' | escape }}">
-              <span>{{ block.settings.button_label | default: 'CALCULAR' }}</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
-            </button>
-          </form>
-          {% if block.settings.no_cep_label != blank %}
-            <a
-              href="{{ block.settings.no_cep_url | default: 'https://buscacepinter.correios.com.br/app/endereco/index.php' }}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="m-product-shipping-calc__link"
-            >
-              {{ block.settings.no_cep_label }}
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
-            </a>
-          {% endif %}
-          <div class="m-product-shipping-calc__result" data-cep-result aria-live="polite"></div>
-        </div>
-        <script src="{{ 'shipping-calc.js' | asset_url }}" defer="defer"></script>
       {%- when 'shipping' -%}
         <ul class="m-product-shipping">
           {% if block.settings.show_delivery_times %}
@@ -1071,7 +1105,7 @@
           class="m-complementary-products m:block{% if block.settings.make_collapsible_row %} m-complementary-products--collapsible{% else %} m-complementary-products--default{% endif %}"
           data-items-per-page="{{ block.settings.products_per_page }}"
           data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ block.settings.product_list_limit }}&intent=complementary"
-          style="--column-gap: 15px; --column-gap-mobile: 15px;"
+          style="--column-gap: 15px; --column-gap-mobile: 15px; padding-top: {{ block.settings.padding_top }}px; padding-bottom: {{ block.settings.padding_bottom }}px;"
           data-enable-slider="true"
         >
           {%- if recommendations.performed and recommendations.products_count > 0 -%}
@@ -1081,18 +1115,38 @@
               if number_of_slides > 1
                 assign enable_slider = true
               endif
+              assign mobile_grid_cols = 'm:grid-2-cols'
+              if block.settings.products_per_page == 1 and recommendations.products_count == 1
+                assign mobile_grid_cols = 'm:grid-1-cols'
+              endif
             -%}
             {% capture block_content %}
-              <div class="m-complementary-products__wrapper m:blocks-radius">
-                <div class="m-complementary-products__inner m-product-list m-cols-{{ block.settings.products_per_page }} m:grid m:grid-2-cols md:m:grid-{{ block.settings.products_per_page | divided_by: 2.0 | ceil }}-cols xl:m:grid-{{ block.settings.products_per_page }}-cols{% if enable_slider %} swiper-container{% endif %}">
+              {%- liquid
+                assign complementary_wrapper_classes = 'm-complementary-products__wrapper m:blocks-radius'
+                if block.settings.pcard_color_scheme != blank
+                  assign complementary_wrapper_classes = complementary_wrapper_classes | append: ' m-gradient m-color-' | append: block.settings.pcard_color_scheme
+                endif
+              -%}
+              <div class="{{ complementary_wrapper_classes }}">
+                <div class="m-complementary-products__inner m-product-list m-cols-{{ block.settings.products_per_page }} m:grid {{ mobile_grid_cols }} md:m:grid-{{ block.settings.products_per_page | divided_by: 2.0 | ceil }}-cols xl:m:grid-{{ block.settings.products_per_page }}-cols{% if enable_slider %} swiper-container{% endif %}">
                   {%- if enable_slider -%}<div class="swiper-wrapper">{%- endif -%}
                     {%- for product in recommendations.products -%}
                       {%- if enable_slider -%}
                         <div class="swiper-slide m:column">
-                          {% render 'product-card-1', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare %}
+                          {%- case block.settings.pcard_layout -%}
+                            {%- when '6' -%}
+                              {% render 'product-card-6', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare, section: section, block: block, is_complementary: true %}
+                            {%- else -%}
+                              {% render 'product-card-1', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare, section: section, block: block %}
+                          {%- endcase -%}
                         </div>
                       {%- else -%}
-                        {% render 'product-card-1', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare, column_wrapper: true %}
+                        {%- case block.settings.pcard_layout -%}
+                          {%- when '6' -%}
+                            {% render 'product-card-6', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare, column_wrapper: true, section: section, block: block, is_complementary: true %}
+                          {%- else -%}
+                            {% render 'product-card-1', product: product, image_ratio: block.settings.pcard_image_ratio, show_desc: false, show_vendor: false, show_inventory: false, show_variant_options: block.settings.enable_variant_options, show_cart_button: block.settings.enable_quick_add, show_quickview_button: block.settings.enable_quick_view, show_wishlist_button: block.settings.enable_wishlist, show_compare_button: block.settings.enable_compare, column_wrapper: true, section: section, block: block %}
+                        {%- endcase -%}
                       {%- endif -%}
                     {%- endfor -%}
                     {%- if enable_slider -%}</div>{%- endif -%}
@@ -1139,6 +1193,8 @@
             {% endif %}
           {%- endif -%}
         </product-recommendations>
+      {%- when 'shipping_calculator' -%}
+        {% render 'shipping-calculator', block: block %}
       {%- when 'inventory_status' -%}
         {{ 'component-product-inventory.css' | asset_url | stylesheet_tag }}
         {% liquid

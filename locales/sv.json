@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "Inklusive moms och frakt beräknas i kassan",
       "taxes_included_and_shipping_policy_html": "Skatt ingår. <a href=\"{{ link }}\">Frakt</a> beräknas i kassan.",
       "enter_discount_code": "Ange rabattkod här",
+      "remove_discount": "Ta bort {{ code }}",
+      "discount_duplicate_error_message": "Rabattkoden har redan tillämpats på din vagn.",
+      "discount_apply_error_message": "Rabattkoden kan inte tillämpas på din kundvagn.",
       "checkout": "Kolla upp",
       "viewcart": "Visa kundvagn",
       "empty": "Din varukorg är för närvarande tom.",

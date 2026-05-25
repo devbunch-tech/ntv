@@ -19,6 +19,18 @@
     assign template_product = false
   endif
 
+  if enable_mobile_photo_preview == null
+    assign enable_mobile_photo_preview = false
+  endif
+
+  if compact_thumbnails_mobile == null
+    assign compact_thumbnails_mobile = false
+  endif
+
+  if compact_thumbnails_desktop == null
+    assign compact_thumbnails_desktop = false
+  endif
+
   assign media_count = product.media.size
 
   assign enable_variant_group_img = false
@@ -43,6 +55,7 @@
   endif
 
   assign enable_desktop_slider = false
+  assign hide_pagination_desktop = true
 
   assign grid_col_class = 'm:grid'
 
@@ -61,7 +74,8 @@
       endif
     when 'layout-5'
       assign grid_layout = 'slider'
-      assign show_thumbnails = false
+      assign show_thumbnails = section.settings.show_nav_media_desktop
+      assign hide_pagination_desktop = section.settings.show_nav_media_desktop
       if media_count > 2
         assign enable_desktop_slider = true
       endif
@@ -85,6 +99,13 @@
   if media_count > 1
     assign only_media = false
   endif
+
+  comment
+    Se houver apenas 1 foto, desativar thumbs no mobile automaticamente
+  endcomment
+  if media_count == 1
+    assign show_thumbnails_mobile = false
+  endif
 %}
 {% if media_count > 0 %}
   <media-gallery
@@ -98,6 +119,7 @@
     data-only-media="{{ only_media }}"
     data-layout="{{ media_layout }}"
     data-enable-desktop-slider="{{ enable_desktop_slider }}"
+    data-enable-mobile-photo-preview="{{ enable_mobile_photo_preview }}"
     data-section="{{ section.id }}"
     class="m-media-gallery m:w-full {{ class }}"
     {% if enable_loading_media %}
@@ -108,7 +130,7 @@
     data-context="{{ context | default: 'product' }}"
   >
     <div
-      class="m-media-gallery__wrapper m-product-media--{{ grid_layout }}{% if media_layout == 'layout-7' %} media-slider-full{% endif %}"
+      class="m-media-gallery__wrapper m-product-media--{{ grid_layout }}{% if media_layout == 'layout-7' %} media-slider-full{% endif %}{% if enable_mobile_photo_preview and media_count > 1 %} m-mobile-photo-preview{% endif %}{% if compact_thumbnails_desktop and show_thumbnails %} m-compact-gallery-desktop{% endif %}"
       {% if grid_layout == 'list' %}
         style="--column-gap: 10px;"
       {% endif %}
@@ -170,7 +192,7 @@
       {% liquid
         assign thumbnail_aspect_ratio = product.media[0].preview_image.aspect_ratio | default: 1
       %}
-      <div class="m-product-media--slider__thumbnails{% if show_thumbnails_mobile %} m:block{% else %} m:hidden{% endif %}{% if show_thumbnails %} md:m:block{% else %} md:m:hidden{% endif %}">
+      <div class="m-product-media--slider__thumbnails{% if show_thumbnails_mobile %} m:block{% else %} m:hidden{% endif %}{% if show_thumbnails %} md:m:block{% else %} md:m:hidden{% endif %}{% if compact_thumbnails_mobile and show_thumbnails_mobile %} m-compact-thumbs-mobile{% endif %}{% if compact_thumbnails_desktop and show_thumbnails %} m-compact-thumbs-desktop{% endif %}">
         <div class="nav-swiper-container">
           <div class="swiper-wrapper" style="min-width: 70px;">
             {% for media in product.media %}
@@ -224,7 +246,7 @@
 
       {% if show_dots %}
         <div
-          class="m-product-media--slider__pagination swiper-pagination m:w-full{% if media_layout != 'layout-5' %} !md:m:hidden{% endif %}{% unless show_pagination_mobile %} !m:hidden-mobile{% endunless %}"
+          class="m-product-media--slider__pagination swiper-pagination m:w-full{% if hide_pagination_desktop %} !md:m:hidden{% endif %}{% unless show_pagination_mobile %} !m:hidden-mobile{% endunless %}"
         ></div>
       {% endif %}
     </div>

@@ -10,9 +10,50 @@
   assign button_type = section.settings.button_type
   assign max_pages = section.settings.max_page_load
   assign show_button_on_header = section.settings.show_button_on_header
+  assign split_by_color = section.settings.split_by_color_variant
+  assign color_option_name = settings.pcard_option_name | default: 'Cor' | downcase
+
+  comment
+    Calcular o total de cards que serão exibidos
+  endcomment
+  assign total_cards = 0
+  if split_by_color and current_collection != blank
+    for product in current_collection.products
+      if total_cards >= product_to_show
+        break
+      endif
+      assign color_option = null
+      for option in product.options_with_values
+        assign option_name_downcase = option.name | downcase
+        if option_name_downcase == color_option_name or option_name_downcase == 'color' or option_name_downcase == 'colour' or option_name_downcase == 'cor'
+          assign color_option = option
+          break
+        endif
+      endfor
+      if color_option != null
+        for color_value in color_option.values
+          if total_cards >= product_to_show
+            break
+          endif
+          assign total_cards = total_cards | plus: 1
+        endfor
+      else
+        assign total_cards = total_cards | plus: 1
+      endif
+    endfor
+  else
+    if current_collection != blank
+      assign total_cards = current_collection.products.size
+      if total_cards > product_to_show
+        assign total_cards = product_to_show
+      endif
+    else
+      assign total_cards = product_to_show
+    endif
+  endif
 
   if current_collection != blank
-    if product_to_show <= items_per_row or current_collection.products.size <= items_per_row
+    if total_cards <= items_per_row
       assign enable_slider = false
     endif
   else
@@ -81,7 +122,10 @@
     endif
   endif
 
-  assign classes = 'm-featured-collection m-swiper-overflow'
+  assign classes = 'm-featured-collection'
+  unless section.settings.show_header_navigation
+    assign classes = classes | append: ' m-swiper-overflow'
+  endunless
   if section.settings.button_text == blank
     assign classes = classes | append: ' show__more-disabled'
   endif
@@ -103,6 +147,8 @@
     --items: {{ items_per_row }};
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 {% paginate current_collection.products by product_to_show %}
@@ -166,7 +212,10 @@
             button_style: section.settings.button_style,
             button_link: current_collection.url,
             button_size: section.settings.button_size,
-            button_label: section.settings.button_text
+            button_label: section.settings.button_text,
+            show_header_nav: section.settings.show_header_navigation,
+            header_arrow_style: section.settings.arrow_style,
+            inline_mobile: section.settings.inline_mobile_header
           %}
         {% endif %}
 
@@ -177,24 +226,123 @@
               data-products-container
             >
               {% if current_collection != blank %}
-                {% for product in current_collection.products limit: product_to_show %}
-                  <div class="swiper-slide m:column">
-                    {% liquid
-                      case card_style
-                        when '1'
-                          render 'product-card-1', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
-                        when '2'
-                          render 'product-card-2', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
-                        when '3'
-                          render 'product-card-3', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
-                        when '4'
-                          render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
-                        when '5'
-                          render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
-                      endcase
-                    %}
-                  </div>
-                {% endfor %}
+                {%- if split_by_color -%}
+                  {%- comment -%} Modo separado por variante de cor {%- endcomment -%}
+                  {%- assign card_index = 0 -%}
+                  {%- for product in current_collection.products -%}
+                    {%- if card_index >= product_to_show -%}
+                      {%- break -%}
+                    {%- endif -%}
+                    
+                    {%- liquid
+                      assign color_option = null
+                      for option in product.options_with_values
+                        assign option_name_downcase = option.name | downcase
+                        if option_name_downcase == color_option_name or option_name_downcase == 'color' or option_name_downcase == 'colour' or option_name_downcase == 'cor'
+                          assign color_option = option
+                          break
+                        endif
+                      endfor
+                    -%}
+
+                    {%- if color_option != null -%}
+                      {%- for color_value in color_option.values -%}
+                        {%- if card_index >= product_to_show -%}
+                          {%- break -%}
+                        {%- endif -%}
+                        {%- liquid
+                          assign card_index = card_index | plus: 1
+
+                          comment
+                            Encontrar uma variante disponível com essa cor
+                          endcomment
+                          assign color_variant = null
+                          for variant in product.variants
+                            if variant.options contains color_value
+                              if variant.available or color_variant == null
+                                assign color_variant = variant
+                                if variant.available
+                                  break
+                                endif
+                              endif
+                            endif
+                          endfor
+
+                          if color_variant == null
+                            assign color_variant = product.first_available_variant
+                          endif
+                        -%}
+                        <div class="swiper-slide m:column">
+                          {% liquid
+                            case card_style
+                              when '1'
+                                render 'product-card-1', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '2'
+                                render 'product-card-2', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '3'
+                                render 'product-card-3', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '4'
+                                render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '5'
+                                render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '6'
+                                render 'product-card-6', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                              when '7'
+                                render 'product-card-7', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect, forced_variant: color_variant, forced_color: color_value
+                            endcase
+                          %}
+                        </div>
+                      {%- endfor -%}
+                    {%- else -%}
+                      {%- comment -%} Produto sem opção de cor - renderizar normalmente {%- endcomment -%}
+                      {%- assign card_index = card_index | plus: 1 -%}
+                      <div class="swiper-slide m:column">
+                        {% liquid
+                          case card_style
+                            when '1'
+                              render 'product-card-1', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '2'
+                              render 'product-card-2', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '3'
+                              render 'product-card-3', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '4'
+                              render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '5'
+                              render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '6'
+                              render 'product-card-6', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                            when '7'
+                              render 'product-card-7', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: card_index, animated: animated, animation_effect: animation_effect
+                          endcase
+                        %}
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {%- else -%}
+                  {%- comment -%} Modo normal: um card por produto {%- endcomment -%}
+                  {% for product in current_collection.products limit: product_to_show %}
+                    <div class="swiper-slide m:column">
+                      {% liquid
+                        case card_style
+                          when '1'
+                            render 'product-card-1', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '2'
+                            render 'product-card-2', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '3'
+                            render 'product-card-3', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '4'
+                            render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '5'
+                            render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '6'
+                            render 'product-card-6', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '7'
+                            render 'product-card-7', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                        endcase
+                      %}
+                    </div>
+                  {% endfor %}
+                {%- endif -%}
               {% else %}
                 {% for i in (1..product_to_show) %}
                   <div class="swiper-slide m:column m:text-{{ settings.pcard_alignment }}">
@@ -270,10 +418,18 @@
           {% if button_type == 'link' and show_button_on_header == false %}
             <div class="m-featured-collection__button m:display-flex{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
               <a
-                class="m-button{% if is_button_icon %} m-button--text-with-icon{% endif %} {{ section.settings.button_style | replace: 'sf__btn-primary', 'm-button--primary' | replace: 'sf__btn-secondary', 'm-button--secondary' | replace: 'sf__btn-link', 'm-button--link' | replace: 'sf__btn-white', 'm-button--white' }} {{ section.settings.button_size }}"
+                class="m-button{% if is_button_icon %} m-button--text-with-icon{% endif %} {{ section.settings.button_style | replace: 'sf__btn-primary', 'm-button--primary' | replace: 'sf__btn-secondary', 'm-button--secondary' | replace: 'sf__btn-link', 'm-button--link' | replace: 'sf__btn-white', 'm-button--white' | replace: 'm-button--link-arrow', 'm-button--link m-button--link-arrow' }} {{ section.settings.button_size }}"
                 href="{{ current_collection.url }}"
               >
-                {{- section.settings.button_text | replace: '[arrow]', arrow -}}
+                <span>{{- section.settings.button_text | replace: '[arrow]', arrow -}}</span>
+                {% if section.settings.button_style == 'm-button--link-arrow' %}
+                  <span class="m-button-arrow-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                      <path d="M12.3536 8.35355C12.5488 8.15829 12.5488 7.84171 12.3536 7.64645L9.17157 4.46447C8.97631 4.2692 8.65973 4.2692 8.46447 4.46447C8.2692 4.65973 8.2692 4.97631 8.46447 5.17157L11.2929 8L8.46447 10.8284C8.2692 11.0237 8.2692 11.3403 8.46447 11.5355C8.65973 11.7308 8.97631 11.7308 9.17157 11.5355L12.3536 8.35355ZM3 8V8.5H12V8V7.5H3V8Z" fill="#BDBDBD"/>
+                      <circle cx="8" cy="8" r="7.5" stroke="#BDBDBD"/>
+                    </svg>
+                  </span>
+                {% endif %}
               </a>
             </div>
           {% endif %}
@@ -295,7 +451,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Featured collection"
@@ -341,6 +497,13 @@
           "label": "Center"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_divider",
+      "label": "Show divider line",
+      "default": false,
+      "info": "Display a horizontal divider line between heading and content"
     },
     {
       "type": "header",
@@ -407,6 +570,13 @@
       "default": 8
     },
     {
+      "type": "checkbox",
+      "id": "split_by_color_variant",
+      "label": "Separate listing by color variant",
+      "default": false,
+      "info": "Show one card per color variant instead of one card per product. The 'Products to show' limit applies to total cards."
+    },
+    {
       "type": "range",
       "id": "items_per_row",
       "label": "Products per row",
@@ -428,6 +598,67 @@
     {
       "type": "header",
       "content": "Product card settings"
+    },
+    {
+      "type": "select",
+      "id": "button_style_inside3",
+      "label": "Button style",
+      "default": "m-button--primary",
+      "options": [
+        {
+          "value": "m-button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "m-button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "m-button--white",
+          "label": "White"
+        },
+        {
+          "value": "m-button--link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_color_inside3",
+      "label": "Button color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_text_hover_color_inside3",
+      "label": "Button text color on hover",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient_inside3",
+      "label": "Background gradient"
     },
     {
       "type": "select",
@@ -458,6 +689,14 @@
         {
           "value": "5",
           "label": "Style 5"
+        },
+        {
+          "value": "6",
+          "label": "Style 6"
+        },
+        {
+          "value": "7",
+          "label": "Style 7"
         }
       ]
     },
@@ -480,6 +719,10 @@
           "label": "1:1"
         },
         {
+          "value": "2/3",
+          "label": "2:3"
+        },
+        {
           "value": "3/4",
           "label": "3:4"
         },
@@ -490,6 +733,10 @@
         {
           "value": "16/9",
           "label": "16:9"
+        },
+        {
+          "value": "7/10",
+          "label": "7:10"
         }
       ]
     },
@@ -528,6 +775,30 @@
       "default": false
     },
     {
+      "type": "checkbox",
+      "id": "show_header_navigation",
+      "label": "Show navigation on header",
+      "info": "Shows arrows next to the header button (desktop only)",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Arrow style",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Chevron"
+        },
+        {
+          "value": "line",
+          "label": "Line arrow"
+        }
+      ],
+      "visible_if": "{{ section.settings.show_header_navigation }}"
+    },
+    {
       "type": "header",
       "content": "Button settings"
     },
@@ -535,6 +806,14 @@
       "type": "checkbox",
       "id": "show_button_on_header",
       "label": "Show button on header"
+    },
+    {
+      "type": "checkbox",
+      "id": "inline_mobile_header",
+      "label": "Inline header on mobile",
+      "info": "Keep button aligned to the right of the title on mobile",
+      "default": false,
+      "visible_if": "{{ section.settings.show_button_on_header }}"
     },
     {
       "type": "select",
@@ -584,6 +863,10 @@
         {
           "value": "m-button--plain",
           "label": "Plain button"
+        },
+        {
+          "value": "m-button--link-arrow",
+          "label": "Link with arrow"
         }
       ],
       "default": "m-button--primary"
@@ -675,6 +958,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

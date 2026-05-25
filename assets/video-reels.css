@@ -1,0 +1,224 @@
+/* ALOFT CUSTOM: Video Reels — Influencer video cards */
+
+/* Heading sizes matching Figma */
+.m-video-reels-section .m-section__heading {
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: -1.2px;
+}
+
+@media screen and (min-width: 768px) {
+  .m-video-reels-section .m-section__heading {
+    font-size: 38px;
+    letter-spacing: -1.9px;
+  }
+}
+
+.m-video-reels__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--items, 4), 1fr);
+  gap: var(--item-gap, 20px);
+}
+
+/* Card */
+.m-video-reel {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 35/65;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.m-video-reel__media {
+  position: absolute;
+  inset: 0;
+}
+
+.m-video-reel__thumbnail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.m-video-reel__thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.m-video-reel__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Gradient overlay */
+.m-video-reel__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 40%, transparent 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+
+/* Play button */
+.m-video-reel__play {
+  width: 56px;
+  height: 56px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 3;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.m-video-reel__play:hover {
+  transform: scale(1.1);
+}
+
+.m-video-reel__play svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Info — bottom left */
+.m-video-reel__info {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.m-video-reel__name {
+  font-size: 28px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: -1.4px;
+  line-height: 1.1;
+  margin: 0 0 4px;
+}
+
+.m-video-reel__desc {
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  text-transform: capitalize;
+  margin: 0;
+}
+
+/* Playing state */
+.m-video-reel.is-playing .m-video-reel__play {
+  opacity: 0;
+}
+
+/* Fullscreen modal */
+.m-video-reel-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.m-video-reel-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.m-video-reel-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  cursor: pointer;
+}
+
+.m-video-reel-modal__content {
+  position: relative;
+  z-index: 1;
+  max-width: 400px;
+  max-height: 90vh;
+  width: 100%;
+}
+
+.m-video-reel-modal__video {
+  width: 100%;
+  height: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.m-video-reel-modal__close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 2;
+}
+
+.m-video-reel-modal__close:hover {
+  opacity: 0.7;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .m-video-reels-section .m-section__header {
+    text-align: center;
+  }
+
+  .m-video-reels-section .m-section-py {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .m-video-reels-section .swiper-slide {
+    width: 80vw;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: scale(0.88);
+    opacity: 0.5;
+  }
+
+  .m-video-reels-section .swiper-slide-active {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+
+  .m-video-reel {
+    aspect-ratio: 315/536;
+  }
+
+  .m-video-reel__name {
+    font-size: 44px;
+    font-weight: 300;
+    font-family: var(--font-stack-body);
+    text-transform: capitalize;
+    letter-spacing: -2.2px;
+  }
+
+  .m-video-reel__desc {
+    font-size: 16px;
+    font-weight: 300;
+    text-transform: uppercase;
+  }
+
+  .m-video-reel__info {
+    bottom: 24px;
+    left: 20px;
+  }
+}

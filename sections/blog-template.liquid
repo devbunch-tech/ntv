@@ -1,3 +1,56 @@
+{%- comment -%}
+  ===== STRUCTURED DATA: Blog (schema.org 2026 best practices) =====
+  - Schema Blog com lista dos artigos como blogPost
+  - publisher referenciando Organization
+  - inLanguage pt-BR
+  - Verificação de campos vazios
+{%- endcomment -%}
+{%- if blog != blank and blog.title != blank -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "@id": {{ request.origin | append: blog.url | append: '#blog' | json }},
+  "name": {{ blog.title | json }},
+  "url": {{ request.origin | append: blog.url | json }},
+  "inLanguage": "pt-BR",
+  "publisher": {
+    "@type": "Organization",
+    "@id": {{ request.origin | append: '/#organization' | json }},
+    "name": {{ shop.name | json }}
+  }
+  {%- if blog.articles.size > 0 -%}
+  ,"blogPost": [
+    {%- for article in blog.articles limit: 20 -%}
+      {
+        "@type": "BlogPosting",
+        {%- if article.title != blank -%}
+          "headline": {{ article.title | json }},
+        {%- endif -%}
+        "url": {{ request.origin | append: article.url | json }}
+        {%- if article.published_at -%}
+          ,"datePublished": {{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}
+          ,"dateModified": {{ article.updated_at | default: article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' | json }}
+        {%- endif -%}
+        {%- if article.excerpt != blank -%}
+          ,"description": {{ article.excerpt | strip_html | truncate: 200 | json }}
+        {%- endif -%}
+        {%- if article.image -%}
+          ,"image": {{ article | image_url: width: article.image.width | prepend: "https:" | json }}
+        {%- endif -%}
+        {%- if article.author != blank -%}
+          ,"author": {
+            "@type": "Person",
+            "name": {{ article.author | json }}
+          }
+        {%- endif -%}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+  {%- endif -%}
+}
+</script>
+{%- endif -%}
 {{ 'component-article-card.css' | asset_url | stylesheet_tag }}
 {{ 'blog.css' | asset_url | stylesheet_tag }}
 {%- liquid

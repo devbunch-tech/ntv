@@ -1,0 +1,45 @@
+{%- liquid
+  assign cashback_percentage = settings.cashback_percentage | default: 0
+-%}
+
+{%- if cashback_percentage > 0 -%}
+  {%- liquid
+    assign cashback_value = product.price | times: cashback_percentage | divided_by: 100.0
+    assign cashback_formatted = cashback_value | money
+    assign cashback_message = settings.cashback_message | default: 'GANHE {{ value }} DE CASHBACK'
+    assign placeholder = '{{ value }}'
+  -%}
+  {%- capture cashback_bold -%}<b>{{ cashback_formatted }}</b>{%- endcapture -%}
+  {%- assign final_message = cashback_message | replace: placeholder, cashback_bold -%}
+  <div class="m-product-card__cashback">
+    <span class="m-product-card__cashback-text">
+      {{ final_message }}
+    </span>
+  </div>
+{%- endif -%}
+
+{% style %}
+  .m-product-card__cashback {
+    background: #efefef;
+    border-radius: 0 0 var(--btn-border-radius, 0) var(--btn-border-radius, 0);
+    text-align: center;
+    padding: 8px 0 4px 0;
+    margin-top: -4px;
+  }
+  
+  .m-product-card__cashback-text {
+    font-size: .65rem;
+    font-weight: 400;
+    color: #333;
+    letter-spacing: .035rem;
+    line-height: 1;
+    display: block;
+  }
+  
+  @media (max-width: 767px) {
+    .m-product-card__cashback-text {
+      font-size: .6rem;
+    }
+  }
+{% endstyle %}
+

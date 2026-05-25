@@ -30,12 +30,13 @@
           class="loox-reviews-default"
         ></div>
       {% when 'growave' %}
-        {% capture the_snippet_reviews %}{% render 'socialshopwave-widget-recommends' with 1 %}{% endcapture %}
-        {% unless the_snippet_reviews contains 'Liquid error' %}
-          {{ the_snippet_reviews }}
-        {% else %}
-          {% render 'mm-socialshopwave-widget-recommends' with 1 %}
-        {% endunless %}
+        <div
+          class="gw-rv-main-widget-placeholder"
+          data-gw-product-id="{{ product.id }}"
+          data-gw-reviews-per-page="15"
+          data-gw-min-images-for-slider-visibility="3"
+          style="display: block"
+        ></div>
       {% when 'lai_reviews' %}
         {% assign random_number = 'now' | date: '%N' | modulo: 1000 | plus: 0 %}
         <script>
@@ -77,7 +78,7 @@
         <script
           type="text/javascript"
           async
-          src="https://widgets.automizely.com/reviews/v1/sdk.js?{{- shop.metafields.automizely_reviews.script_tags_query.value -}}&shop=chind-dev-new.myshopify.com"
+          src="https://widgets.automizely.com/reviews/v1/sdk.js?{{- shop.metafields.automizely_reviews.script_tags_query.value -}}&shop={{ shop.permanent_domain }}"
         ></script>
       {% when 'stamped' %}
         <div

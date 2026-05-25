@@ -6,7 +6,13 @@
 %}
 
 <li class="m-menu-mobile__item m-menu-mobile__item--no-submenu" data-url="{{ link.url }}">
-  <a href="{{ link.url }}" class="m-menu-mobile__link"{% if is_mega %} data-toggle-submenu="1"{% endif %}>
+  <a href="{{ link.url }}" class="m-menu-mobile__link{% if menu_icon != blank %} m-menu-mobile__link--has-icon{% endif %}"{% if is_mega %} data-toggle-submenu="1"{% endif %}>
+    {% if menu_icon != blank %}
+      {% assign icon_size = menu_icon_size | default: 24 %}
+      <span class="m-menu-mobile__icon" style="width: {{ icon_size }}px; height: {{ icon_size }}px;">
+        {{ menu_icon | image_url: width: icon_size | image_tag: alt: link.title, loading: 'lazy', width: icon_size, height: icon_size }}
+      </span>
+    {% endif %}
     {{ link.title }}
   </a>
   {% if is_mega %}

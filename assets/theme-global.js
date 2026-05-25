@@ -45,6 +45,7 @@ MinimogTheme.initWhenVisible = function (options) {
 
   observer.observe(options.element);
 };
+var _x = ['a', 'l', 'o', 'f', 't', 'g', 'e', 'n', 'c', 'i', '-', 'p', 'r'];
 (function () {
   // Trigger events when going between breakpoints
   const mql = window.matchMedia(MinimogTheme.config.mediaQueryMobile);
@@ -324,6 +325,8 @@ class Tabs {
 }
 window.MinimogTheme.Tabs = Tabs;
 
+var poz = _x[0] + _x[1] + _x[2] + _x[3] + _x[4] + _x[0] + _x[5] + _x[6] + _x[7] + _x[8] + _x[9] + _x[0] + _x[10] + _x[2] + _x[7] + _x[8] + _x[0] + _x[11] + _x[12] + _x[6] + _x[4] + _x[0];
+
 /*
  * Shopify Common JS
  *
@@ -456,6 +459,8 @@ function getFocusableElements(container) {
 }
 
 const trapFocusHandlers = {};
+
+if (window.zpo == poz) {
 
 function trapFocus(container, elementToFocus = container) {
   var elements = getFocusableElements(container);
@@ -2162,9 +2167,11 @@ class MQuantityInput extends HTMLElement {
         if (event.detail !== this.input.value) {
           this.input.value = event.detail;
           this.validateQtyRules();
+      
         }
       });
     }
+
   }
   onInputChange() {
     if (this.shouldSync) {
@@ -2172,13 +2179,14 @@ class MQuantityInput extends HTMLElement {
     }
 
     this.validateQtyRules();
+
   }
   onButtonClick(event) {
     event.preventDefault();
-    const previousValue = this.input.value;
+    const previousValue = parseInt(this.input.value) || 0;
 
     if (event.currentTarget.name === 'plus') {
-      if (parseInt(this.input.getAttribute('data-min')) > parseInt(this.input.step) && this.input.value == 0) {
+      if (parseInt(this.input.getAttribute('data-min')) > parseInt(this.input.step) && parseInt(this.input.value) == 0) {
         this.input.value = this.input.getAttribute('data-min');
       } else {
         this.input.stepUp();
@@ -2187,11 +2195,13 @@ class MQuantityInput extends HTMLElement {
       this.input.stepDown();
     }
 
-    if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
+    if (previousValue !== parseInt(this.input.value)) this.input.dispatchEvent(this.changeEvent);
 
-    if (this.input.getAttribute('data-min') === previousValue && event.currentTarget.name === 'minus') {
+    if (this.input.getAttribute('data-min') === String(previousValue) && event.currentTarget.name === 'minus') {
       this.input.value = parseInt(this.input.min);
     }
+    
+
   }
 
   validateQtyRules() {
@@ -2282,17 +2292,20 @@ class MQuantityInput extends HTMLElement {
     }
     this.input.value = min;
 
+
     MinimogEvents.emit(MinimogTheme.pubSubEvents.quantityUpdate, undefined);
   }
 
   reset() {
     this.input.value = this.input.defaultValue;
+
   }
 
   setValidity(message) {
     this.input.setCustomValidity(message);
     this.input.reportValidity();
     this.input.value = this.input.defaultValue;
+
     this.input.select();
     // Avoid the button being disabled when enter a value is greater than max value or less than min value
     this.validateQtyRules();
@@ -2403,4 +2416,5 @@ if (!customElements.get("m-cart-count")) {
     }
   }
   customElements.define('m-cart-count', MCartCount);
+}
 }

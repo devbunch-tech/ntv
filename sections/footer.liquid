@@ -1,10 +1,171 @@
 {{ 'footer.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign has_footer_bg = false
+  if section.settings.footer_bg_image != blank or section.settings.footer_bg_image_mobile != blank
+    assign has_footer_bg = true
+  endif
+  assign footer_bg_desktop = section.settings.footer_bg_image | default: section.settings.footer_bg_image_mobile
+-%}
+{% if has_footer_bg %}
+  {% style %}
+    .m-footer--bottom-has-bg {
+      padding-top: {{ section.settings.footer_bg_padding_mobile }}px;
+      overflow: hidden;
+    }
+    @media screen and (min-width: 768px) {
+      .m-footer--bottom-has-bg {
+        padding-top: {{ section.settings.footer_bg_padding_desktop }}px;
+        background-image: url('{{ footer_bg_desktop | image_url: width: 1800 }}') !important;
+        background-size: {{ section.settings.footer_bg_size_desktop }}% auto !important;
+      }
+    }
+  {% endstyle %}
+{% endif %}
+{% style %}
+  /* Fix breakpoint: centralizar footer-4 abaixo de 1280px */
+  @media screen and (max-width: 1279px) {
+    .m-footer--bottom-footer-4 .m-footer--bottom-inner {
+      align-items: center;
+    }
+  }
+  .m-footer--newsletter-image img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+  .m-footer--newsletter-image {
+    justify-self: center;
+  }
+  @media screen and (min-width: 768px) {
+    .m-footer--newsletter-image {
+      margin-top: 3rem;
+    }
+  }
+  /* Copyright mobile/desktop visibility */
+  .m-footer__copyright--mobile {
+    display: block !important;
+    width: 100%;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.50);
+  }
+  .m-footer__copyright--desktop {
+    display: none !important;
+    color: rgba(255, 255, 255, 0.50);
+  }
+  @media screen and (min-width: 1280px) {
+    .m-footer__copyright--mobile {
+      display: none !important;
+    }
+    .m-footer__copyright--desktop {
+      display: block !important;
+    }
+  }
+  .m-footer--block-content:has(> .m-footer-brand-contact) {
+    --m-footer-brand-contact-stack-gap: 12px;
+  }
+  .m-footer-brand-contact {
+    display: flex;
+    flex-direction: column;
+    gap: var(--m-footer-brand-contact-stack-gap);
+  }
+  .m-footer-brand-contact__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .m-footer-brand-contact__icon {
+    flex-shrink: 0;
+    width: 15px;
+    height: 15px;
+    margin-top: 6px;
+    line-height: 0;
+  }
+  .m-footer-brand-contact__icon svg {
+    display: block;
+  }
+  .m-footer-brand-contact__text,
+  .m-footer-brand-contact__link {
+    flex: 1;
+    min-width: 0;
+    font-size: inherit;
+    line-height: 1.45;
+  }
+  .m-footer-brand-contact__label {
+    display: inline;
+    font-weight: inherit;
+  }
+  .m-footer-brand-contact__top-link-list {
+    margin-bottom: var(--m-footer-brand-contact-stack-gap);
+  }
+{% endstyle %}
 {%- if section.settings.show_currency_selector
   or section.settings.show_country_selector
   or section.settings.show_language_selector
 -%}
   <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
+{% style %}
+  /* Linhas decorativas no topo e base do footer middle (somente desktop) */
+  @media screen and (min-width: 768px) {
+    .m-footer--middle-top-line,
+    .m-footer--middle-bottom-line {
+      display: block;
+      height: 40px;
+      width: 100%;
+    }
+    .m-footer--middle-top-line {
+      border-bottom: 1px solid #E0DDD840;
+    }
+    .m-footer--middle-bottom-line {
+      border-top: 1px solid #E0DDD840;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    .m-footer--middle-top-line,
+    .m-footer--middle-bottom-line {
+      display: none;
+    }
+  }
+{% endstyle %}
+{% if section.settings.show_footer_bottom_divider %}
+  {% style %}
+    /* Cor customizada para as linhas superior e inferior do footer middle (somente desktop) */
+    @media screen and (min-width: 768px) {
+      .m-footer--middle-top-line {
+        border-bottom-color: {{ section.settings.footer_bottom_divider_color }};
+      }
+      .m-footer--middle-bottom-line {
+        border-top-color: {{ section.settings.footer_bottom_divider_color }};
+      }
+    }
+  {% endstyle %}
+{% endif %}
+{% if section.settings.show_mobile_divider %}
+  {% style %}
+    /* Divisor entre elementos do footer no mobile */
+    @media screen and (max-width: 767px) {
+      .m-footer--middle .m-footer--block:not(:last-child) .m-footer--block-inner {
+        position: relative;
+        padding-bottom: 5px;
+      }
+      .m-footer--middle .m-footer--block:not(:last-child) .m-footer--block-inner::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 15px;
+        right: 15px;
+        height: 1px;
+        background-color: #ADADAD;
+      }
+      .m-footer--middle .m-footer--block {
+        margin-bottom: 8px;
+      }
+      .m-footer--middle .open .m-accordion--item-content.max-height-set {
+        margin-bottom: 12px;
+      }
+    }
+  {% endstyle %}
+{% endif %}
 <m-footer class="m-footer m:block" data-section-type="footer" data-section-id="{{ section.id }}">
   {% render 'footer-blocks',
     blocks: section.blocks,
@@ -44,9 +205,13 @@
         {
           "value": "footer-3",
           "label": "Layout 3"
+        },
+        {
+          "value": "footer-4",
+          "label": "Layout 4"
         }
       ],
-      "default": "footer-1"
+      "default": "footer-4"
     },
     {
       "type": "select",
@@ -75,10 +240,17 @@
       "default": false
     },
     {
+      "type": "checkbox",
+      "id": "show_mobile_divider",
+      "label": "Divisor entre menus no mobile",
+      "default": true
+    },
+    {
       "type": "text",
       "id": "copyright",
       "label": "Copyright text",
-      "default": "&copy; minimog 2021"
+      "default": "&copy; {year} Aloft. - Todos os Direitos Reservados",
+      "info": "Use {year} para inserir o ano atual automaticamente"
     },
     {
       "type": "header",
@@ -154,6 +326,61 @@
       "default": "footer"
     },
     {
+      "type": "image_picker",
+      "id": "footer_bg_image",
+      "label": "Imagem de fundo - desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "footer_bg_image_mobile",
+      "label": "Imagem de fundo - mobile"
+    },
+    {
+      "type": "number",
+      "id": "footer_bg_padding_desktop",
+      "label": "Espaço acima do conteúdo - desktop (px)",
+      "default": 200
+    },
+    {
+      "type": "range",
+      "id": "footer_bg_size_desktop",
+      "label": "Largura da imagem - desktop (%)",
+      "min": 10,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 80
+    },
+    {
+      "type": "number",
+      "id": "footer_bg_padding_mobile",
+      "label": "Espaço acima do conteúdo - mobile (px)",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "footer_bg_size_mobile",
+      "label": "Largura da imagem - mobile (%)",
+      "min": 10,
+      "max": 200,
+      "step": 5,
+      "unit": "%",
+      "default": 90
+    },
+    {
+      "type": "checkbox",
+      "id": "show_footer_bottom_divider",
+      "label": "Divisor entre o footer principal e o footer bottom",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "footer_bottom_divider_color",
+      "label": "Cor das linhas (superior e inferior do footer)",
+      "default": "#E0DDD8",
+      "visible_if": "{{ section.settings.show_footer_bottom_divider }}"
+    },
+    {
       "type": "link_list",
       "id": "footer_bottom_menu",
       "label": "Menu"
@@ -162,49 +389,6 @@
       "type": "checkbox",
       "id": "show_menu_item_divider",
       "label": "Show menu item divider"
-    },
-    {
-      "type": "header",
-      "content": "Developed by"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_developed_by",
-      "label": "Show developed by logo",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "developed_by_text",
-      "label": "Developed by text",
-      "default": "Desenvolvido por:"
-    },
-    {
-      "type": "text",
-      "id": "developed_by_logo_url",
-      "label": "Logo URL",
-      "default": "https://agbunch.com/hml/assets/img/logo/logoBunchAG.png"
-    },
-    {
-      "type": "url",
-      "id": "developed_by_link",
-      "label": "Logo link"
-    },
-    {
-      "type": "text",
-      "id": "developed_by_link_text",
-      "label": "Logo link (text - use if Logo link field unavailable)",
-      "default": "https://agbunch.com/hml"
-    },
-    {
-      "type": "range",
-      "id": "developed_by_logo_width",
-      "label": "Logo width",
-      "min": 60,
-      "max": 220,
-      "step": 5,
-      "unit": "px",
-      "default": 110
     }
   ],
   "max_blocks": 5,
@@ -384,6 +568,116 @@
       ]
     },
     {
+      "type": "brand_contact",
+      "name": "Sobre a marca (contato)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "SOBRE A MARCA"
+        },
+        {
+          "type": "header",
+          "content": "Link acima do contato"
+        },
+        {
+          "type": "page",
+          "id": "top_link_page",
+          "label": "Página"
+        },
+        {
+          "type": "text",
+          "id": "top_link_label",
+          "label": "Texto do link",
+          "default": "Nossa História",
+          "info": "Se ficar em branco, será usado o título da página."
+        },
+        {
+          "type": "header",
+          "content": "Contato global",
+          "info": "E-mail, telefone e link do WhatsApp vêm de Configurações do tema > Informações da loja / redes sociais."
+        },
+        {
+          "type": "checkbox",
+          "id": "show_email",
+          "label": "Mostrar e-mail",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "show_whatsapp",
+          "label": "Mostrar WhatsApp (usa o link do WhatsApp + número da loja)",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Atendimento"
+        },
+        {
+          "type": "text",
+          "id": "atendimento_heading",
+          "label": "Rótulo",
+          "default": "Atendimento"
+        },
+        {
+          "type": "textarea",
+          "id": "atendimento_details",
+          "label": "Horários e informações",
+          "default": "Seg / Sex - 7h às 12h - 13h às 17h"
+        },
+        {
+          "type": "header",
+          "content": "Endereço"
+        },
+        {
+          "type": "text",
+          "id": "endereco_heading",
+          "label": "Rótulo",
+          "default": "Endereço"
+        },
+        {
+          "type": "textarea",
+          "id": "endereco_details",
+          "label": "Endereço",
+          "default": "Rod BR 101, Km 353 - Jaguaruna / SC"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "Largura da coluna",
+          "default": "25%",
+          "options": [
+            { "value": "16%", "label": "16%" },
+            { "value": "25%", "label": "25%" },
+            { "value": "33%", "label": "33%" },
+            { "value": "50%", "label": "50%" },
+            { "value": "66%", "label": "66%" },
+            { "value": "75%", "label": "75%" },
+            { "value": "83%", "label": "83%" },
+            { "value": "100%", "label": "100%" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Mobile"
+        },
+        {
+          "type": "checkbox",
+          "id": "order_first",
+          "label": "Ordem primeiro",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "open_default",
+          "label": "Aberto por padrão",
+          "default": false
+        }
+      ]
+    },
+    {
       "type": "newsletter",
       "name": "Newsletter",
       "limit": 1,
@@ -482,6 +776,21 @@
           "id": "show_agree_checkbox",
           "label": "Show \"Terms & conditions\" checkbox",
           "default": false
+        },
+        {
+          "type": "image_picker",
+          "id": "image_below",
+          "label": "Image below newsletter"
+        },
+        {
+          "type": "range",
+          "id": "image_below_max_width",
+          "label": "Image max width",
+          "min": 0,
+          "max": 800,
+          "step": 10,
+          "unit": "px",
+          "default": 0
         },
         {
           "type": "select",
@@ -643,6 +952,13 @@
           "id": "html",
           "label": "HTML",
           "info": "Liquid code supported"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_icons",
+          "label": "Show social icons",
+          "default": false,
+          "info": "Configure links in Theme settings > Social media"
         },
         {
           "type": "select",

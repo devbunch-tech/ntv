@@ -1,3 +1,17 @@
+/**
+ * Abas de produto (m-product-tabs): sliders, load more e botão no header.
+ *
+ * Modificações em relação ao tema base:
+ * - initHeaderButton(): inicializa o botão no header (data-header-button-wrapper).
+ *   Se buttonType === "load", delega o clique em [data-load-more-product] para
+ *   handleLoadMore(activeTab), usando o activeTabId guardado no wrapper.
+ * - updateHeaderButton(tabId): mantém o botão do header em sync com a aba ativa.
+ *   Tipo "link" → atualiza o href com a URL da coleção da aba; tipo "load" →
+ *   grava activeTabId e url no wrapper para o load more. Chamado ao trocar de aba
+ *   e na inicialização (primeira aba).
+ * - Shopify.designMode: ao selecionar um bloco .m-tab-content no editor, define
+ *   a aba ativa (setActiveTab) para o editor refletir a aba selecionada.
+ */
 if (!customElements.get("m-product-tabs")) {
   class MProductTabs extends HTMLElement {
     constructor() {
@@ -59,6 +73,7 @@ if (!customElements.get("m-product-tabs")) {
       });
       this.initTabs();
       this.initMobileSelect();
+      this.initHeaderButton();
 
       if (Shopify.designMode) {
         document.addEventListener("shopify:block:select", (event) => {
@@ -66,6 +81,28 @@ if (!customElements.get("m-product-tabs")) {
           if (!blockSelectedIsTab) return;
           const dataIndex = event.target && event.target.dataset.index;
           this.tabs.setActiveTab(dataIndex);
+        });
+      }
+    }
+
+    initHeaderButton() {
+      const headerButtonWrapper = this.querySelector("[data-header-button-wrapper]");
+      if (!headerButtonWrapper) return;
+      
+      if (this.buttonType === "load") {
+        addEventDelegate({
+          context: headerButtonWrapper,
+          selector: "[data-load-more-product]",
+          handler: (e) => {
+            e.preventDefault();
+            const activeTabId = headerButtonWrapper.dataset.activeTabId;
+            if (activeTabId) {
+              const activeTab = this.querySelector("#" + activeTabId);
+              if (activeTab) {
+                this.handleLoadMore(activeTab);
+              }
+            }
+          },
         });
       }
     }
@@ -82,7 +119,70 @@ if (!customElements.get("m-product-tabs")) {
           const itemHeight = firstItem.clientHeight;
           controlsContainer.style.setProperty("--offset-top", parseInt(itemHeight) / 2 + "px");
         }
+        
+        // Update header button if it exists
+        this.updateHeaderButton(tabId);
+
+        // ALOFT CUSTOM: Bind header nav arrows to active tab slider
+        this.bindHeaderNav(slider);
       });
+
+      // Initialize header button with first tab
+      if (this.domNodes.tabContent.length > 0) {
+        const firstTab = this.domNodes.tabContent[0];
+        const firstTabId = firstTab.getAttribute("id");
+        this.updateHeaderButton("#" + firstTabId);
+        // Bind header nav to first tab slider (wait for swiper init)
+        const firstSlider = firstTab.querySelector(".swiper-container");
+        const tryBind = () => {
+          if (firstSlider && firstSlider.swiper) {
+            this.bindHeaderNav(firstSlider);
+          } else {
+            setTimeout(tryBind, 100);
+          }
+        };
+        setTimeout(tryBind, 200);
+      }
+    }
+
+    // ALOFT CUSTOM: Bind header nav arrows to the active tab's swiper
+    bindHeaderNav(sliderContainer) {
+      const headerNav = this.querySelector(".m-section__header-nav .m-slider-controls");
+      if (!headerNav) return;
+      const prevBtn = headerNav.querySelector(".m-slider-controls__button-prev");
+      const nextBtn = headerNav.querySelector(".m-slider-controls__button-next");
+      if (!prevBtn || !nextBtn) return;
+      // Clone to remove old listeners
+      const newPrev = prevBtn.cloneNode(true);
+      const newNext = nextBtn.cloneNode(true);
+      prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+      nextBtn.parentNode.replaceChild(newNext, nextBtn);
+      if (sliderContainer && sliderContainer.swiper) {
+        newPrev.addEventListener("click", () => sliderContainer.swiper.slidePrev());
+        newNext.addEventListener("click", () => sliderContainer.swiper.slideNext());
+      }
+    }
+
+    updateHeaderButton(tabId) {
+      const headerButtonWrapper = this.querySelector("[data-header-button-wrapper]");
+      if (!headerButtonWrapper) return;
+      
+      const activeTab = this.querySelector(tabId);
+      if (!activeTab) return;
+      
+      const headerButton = headerButtonWrapper.querySelector("[data-header-button]");
+      if (!headerButton) return;
+      
+      const collectionUrl = activeTab.dataset.url;
+      
+      if (this.buttonType === "link") {
+        // Update link href
+        headerButton.href = collectionUrl;
+      } else if (this.buttonType === "load") {
+        // Store reference to active tab
+        headerButtonWrapper.dataset.activeTabId = activeTab.id;
+        headerButtonWrapper.dataset.url = collectionUrl;
+      }
     }
 
     initSliderByScreenSize(sliderContainer) {
@@ -121,7 +221,7 @@ if (!customElements.get("m-product-tabs")) {
       swiper && swiper.classList.add("swiper-container");
 
       let slider = new MinimogLibs.Swiper(swiper, {
-        slidesPerView: 2,
+        slidesPerView: "auto",
         showPagination: this.showPagination,
         showNavigation: this.showNavigation,
         loop: this.enableFlashsale ? false : true,

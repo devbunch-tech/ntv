@@ -1,0 +1,489 @@
+{% stylesheet %}
+  /* Container principal */
+  .frete-calculo {
+    margin: 15px 0 0 0;
+  }
+
+  /* Header com título e link de frete grátis */
+  .frete-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .frete-header__title {
+    font-family: var(--font-stack-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: #000;
+    line-height: 1.22;
+    letter-spacing: 0;
+    margin: 0;
+  }
+
+  .frete-header__link {
+    font-family: var(--font-stack-body);
+    font-size: 12px;
+    font-weight: 300;
+    color: #000;
+    line-height: 1.22;
+    letter-spacing: 0;
+    text-align: left;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: min(37.5%, 200px);
+  }
+
+  /* Formulário de frete */
+  .frete-form {
+    display: flex;
+    gap: 8px;
+  }
+
+  .frete-form__input {
+    flex: 1;
+    min-width: 0;
+    height: 43px;
+    padding: 0 16px;
+    border: 1px solid #a09e97;
+    border-right: none;
+    border-radius: 0;
+    font-family: var(--font-stack-body);
+    font-size: 14px;
+    font-weight: 300;
+    color: #000;
+    line-height: 1.22;
+    letter-spacing: 0;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .frete-form__input::placeholder {
+    color: #a09e97;
+  }
+
+  .frete-form__input:focus {
+    border-color: #0a0a0a;
+  }
+
+  .frete-form__button {
+    flex-shrink: 0;
+    width: 37.5%;
+    max-width: 200px;
+    height: 43px;
+    padding: 0 14px;
+    background: #0a0a0a !important;
+    background-color: #0a0a0a !important;
+    border: none !important;
+    border-radius: 0;
+    font-family: var(--font-stack-body);
+    font-size: 12px;
+    font-weight: 500;
+    color: #fff !important;
+    line-height: 1.22;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .frete-form__button:hover {
+    background: #333 !important;
+    background-color: #333 !important;
+  }
+
+  /* Mensagem de erro */
+  .frete-error {
+    color: #c00;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+  }
+
+  /* Lista de fretes */
+  .frete-results {
+    margin-top: 12px;
+    padding: 0 12px;
+    border-radius: 3px;
+    background: #f5f5f5;
+    display: none;
+  }
+
+  .frete-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+  }
+
+  .frete-item + .frete-item {
+    border-top: 1px solid #d9d9d9;
+  }
+
+  .frete-item__info {
+    flex: 1;
+  }
+
+  .frete-item__name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    margin: 0;
+  }
+
+  .frete-item__delivery {
+    font-size: 12px;
+    font-weight: 400;
+    color: #666;
+    margin-top: 2px;
+  }
+
+  .frete-item__price {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* Esconder selects do país e estado */
+  #pais-simulator,
+  #estados-simulator {
+    display: none;
+  }
+
+  /* Responsivo - Mobile */
+  @media screen and (max-width: 767px) {
+    .frete-form {
+      gap: 6px;
+    }
+    .frete-form__button {
+      width: 38%;
+      max-width: none;
+    }
+    .frete-header__link {
+      min-width: 38%;
+    }
+  }
+{% endstylesheet %}
+
+<div 
+  class="frete-calculo"
+  data-error-message="{{ block.settings.error_message | default: 'CEP não encontrado, tente novamente.' }}"
+  data-free-shipping-text="{{ block.settings.free_shipping_text | default: 'Grátis' }}"
+>
+  <div class="frete-header">
+    <h4 class="frete-header__title">{{ block.settings.title | default: 'Cálcule seu Frete' }}</h4>
+    {% if block.settings.show_free_shipping_link %}
+      <span class="frete-header__link">{{ block.settings.free_shipping_link_text }}</span>
+    {% endif %}
+  </div>
+  
+  <div class="frete-form" id="frete-form">
+    <select id="pais-simulator" name="shipping_address[country]">
+      <option value="Brazil" selected>Brazil</option>
+    </select>
+    <select id="estados-simulator" name="shipping_address[province]">
+      <option value="Acre">Acre</option>
+      <option value="Alagoas">Alagoas</option>
+      <option value="Amapa">Amapá</option>
+      <option value="Amazonas">Amazonas</option>
+      <option value="Bahia">Bahia</option>
+      <option value="Ceara">Ceará</option>
+      <option value="Distrito Federal">Distrito Federal</option>
+      <option value="Espirito Santo">Espírito Santo</option>
+      <option value="Goias">Goiás</option>
+      <option value="Maranhao">Maranhão</option>
+      <option value="Mato Grosso">Mato Grosso</option>
+      <option value="Mato Grosso do Sul">Mato Grosso do Sul</option>
+      <option value="Minas Gerais">Minas Gerais</option>
+      <option value="Para">Pará</option>
+      <option value="Paraiba">Paraíba</option>
+      <option value="Parana">Paraná</option>
+      <option value="Pernambuco">Pernambuco</option>
+      <option value="Piaui">Piauí</option>
+      <option value="Rio de Janeiro">Rio de Janeiro</option>
+      <option value="Rio Grande do Norte">Rio Grande do Norte</option>
+      <option value="Rio Grande do Sul">Rio Grande do Sul</option>
+      <option value="Rondonia">Rondônia</option>
+      <option value="Roraima">Roraima</option>
+      <option value="Santa Catarina">Santa Catarina</option>
+      <option value="Sao Paulo">São Paulo</option>
+      <option value="Sergipe">Sergipe</option>
+      <option value="Tocantins">Tocantins</option>
+    </select>
+    <input 
+      type="text" 
+      id="frete-cep" 
+      name="shipping_address[zip]" 
+      class="frete-form__input" 
+      placeholder="{{ block.settings.placeholder | default: 'Digite seu CEP' }}"
+      maxlength="10"
+    >
+    <button type="button" id="frete-calcular" class="frete-form__button">
+      {{ block.settings.button_text | default: 'CALCULAR' }}
+    </button>
+  </div>
+
+  <p class="frete-error" id="frete-error"></p>
+  <div class="frete-results" id="frete-results"></div>
+</div>
+
+{% javascript %}
+  (function () {
+    "use strict";
+
+    var freteCalculo = document.querySelector('.frete-calculo');
+    if (!freteCalculo) return;
+
+    /** Testa se o ViaCEP está online; se não estiver, o bloco do calculador é ocultado. */
+    function checkViaCEP() {
+      var url = 'https://viacep.com.br/ws/01310100/json/';
+      var timeoutMs = 5000;
+      function tryFetch() {
+        return Promise.race([
+          fetch(url).then(function(r) { return r.json(); }).then(function() { return true; }),
+          new Promise(function(_, rej) { setTimeout(function() { rej(new Error('timeout')); }, timeoutMs); })
+        ]);
+      }
+      return tryFetch().catch(function() { return tryFetch(); }).catch(function() { return false; });
+    }
+
+    checkViaCEP().then(function(online) {
+      if (!online) {
+        freteCalculo.style.display = 'none';
+        return;
+      }
+
+      var shippingZip = document.getElementById('frete-cep');
+    var shippingCountry = document.getElementById('pais-simulator');
+    var shippingProvince = document.getElementById('estados-simulator');
+    var shippingMessage = document.getElementById('frete-error');
+    var freteLista = document.getElementById('frete-results');
+    var calcularBtn = document.getElementById('frete-calcular');
+
+    if (!shippingZip || !calcularBtn) return;
+
+    // Configurações dos data attributes
+    var config = {
+      errorMessage: freteCalculo.dataset.errorMessage || 'CEP não encontrado, tente novamente.',
+      freeShippingText: freteCalculo.dataset.freeShippingText || 'Grátis'
+    };
+
+    // Seletor do produto
+    var productSelect = document.getElementById('ProductSelect-product-template');
+    if (!productSelect) productSelect = document.getElementsByName('id')[0];
+    if (!productSelect) return;
+
+    // Máscara de CEP (formato: 00.000-000)
+    shippingZip.addEventListener('input', function(e) {
+      var value = e.target.value.replace(/\D/g, '');
+      if (value.length > 8) value = value.slice(0, 8);
+      if (value.length > 5) {
+        value = value.slice(0, 2) + '.' + value.slice(2, 5) + '-' + value.slice(5);
+      } else if (value.length > 2) {
+        value = value.slice(0, 2) + '.' + value.slice(2);
+      }
+      e.target.value = value;
+    });
+
+    // Click no botão calcular
+    calcularBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      var cepLimpo = shippingZip.value.replace(/\D/g, '');
+      if (cepLimpo.length < 8) {
+        shippingMessage.innerHTML = 'CEP inválido';
+        shippingMessage.style.display = 'block';
+        return;
+      }
+
+      shippingMessage.innerHTML = '';
+      shippingMessage.style.display = 'none';
+
+      fetch("https://viacep.com.br/ws/" + cepLimpo + "/json/")
+        .then(function(response) { return response.json(); })
+        .then(function(dados) {
+          if (!("erro" in dados)) {
+            var ufMap = {
+              'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapa', 'AM': 'Amazonas',
+              'BA': 'Bahia', 'CE': 'Ceara', 'DF': 'Distrito Federal', 'ES': 'Espirito Santo',
+              'GO': 'Goias', 'MA': 'Maranhao', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul',
+              'MG': 'Minas Gerais', 'PA': 'Para', 'PB': 'Paraiba', 'PR': 'Parana',
+              'PE': 'Pernambuco', 'PI': 'Piaui', 'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte',
+              'RS': 'Rio Grande do Sul', 'RO': 'Rondonia', 'RR': 'Roraima', 'SC': 'Santa Catarina',
+              'SP': 'Sao Paulo', 'SE': 'Sergipe', 'TO': 'Tocantins'
+            };
+
+            dados.uf = ufMap[dados.uf] || dados.uf;
+            shippingProvince.value = dados.uf;
+
+            var variantId = productSelect.value;
+            if (!variantId) {
+              var firstOption = productSelect.querySelector('option');
+              if (firstOption) variantId = firstOption.value;
+            }
+
+            getRates(parseInt(variantId));
+          } else {
+            freteLista.innerHTML = "";
+            freteLista.style.display = "none";
+            shippingMessage.innerHTML = config.errorMessage;
+            shippingMessage.style.display = "block";
+          }
+        })
+        .catch(function() {
+          freteLista.innerHTML = "";
+          freteLista.style.display = "none";
+          shippingMessage.innerHTML = config.errorMessage;
+          shippingMessage.style.display = "block";
+        });
+    });
+
+    function getRates(variantId) {
+      if (typeof variantId === 'undefined') return;
+
+      // Busca o input de quantidade da página do produto atual
+      var productQuantity = document.querySelector('.m-main-product .m-quantity__input');
+      var quantity = (productQuantity && productQuantity.value) ? parseInt(productQuantity.value) : 1;
+      
+      var addData = {
+        'id': variantId,
+        'quantity': quantity
+      };
+
+      var originalCartItems = [];
+
+      function isDateBeforeToday(date) {
+        return new Date(date.toDateString()) < new Date(new Date().toDateString());
+      }
+
+      function excludeDate(name) {
+        return (name != 'Entrega Expressa - pedidos feitos até 11h chegam em até 24hrs úteis' && name != 'Entrega Rápida - pedidos chegam em até 48hrs úteis');
+      }
+
+      function restoreCart() {
+        if (originalCartItems.length === 0) return Promise.resolve();
+        
+        return fetch('/cart/clear.js', {
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST'
+        }).then(function() {
+          var itemsToAdd = originalCartItems.map(function(item) {
+            return {
+              id: item.variant_id,
+              quantity: item.quantity,
+              properties: item.properties
+            };
+          });
+          
+          return fetch('/cart/add.js', {
+            body: JSON.stringify({ items: itemsToAdd }),
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/json' },
+            method: 'POST'
+          });
+        });
+      }
+
+      // Mostra loading
+      shippingMessage.style.display = "none";
+      freteLista.style.display = "block";
+      freteLista.innerHTML = '<div style="display: flex; justify-content: center; padding: 20px;"><svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="animation: spin 1s linear infinite;"><style>@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }</style><circle cx="12" cy="12" r="10" stroke="#d9d9d9" stroke-width="3" fill="none"/><path d="M12 2a10 10 0 0 1 10 10" stroke="#414141" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div>';
+
+      // 1. Busca os itens do carrinho atual
+      fetch('/cart.js', {
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(cart) {
+        originalCartItems = cart.items || [];
+        
+        // 2. Limpa o carrinho
+        return fetch('/cart/clear.js', {
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST'
+        });
+      })
+      .then(function() {
+        // 3. Adiciona apenas o produto para cálculo
+        return fetch('/cart/add.js', {
+          body: JSON.stringify(addData),
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST'
+        });
+      })
+      .then(function(response) { return response.json(); })
+      .then(function() {
+        var params = new URLSearchParams({
+          'shipping_address[country]': shippingCountry.value,
+          'shipping_address[province]': shippingProvince.value,
+          'shipping_address[zip]': shippingZip.value
+        });
+
+        // 4. Consulta as taxas de frete
+        return fetch('/cart/shipping_rates.json?_easygift_internal=true&' + params.toString(), {
+          credentials: 'same-origin',
+          headers: { 'Content-Type': 'application/json' }
+        });
+      })
+      .then(function(response) { return response.json(); })
+      .then(function(d) {
+        if (d.shipping_rates && d.shipping_rates.length) {
+          freteLista.innerHTML = "";
+
+          for (var i = 0; i < d.shipping_rates.length; i++) {
+            var deliveryDate = d.shipping_rates[i].delivery_date;
+            var entrega = new Date(d.shipping_rates[i].delivery_date);
+            var checkBeforeday = isDateBeforeToday(entrega);
+            var excludeDateCheck = excludeDate(d.shipping_rates[i].name);
+            var dataFormatada = entrega.getDate() + "/" + (entrega.getMonth() + 1) + "/" + entrega.getFullYear();
+
+            var valorFrete = d.shipping_rates[i].price;
+
+            if (valorFrete == "0.00" || valorFrete == null) {
+              valorFrete = config.freeShippingText;
+            } else {
+              valorFrete = formatMoney(valorFrete * 100, window.MinimogSettings.money_format);
+            }
+
+            var entregaText;
+            if (deliveryDate == null && excludeDateCheck || checkBeforeday && excludeDateCheck) {
+              entregaText = "Estimativa de entrega indisponível";
+            } else if (!excludeDateCheck) {
+              entregaText = "";
+            } else {
+              entregaText = "(Estimativa de entrega: " + dataFormatada + ")";
+            }
+
+            var freteItem = document.createElement('div');
+            freteItem.className = 'frete-item';
+            freteItem.innerHTML = '<div class="frete-item__info"><p class="frete-item__name">' + d.shipping_rates[i].name + '</p>' + (entregaText ? '<span class="frete-item__delivery">' + entregaText + '</span>' : '') + '</div><div class="frete-item__price">' + valorFrete + '</div>';
+            freteLista.appendChild(freteItem);
+          }
+        } else {
+          freteLista.innerHTML = "";
+          freteLista.style.display = "none";
+          shippingMessage.innerHTML = config.errorMessage;
+          shippingMessage.style.display = "block";
+        }
+        restoreCart();
+      })
+      .catch(function(err) {
+        console.error(err);
+        restoreCart();
+        freteLista.innerHTML = "";
+        freteLista.style.display = "none";
+        shippingMessage.innerHTML = config.errorMessage;
+        shippingMessage.style.display = "block";
+      });
+    }
+    });
+  })();
+{% endjavascript %}

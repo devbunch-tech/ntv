@@ -1,63 +1,36 @@
-{% comment %}
-  Mobile menu hardcoded para Edilan.
-  Mesma listagem do menu desktop, mantendo a disposição original do drawer.
-{% endcomment %}
+{% liquid
+  assign main_menu = section.settings.main_menu
+  assign mobile_menu = section.settings.mobile_menu
+
+  if mobile_menu == blank
+    assign menu = main_menu
+  else
+    assign menu = mobile_menu
+  endif
+%}
 <div id="m-menu-drawer" class="m-menu-drawer">
   <div class="m-menu-drawer__backdrop"></div>
-  <div class="m-menu-drawer__wrapper">
+  <div class="m-menu-drawer__wrapper m:h-full m-gradient m-color-{{ section.settings.menu_drawer_color_scheme }}">
     <div class="m-menu-drawer__content">
-      <ul class="m-menu-drawer__navigation m-menu-mobile">
-        {%- comment -%} HARDCODED ITEMS START {%- endcomment -%}
-        <li class="m-menu-mobile__item" data-url="/collections/casamento" data-index="0">
-          <a href="/collections/casamento" class="m-menu-mobile__link"><span>Casamento</span></a>
-        </li>
-        <li class="m-menu-mobile__item" data-url="/collections/devocional" data-index="1">
-          <a href="/collections/devocional" class="m-menu-mobile__link"><span>Devocional</span></a>
-        </li>
-        <li class="m-menu-mobile__item" data-url="/collections/mulheres" data-index="2">
-          <a href="/collections/mulheres" class="m-menu-mobile__link"><span>Mulheres</span></a>
-        </li>
-        <li class="m-menu-mobile__item" data-url="/collections/espirito-santo" data-index="3">
-          <a href="/collections/espirito-santo" class="m-menu-mobile__link"><span>Espírito Santo</span></a>
-        </li>
-        <li class="m-menu-mobile__item" data-url="/collections" data-index="4">
-          <a href="/collections" class="m-menu-mobile__link" data-toggle-submenu="1"><span>Autores</span></a>
-          <span class="m-menu-mobile__toggle-button" data-toggle-submenu="1">
-            <svg fill="currentColor" stroke="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 512">
-              <path d="M17.525 36.465l-7.071 7.07c-4.686 4.686-4.686 12.284 0 16.971L205.947 256 10.454 451.494c-4.686 4.686-4.686 12.284 0 16.971l7.071 7.07c4.686 4.686 12.284 4.686 16.97 0l211.051-211.05c4.686-4.686 4.686-12.284 0-16.971L34.495 36.465c-4.686-4.687-12.284-4.687-16.97 0z"/>
-            </svg>
-          </span>
-          <div class="m-megamenu-mobile m-megamenu-mobile--level-1">
-            <div class="m-megamenu-mobile__wrapper">
-              <button class="m-menu-mobile__back-button" data-level="1">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 17">
-                  <path fill="currentColor" d="M8.12109 15.9141c-.21093.1875-.41015.1875-.59765 0L.175781 8.53125c-.210937-.1875-.210937-.375 0-.5625L7.52344.585938c.1875-.1875.38672-.1875.59765 0l.70313.703122c.1875.1875.1875.38672 0 .59766L3.375 7.33594h11.9883c.2812 0 .4219.14062.4219.42187v.98438c0 .28125-.1407.42187-.4219.42187H3.375l5.44922 5.44924c.1875.2109.1875.4101 0 .5976l-.70313.7032z"/>
-                </svg>
-                <span>Autores</span>
-              </button>
-              <ul class="m-submenu-mobile">
-                <li class="m-menu-mobile__item"><a href="/collections/john-bevere" class="m-menu-mobile__link"><span>John Bevere</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/lisa-bevere" class="m-menu-mobile__link"><span>Lisa Bevere</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/larry-stockstill" class="m-menu-mobile__link"><span>Larry Stockstill</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/philip-murdoch" class="m-menu-mobile__link"><span>Philip Murdoch</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/craig-groeschel" class="m-menu-mobile__link"><span>Craig Groeschel</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/robert-morris" class="m-menu-mobile__link"><span>Robert Morris</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/renee-murdoch" class="m-menu-mobile__link"><span>Renee Murdoch</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/jonathan-stockstill" class="m-menu-mobile__link"><span>Jonathan Stockstill</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/mary-duarte" class="m-menu-mobile__link"><span>Mary Duarte</span></a></li>
-                <li class="m-menu-mobile__item"><a href="/collections/claudio-duarte" class="m-menu-mobile__link"><span>Claudio Duarte</span></a></li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        {%- comment -%} HARDCODED ITEMS END {%- endcomment -%}
-        {%- comment -%} Original linklist loop disabled in favor of hardcoded items above {%- endcomment -%}
-        {%- if false -%}
+      <ul class="m-menu-drawer__navigation m-menu-mobile{% if section.settings.menu_drawer_show_border %} m-menu-mobile--with-border{% endif %}">
         {% for link in linklists[menu].links %}
           {% liquid
             assign title_handle = link.title | handleize
             assign has_mega_item = false
+            assign menu_icon = null
+            assign menu_icon_size = 24
           %}
+          {%- comment -%} Verificar se existe um bloco menu_icon correspondente {%- endcomment -%}
+          {% for block in section.blocks %}
+            {% if block.type == 'menu_icon' %}
+              {% assign block_menu_text = block.settings.menu_text | handleize %}
+              {% if block_menu_text == title_handle %}
+                {% assign menu_icon = block.settings.menu_icon_image %}
+                {% assign menu_icon_size = block.settings.icon_size %}
+                {% break %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
           {% for block in section.blocks %}
             {% liquid
               assign menu_title = block.settings.heading | handleize
@@ -252,11 +225,16 @@
             <li class="m-menu-mobile__item" data-url="{{ link.url }}" data-index="{{ forloop.index0 }}">
               <a
                 href="{{ link.url }}"
-                class="m-menu-mobile__link"
+                class="m-menu-mobile__link{% if menu_icon != blank %} m-menu-mobile__link--has-icon{% endif %}"
                 {% if link.url contains '#' %}
                   data-toggle-submenu="1"
                 {% endif %}
               >
+                {% if menu_icon != blank %}
+                  <span class="m-menu-mobile__icon" style="width: {{ menu_icon_size }}px; height: {{ menu_icon_size }}px;">
+                    {{ menu_icon | image_url: width: menu_icon_size | image_tag: alt: link.title, loading: 'lazy', width: menu_icon_size, height: menu_icon_size }}
+                  </span>
+                {% endif %}
                 <span>{{ link.title }}</span>
               </a>
               <span class="m-menu-mobile__toggle-button" data-toggle-submenu="1">
@@ -321,10 +299,9 @@
               </div>
             </li>
           {% else %}
-            {% render 'mega-menu-link' with link as link, has_mega_item: has_mega_item, block_type: block_type %}
+            {% render 'mega-menu-link' with link as link, has_mega_item: has_mega_item, block_type: block_type, menu_icon: menu_icon, menu_icon_size: menu_icon_size %}
           {% endif %}
         {% endfor %}
-        {%- endif -%}
       </ul>
       {% render 'mega-menu-customer', section: section %}
     </div>

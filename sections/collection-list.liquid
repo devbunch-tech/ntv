@@ -12,7 +12,7 @@
 
   assign enable_slider = false
   assign layout = section.settings.layout
-  if section.settings.enable_slider == true and section.blocks.size > 3
+  if section.settings.enable_slider == true and section.blocks.size >= 3
     assign enable_slider = true
   endif
   assign mobile_disable_slider = section.settings.mobile_disable_slider
@@ -27,6 +27,15 @@
   assign row_gap = section.settings.item_gap
   assign row_gap_mobile = section.settings.mobile_gap
   assign expanded = section.settings.expanded
+  assign show_controls_top = section.settings.show_controls_top
+  
+  assign show_controls_at_top = false
+  if expanded
+    assign show_controls_at_top = true
+  endif
+  if show_controls_top
+    assign show_controls_at_top = true
+  endif
 
   assign container = section.settings.container
   if container == 'w-full'
@@ -81,6 +90,18 @@
   #m-collection-list-{{ section.id }} {
     --offset-margin: calc((100vw - {{ container_width }}px) / 2);
   }
+  {% if section.settings.collection_image_gradient %}
+    .m-collection-list--{{ section.id }} .m-collection-card__image .m-hover-box__wrapper {
+      position: relative;
+    }
+    .m-collection-list--{{ section.id }} .m-collection-card__image .m-hover-box__wrapper::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 0%, rgba(0, 0, 0, 0.55) 100%);
+      pointer-events: none;
+    }
+  {% endif %}
   {% if enable_slider and section.settings.container != 'w-full' and expanded %}
     {% if layout != 'left-side' %}
       @media (min-width: 1280px) {
@@ -115,21 +136,38 @@
       }
     }
   {% endif %}
+  {% if section.settings.mobile_column_style == 'fullwidth' %}
+    @media (max-width: 767px) {
+      .m-collection-list--{{ section.id }} .swiper-slide {
+        width: 90vw !important;
+      }
+      .m-collection-list--{{ section.id }} .swiper-container {
+        padding-left: calc((100vw - 90vw - var(--column-gap-mobile, 5px)) / 2);
+      }
+      .m-collection-list--{{ section.id }} .m-mixed-layout--mobile-scroll .m-mixed-layout__inner > * {
+        --mobile-column-width: 90vw;
+      }
+    }
+  {% endif %}
 {% endstyle %}
 
 {% capture section_content %}
   {% if section.settings.heading != blank or section.settings.subheading != blank or section.settings.description != blank %}
     {% if section.settings.layout != 'left-side' %}<div class="m-collection-list__header-container {{ section.settings.container | replace: 'w-full', 'container-full' }}">{% endif %}
     <div class="m-section__header m:text-{{ section.settings.header_alignment }}">
-      {% if section.settings.subheading != blank %}
-        <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">{{ section.settings.subheading }}</p>
-      {% endif %}
       {% if section.settings.heading != blank %}
         <h2 class="m-section__heading {{ section.settings.heading_size | default: 'h3' }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">{{ section.settings.subheading }}</p>
       {% endif %}
       {% if section.settings.description != blank %}
         <div class="m-section__description{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">{{ section.settings.description }}</div>
       {% endif %}
+      {% if section.settings.show_title_divider %}
+        <div class="m-collection-list__mobile-divider"></div>
+      {% endif %}
+      
       {% if section.settings.button_label != blank %}
 
         {% capture arrow %}<svg class="m-rlt-reverse-x" width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -156,13 +194,14 @@
           </a>
         </div>
       {% endif %}
-      {% if enable_slider and expanded %}
+      {% if enable_slider and show_controls_at_top %}
         {% if section.settings.show_pagination or section.settings.show_navigation %}
           <div class="m-collection-list__controls m-collection-list__controls--top">
-            {% render 'slider-controls', 
-              extra_classes: slider_control_classes, 
+            {% render 'slider-controls',
+              extra_classes: slider_control_classes,
               position: slider_controls_position,
-              show_nav: show_navigation, 
+              show_nav: show_navigation,
+              arrow_style: section.settings.arrow_style,
               show_pagination: show_pagination, 
               pagination_class: 'm-dot-circle m-dot-circle--dark', 
               pagination_type: 'fraction'
@@ -186,20 +225,19 @@
                   assign collection = collections[block.settings.collection]
                   assign default_label = 'homepage.onboarding.collection_title' | t
                 %}
-                {% render 'collection-card',
-                  section: section,
-                  collection: collection,
-                  card_style: card_style,
-                  text_alignment: section.settings.text_alignment,
-                  image: block.settings.item_image,
-                  video: block.settings.item_video,
-                  show_product_count: section.settings.show_product_count,
-                  enable_slider: enable_slider,
-                  image_rounded: section.settings.image_rounded,
-                  hover_effect: section.settings.hover_effect,
+                {% render 'collection-card', 
+                  section: section, 
+                  collection: collection, 
+                  card_style: card_style, 
+                  text_alignment: section.settings.text_alignment, 
+                  image: block.settings.item_image, 
+                  show_product_count: section.settings.show_product_count, 
+                  enable_slider: enable_slider, 
+                  image_rounded: section.settings.image_rounded, 
+                  hover_effect: section.settings.hover_effect, 
                   title: block.settings.title,
                   index: forloop.index,
-                  animated: animated,
+                  animated: animated, 
                   animation_effect: animation_effect
                 %}
               {% when 'banner' %}
@@ -233,12 +271,13 @@
           {% endfor %}
         </div>
       </div>
-      {% if enable_slider and expanded == false %}
+      {% if enable_slider and expanded == false and show_controls_top == false %}
         {% if section.settings.show_pagination or section.settings.show_navigation %}
           <div class="m-collection-list__controls m-collection-list__controls--bottom m:text-center">
-            {% render 'slider-controls', 
+            {% render 'slider-controls',
               extra_classes: slider_control_classes,
-              show_nav: show_navigation, 
+              show_nav: show_navigation,
+              arrow_style: section.settings.arrow_style,
               show_pagination: show_pagination, 
               pagination_class: 'm-dot-circle m-dot-circle--dark', 
               pagination_type: 'fraction'
@@ -258,7 +297,7 @@
   class="m-section m-collection-list m-collection-list--{{ layout }} {{ section.settings.custom_class }} m-collection-list--{{ section.id }} m-gradient m-color-{{ section.settings.color_scheme }}"
   data-hover-effect="{{ section.settings.hover_effect }}"
   data-container="{{ section.settings.container }}"
-  style="--section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px;"
+  style="--section-padding-top: {{ section.settings.padding_top }}px; --section-padding-bottom: {{ section.settings.padding_bottom }}px; --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px; --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;"
 >
   <div
     class="m-collection-list__container{% if section.settings.layout == 'left-side' %} {{ container }}{% endif %} m-section-my m-section-py"
@@ -268,6 +307,7 @@
       data-enable-slider="{{ enable_slider }}"
       data-mobile-disable-slider="{{ section.settings.mobile_disable_slider }}"
       data-mobile-hide-controls="{{ section.settings.hidden_slide_control_mobile }}"
+      data-mobile-column-style="{{ section.settings.mobile_column_style | default: 'default' }}"
       {% if enable_slider %}
         data-gutter="{{ section.settings.item_gap }}"
         data-items="{{ section.settings.items_per_row }}"
@@ -301,7 +341,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Shop by collections"
@@ -331,6 +371,13 @@
       "type": "textarea",
       "id": "description",
       "label": "Description"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_divider",
+      "label": "Show divider line",
+      "default": false,
+      "info": "Display a horizontal divider line between heading and content"
     },
     {
       "type": "text",
@@ -436,6 +483,14 @@
       "info": "Work if Enable slider is checked"
     },
     {
+      "type": "checkbox",
+      "id": "show_controls_top",
+      "label": "Show controls at top",
+      "default": false,
+      "info": "Show slider controls at top next to title (only works when Expanded is disabled)",
+      "visible_if": "{{ section.settings.expanded == false }}"
+    },
+    {
       "type": "header",
       "content": "Card settings"
     },
@@ -460,7 +515,11 @@
         {
           "value": "inside-2",
           "label": "Button only"
-        }
+        },
+        {
+          "value": "inside-3",
+          "label": "Content inside with button"
+        },
       ]
     },
     {
@@ -482,6 +541,95 @@
           "label": "Right"
         }
       ]
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "COMPRAR",
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
+    },
+    {
+      "type": "select",
+      "id": "button_style_inside3",
+      "label": "Button style",
+      "default": "m-button--primary",
+      "options": [
+        {
+          "value": "m-button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "m-button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "m-button--white",
+          "label": "White"
+        },
+        {
+          "value": "m-button--link",
+          "label": "Link"
+        }
+      ],
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
+    },
+    {
+      "type": "select",
+      "id": "title_color_inside3",
+      "label": "Title color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ],
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
+    },
+    {
+      "type": "select",
+      "id": "button_color_inside3",
+      "label": "Button color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ],
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
+    },
+    {
+      "type": "select",
+      "id": "button_text_hover_color_inside3",
+      "label": "Button text color on hover",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ],
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient_inside3",
+      "label": "Background gradient",
+      "visible_if": "{{ section.settings.card_style == 'inside-3' }}"
     },
     {
       "type": "select",
@@ -521,6 +669,12 @@
       "label": "Image rounded",
       "default": false,
       "info": "Don't work well with \"Content inside\" layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "collection_image_gradient",
+      "label": "Gradient overlay on images",
+      "default": false
     },
     {
       "type": "header",
@@ -568,6 +722,23 @@
       "default": false
     },
     {
+      "type": "select",
+      "id": "arrow_style",
+      "label": "Arrow style",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Chevron"
+        },
+        {
+          "value": "line",
+          "label": "Line arrow"
+        }
+      ],
+      "visible_if": "{{ section.settings.show_navigation }}"
+    },
+    {
       "type": "checkbox",
       "id": "autorotate",
       "label": "Auto slide",
@@ -610,6 +781,22 @@
       "unit": "px"
     },
     {
+      "type": "select",
+      "id": "mobile_column_style",
+      "label": "Mobile card width",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Default (70vw)"
+        },
+        {
+          "value": "fullwidth",
+          "label": "Fullwidth with peek (90vw)"
+        }
+      ]
+    },
+    {
       "type": "checkbox",
       "id": "hidden_slide_control_mobile",
       "label": "Hide slider controls",
@@ -636,6 +823,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },
@@ -702,12 +909,6 @@
           "type": "image_picker",
           "id": "item_image",
           "label": "Featured image"
-        },
-        {
-          "type": "video",
-          "id": "item_video",
-          "label": "Featured video",
-          "info": "If uploaded, the video will be shown instead of the image."
         }
       ]
     },

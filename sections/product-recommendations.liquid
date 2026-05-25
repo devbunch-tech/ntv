@@ -44,6 +44,8 @@
     --row-gap-mobile: 30px; --items: {{ section.settings.columns }};
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 {%- endstyle -%}
 <section
@@ -64,6 +66,9 @@
           <h2 class="m-section__heading {{ section.settings.heading_size }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
             {{ section.settings.heading | default: default_heading }}
           </h2>
+          {% if section.settings.show_title_divider %}
+            <div class="m-product-recommendations__mobile-divider"></div>
+          {% endif %}
         </div>
         <div class="m-product-recommendations__wrapper m-slider-control-hover-inside m-mixed-layout{% if section.settings.use_scroll_mobile %} m-mixed-layout--mobile-scroll{% endif %}">
           <div class="m-product-list {% if section.settings.enable_slider %} swiper-container{% endif %}">
@@ -82,6 +87,10 @@
                         render 'product-card-4', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
                       when '5'
                         render 'product-card-5', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params
+                      when '6'
+                        render 'product-card-6', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params, section: section
+                      when '7'
+                        render 'product-card-7', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect, remove_params: remove_params, section: section
                     endcase
                   %}
                 </div>
@@ -152,7 +161,7 @@
       "content": "Header settings"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "You Might Also Like",
@@ -189,6 +198,13 @@
           "label": "Center"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_divider",
+      "label": "Show divider line",
+      "default": false,
+      "info": "Display a horizontal divider line between heading and content"
     },
     {
       "type": "header",
@@ -253,6 +269,71 @@
     },
     {
       "type": "header",
+      "content": "Product card settings"
+    },
+    {
+      "type": "select",
+      "id": "button_style_inside3",
+      "label": "Button style",
+      "default": "m-button--primary",
+      "options": [
+        {
+          "value": "m-button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "m-button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "m-button--white",
+          "label": "White"
+        },
+        {
+          "value": "m-button--link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_color_inside3",
+      "label": "Button color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_text_hover_color_inside3",
+      "label": "Button text color on hover",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient_inside3",
+      "label": "Background gradient"
+    },
+    {
+      "type": "header",
       "content": "Section Padding"
     },
     {
@@ -272,6 +353,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

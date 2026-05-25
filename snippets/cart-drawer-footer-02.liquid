@@ -1,0 +1,253 @@
+{% comment %}
+  Footer do carrinho - Estilo 02 (Pancada): Envio + Cupom como botões,
+  resumo (Subtotal/Descontos/TOTAL), botão preto, trust badge.
+  Variáveis: gift_wrapping, gift_wrap_id, gift_wraps_in_cart, items_in_cart
+{% endcomment %}
+{% render 'cart-addons-estilo-2', form_id: 'cart-drawer-form' %}
+<div class="m-cart-drawer__gift-wrapping">
+  {%- if gift_wrapping != null -%}
+    <div class="m:hidden">{{ gift_wrapping.object.variants.first | json }}</div>
+    <m-gift-wrapping-component
+      class="m-gift-wrapping"
+      data-gift-wrap-id="{{ gift_wrap_id }}"
+      data-gift-wrapping="{{ cart.attributes.gift-wrapping | escape }}"
+      cart-items-size="{{ cart.items.size }}"
+      gift-wraps-in-cart="{{ gift_wraps_in_cart }}"
+      items-in-cart="{{ items_in_cart }}"
+    >
+      <input
+        id="m-gift-wrapping"
+        type="checkbox"
+        name="attributes[gift-wrapping]"
+        value="yes"
+        {% if gift_wraps_in_cart > 0 %}
+          checked="checked"
+        {% endif %}
+        class="m:visually-hidden"
+      >
+      <label for="m-gift-wrapping" class="m-gift-wrapping--label">
+        {%- capture gift_price -%}<strong class="m-gift-wrapping--price">{{ gift_wrapping.object.price | money }}</strong>{%- endcapture -%}
+        <span class="m-gift-wrapping--text">
+          {{- 'cart.general.gift_wrapping_html' | t: price: gift_price -}}
+        </span>
+        <div class="m-gift-wrapping--loading">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        </div>
+        <svg
+          class="m-gift-wrapping--icon"
+          viewBox="0 0 14 14"
+          with="16"
+          height="16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect x="0.5" y="0.5" width="13" height="13" stroke="currentColor"/>
+          <path d="M3.5625 7.625L5.75 9.8125L10.75 4.8125" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </label>
+      {%- if gift_wraps_in_cart > 0 -%}
+        <m-gift-note-component class="m-gift-wrapping--note">
+          <textarea
+            class="form-field"
+            name="attributes[gift-note]"
+            placeholder="{{ 'cart.general.gift_note_placeholder' | t }}"
+          >{{ cart.attributes.gift-note }}</textarea>
+        </m-gift-note-component>
+      {%- endif -%}
+    </m-gift-wrapping-component>
+  {%- endif -%}
+</div>
+<div class="m-cart__summary m-cart-drawer__summary">
+  <div data-foxkit-cart-summary></div>
+  <div data-minimog-cart-discounts>
+    {%- liquid
+      assign discount_codes = cart.cart_level_discount_applications | where: 'type', 'discount_code' | map: 'title'
+      assign cart_items_has_discount = false
+      for item in cart.items
+        for allocation in item.line_level_discount_allocations
+          if allocation.discount_application.type == 'discount_code'
+            assign cart_items_has_discount = true
+          endif
+        endfor
+      endfor
+    -%}
+    {%- if cart.cart_level_discount_applications.size > 0 or cart_items_has_discount -%}
+      <ul class="m-cart__discount m:flex m:flex-wrap m:justify-end m:items-center" role="list">
+        {%- for discount in cart.cart_level_discount_applications -%}
+          {% render 'cart-discount-item', discount: discount %}
+        {%- endfor -%}
+        {%- if cart_items_has_discount -%}
+          {%- for item in cart.items -%}
+            {%- for allocation in item.line_level_discount_allocations -%}
+              {%- liquid
+                unless allocation.discount_application.type == 'discount_code'
+                  continue
+                endunless
+
+                assign discount = allocation.discount_application
+
+                assign is_displayed = discount_codes | has: discount.title
+                if is_displayed
+                  continue
+                endif
+
+                assign discount_codes = item.line_level_discount_allocations | slice: forloop.index0 | map: 'discount_application' | map: 'title' | concat: discount_codes
+              -%}
+              {% render 'cart-discount-item', discount: discount %}
+            {%- endfor -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+    {%- endif -%}
+  </div>
+  {%- liquid
+    comment
+      Estilo 2 (Pancada): cálculo do preço comparativo sempre ativo.
+      Soma o valor “original” de cada item (compare_at_price quando existir, senão original_line_price)
+      e do brinde quando meta atingida; se total de descontos > 0, mostra Subtotal + Descontos + TOTAL.
+    endcomment
+    assign cart_original_total = 0
+    assign has_total_discount = false
+    assign gift_discount_value = 0
+
+    for item in cart.items
+      if item.variant.compare_at_price != null and item.variant.compare_at_price > item.variant.price
+        assign item_original = item.variant.compare_at_price | times: item.quantity
+      else
+        assign item_original = item.original_line_price
+      endif
+      assign cart_original_total = cart_original_total | plus: item_original
+    endfor
+
+    assign promo_threshold_type = settings.cart_drawer_promo_threshold_type | default: 'value'
+    assign gift_goal_reached = false
+    if promo_threshold_type == 'quantity'
+      assign threshold_qty = settings.cart_drawer_promo_threshold_quantity | default: 3
+      if cart.item_count >= threshold_qty
+        assign gift_goal_reached = true
+      endif
+    else
+      assign promo_threshold = settings.cart_drawer_promo_threshold
+      assign cart_total_value = cart.total_price | divided_by: 100.0
+      if cart_total_value >= promo_threshold
+        assign gift_goal_reached = true
+      endif
+    endif
+    if settings.cart_drawer_progress_type == 'gift' and settings.cart_drawer_gift_product != blank and gift_goal_reached and cart.item_count > 0
+      assign gift_product = settings.cart_drawer_gift_product
+      assign gift_variant = gift_product.selected_or_first_available_variant
+      if gift_variant.compare_at_price != null and gift_variant.compare_at_price > 0
+        assign gift_discount_value = gift_variant.compare_at_price
+      else
+        assign gift_discount_value = gift_variant.price
+      endif
+      assign cart_original_total = cart_original_total | plus: gift_discount_value
+    endif
+
+    assign cart_total_discount = cart_original_total | minus: cart.total_price
+    if cart_total_discount > 0
+      assign has_total_discount = true
+    endif
+  -%}
+  {%- if has_total_discount -%}
+    <div class="m-cart__pricing-breakdown">
+      <div class="m-cart__pricing-row m-cart__pricing-subtotal">
+        <span class="m-cart__pricing-label">Subtotal</span>
+        <span class="m-cart__pricing-value">
+          {% if settings.currency_code_enabled %}
+            {{ cart_original_total | money_with_currency }}
+          {% else %}
+            {{ cart_original_total | money }}
+          {% endif %}
+        </span>
+      </div>
+      <div class="m-cart__pricing-row m-cart__pricing-discount">
+        <span class="m-cart__pricing-label">Desconto</span>
+        <span class="m-cart__pricing-value">
+          -{% if settings.currency_code_enabled %}{{ cart_total_discount | money_with_currency }}{% else %}{{ cart_total_discount | money }}{% endif %}
+        </span>
+      </div>
+    </div>
+  {%- endif -%}
+  <div class="m-cart__subtotal m-cart-drawer__subtotal-row m:flex m:justify-between m:items-center" data-cart-subtotal>
+    <span class="m-cart__subtotal--label">{% if has_total_discount %}Total{% else %}{{ 'cart.general.subtotal' | t }}{% endif %}</span>
+    <span class="m-cart__subtotal--price" data-cart-subtotal-price>
+      {% if settings.currency_code_enabled %}
+        {{ cart.total_price | money_with_currency }}
+      {% else %}
+        {{ cart.total_price | money }}
+      {% endif %}
+    </span>
+  </div>
+</div>
+<div class="m:flex m:flex-col m:items-center">
+  {% assign show_terms = false %}
+  {% if settings.agree_text != blank and settings.show_agree_on_cart %}
+    <div class="m-terms-conditons">
+      <label class="form-field--checkbox">
+        <input type="checkbox" name="agree_terms" value="yes" required>
+        <span class="form-field--checkbox__label">{{ settings.agree_text }}</span>
+        <span class="form-field--checkbox__icon">
+          <svg
+            class="m-svg-icon--medium"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path d="M18.5 1.5H1.5L1.5 18.5H18.5V1.5ZM1.5 0.5C0.947715 0.5 0.5 0.947715 0.5 1.5V18.5C0.5 19.0523 0.947715 19.5 1.5 19.5H18.5C19.0523 19.5 19.5 19.0523 19.5 18.5V1.5C19.5 0.947715 19.0523 0.5 18.5 0.5H1.5Z" fill-rule="evenodd" fill="currentColor"/>
+            <path d="M14.9975 6.09084C15.201 6.27746 15.2147 6.59375 15.0281 6.79728L8.91631 13.4627C8.82231 13.5652 8.68987 13.6239 8.55079 13.6247C8.41172 13.6256 8.27857 13.5684 8.18335 13.4671L4.99513 10.0731C4.80606 9.87179 4.81596 9.55536 5.01723 9.3663C5.21849 9.17723 5.53492 9.18713 5.72399 9.3884L8.54335 12.3897L14.291 6.12145C14.4776 5.91791 14.7939 5.90421 14.9975 6.09084Z" fill="currentColor"/>
+          </svg>
+        </span>
+      </label>
+    </div>
+    {% assign show_terms = true %}
+  {% endif %}
+  <button
+    type="submit"
+    form="cart-drawer-form"
+    class="m-button m-button--primary m:w-full"
+    name="checkout"
+    {% if show_terms %}
+      data-terms-action disabled
+    {% endif %}
+  >
+    <span>{{ 'cart.general.checkout' | t }}</span>
+  </button>
+  {%- if settings.cart_drawer_show_accelerated_button and additional_checkout_buttons -%}
+    <div class="additional-checkout-buttons m:w-full">
+      {{ content_for_additional_checkout_buttons }}
+    </div>
+  {%- endif -%}
+</div>
+{% if settings.cart_drawer_trust_badge_style == 'style_1' %}
+  {% if settings.cart_drawer_trust_badge_text or settings.cart_drawer_trust_badge_image %}
+    <div class="m-cart__trust-badge">
+      {% if settings.cart_drawer_trust_badge_image %}
+        <img
+          src="{{ settings.cart_drawer_trust_badge_image | image_url: width: 200 }}"
+          loading="lazy"
+          alt="Trust badge logo"
+        >
+      {% endif %}
+      {% if settings.cart_drawer_trust_badge_text %}
+        <span>{{ settings.cart_drawer_trust_badge_text }}</span>
+      {% endif %}
+    </div>
+  {% endif %}
+  {% if settings.cart_drawer_trust_badge %}
+    <div class="m-cart__trust-badge">
+      <img
+        src="{{ settings.cart_drawer_trust_badge | image_url: width: 840 }}"
+        loading="lazy"
+        width="400"
+        height="100"
+        alt="Trust secure badge"
+      >
+    </div>
+  {% endif %}
+{% endif %}

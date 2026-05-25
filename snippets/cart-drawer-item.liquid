@@ -124,10 +124,152 @@
         {% endif %}
       </a>
     </div>
-    <div class="m-cart-item__info m-cart-drawer-item__info">
-      <a href="{{- item.url -}}" class="m-cart-item__title">
-        {{- item.product.title -}}
-      </a>
+    {%- assign use_compare_price_style = force_compare_price_style | default: false -%}
+    <div class="m-cart-item__info m-cart-drawer-item__info{% if settings.cart_drawer_card_style == 'card_2' %} m-cart-item__info--card-2{% elsif settings.cart_drawer_card_style == 'card_4' %} m-cart-item__info--card-4{% elsif settings.cart_drawer_card_style == 'card_3' or use_compare_price_style %} m-cart-item__info--card-3{% endif %}">
+      {% if settings.cart_drawer_card_style == 'card_4' %}
+        {%- comment -%} Card 4: delete icon top-right {%- endcomment -%}
+        <m-cart-remove-button
+          id="MinimogCartDrawer-Remove-{{ item.index | plus: 1 }}"
+          data-index="{{ item.index | plus: 1 }}"
+          class="m-cart-item__remove--card-4-wrap"
+        >
+          <button type="button" class="m-cart-item__remove m-cart-item__remove--icon m-cart-item__remove--card-4{% unless gift_wrap_id == nil or item.id != gift_wrap_id %} m:hidden{% endunless %}" aria-label="{{ 'cart.general.remove' | t }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <g clip-path="url(#clip-trash-{{ item.index }})">
+                <path d="M11.0849 4.98799L9.97926 11.2762C9.93415 11.5331 9.79996 11.7657 9.60027 11.9334C9.40058 12.1011 9.14818 12.193 8.88744 12.1929H4.41482C4.15408 12.193 3.90168 12.1011 3.70199 11.9334C3.5023 11.7657 3.3681 11.5331 3.323 11.2762L2.21731 4.98799M11.6392 3.32531H8.52165M8.52165 3.32531V2.21685C8.52165 1.92287 8.40486 1.64093 8.19699 1.43306C7.98911 1.22518 7.70717 1.1084 7.41319 1.1084H5.88907C5.59509 1.1084 5.31315 1.22518 5.10527 1.43306C4.8974 1.64093 4.78061 1.92287 4.78061 2.21685V3.32531M8.52165 3.32531H4.78061M1.66309 3.32531H4.78061" stroke="currentColor" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+                <clipPath id="clip-trash-{{ item.index }}">
+                  <rect width="13.3014" height="13.3014" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </m-cart-remove-button>
+      {% endif %}
+      <div class="m-cart-item__header{% if settings.cart_drawer_card_style == 'card_2' %} m-cart-item__header--card-2{% elsif settings.cart_drawer_card_style == 'card_3' or use_compare_price_style and settings.cart_drawer_card_style != 'card_4' %} m-cart-item__header--card-3{% endif %}">
+        <a href="{{- item.url -}}" class="m-cart-item__title">
+          {{- item.product.title -}}
+        </a>
+        {% if settings.cart_drawer_card_style == 'card_2' %}
+          <div class="m-cart-item__price m-cart-item__price--card-2">
+            {%- liquid
+              assign compare_at_price = item.variant.compare_at_price
+              assign has_compare_price = false
+              if compare_at_price != null and compare_at_price > item.final_price
+                assign has_compare_price = true
+              endif
+            -%}
+            {%- if has_compare_price -%}
+              <div class="m-cart-item__price-discounted m-cart-item__price-discounted--card-2">
+                <del class="m-cart-item__price--regular m-cart-item__price--compare">
+                  {% if settings.currency_code_enabled %}
+                    {{- compare_at_price | money_with_currency -}}
+                  {% else %}
+                    {{- compare_at_price | money -}}
+                  {% endif %}
+                </del>
+                <span class="m-cart-item__price--final">
+                  {% if settings.currency_code_enabled %}
+                    {{- item.final_price | money_with_currency -}}
+                  {% else %}
+                    {{- item.final_price | money -}}
+                  {% endif %}
+                </span>
+              </div>
+            {%- else -%}
+              <span class="m-cart-item__price--regular">
+                {% if settings.currency_code_enabled %}
+                  {{- item.final_price | money_with_currency -}}
+                {% else %}
+                  {{- item.final_price | money -}}
+                {% endif %}
+              </span>
+            {%- endif -%}
+          </div>
+        {% elsif settings.cart_drawer_card_style == 'card_3' or use_compare_price_style and settings.cart_drawer_card_style != 'card_4' %}
+          <div class="m-cart-item__price m-cart-item__price--card-3">
+            {%- liquid
+              assign compare_at_price = item.variant.compare_at_price
+              assign has_compare_price = false
+              if compare_at_price != null and compare_at_price > item.final_price
+                assign has_compare_price = true
+              endif
+            -%}
+            {%- if has_compare_price -%}
+              <div class="m-cart-item__price-discounted m-cart-item__price-discounted--card-3">
+                <del class="m-cart-item__price--regular m-cart-item__price--compare">
+                  {% if settings.currency_code_enabled %}
+                    {{- compare_at_price | money_with_currency -}}
+                  {% else %}
+                    {{- compare_at_price | money -}}
+                  {% endif %}
+                </del>
+                <span class="m-cart-item__price--final">
+                  {% if settings.currency_code_enabled %}
+                    {{- item.final_price | money_with_currency -}}
+                  {% else %}
+                    {{- item.final_price | money -}}
+                  {% endif %}
+                </span>
+              </div>
+              {%- liquid
+                assign discount_amount_card3 = compare_at_price | minus: item.final_price
+                assign discount_percentage_card3 = discount_amount_card3 | times: 100.0 | divided_by: compare_at_price | round
+              -%}
+              <span class="m-cart-item__discount-badge m-cart-item__discount-badge--price m-gradient m-color-{{ settings.sale_badge_color_scheme }}">
+                {{ discount_percentage_card3 }}% OFF
+              </span>
+            {%- else -%}
+              <span class="m-cart-item__price--regular">
+                {% if settings.currency_code_enabled %}
+                  {{- item.final_price | money_with_currency -}}
+                {% else %}
+                  {{- item.final_price | money -}}
+                {% endif %}
+              </span>
+            {%- endif -%}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if settings.cart_drawer_card_style == 'card_4' %}
+        <div class="m-cart-item__price m-cart-item__price--card-4">
+          {%- liquid
+            assign compare_at_price = item.variant.compare_at_price
+            assign has_compare_price = false
+            if compare_at_price != null and compare_at_price > item.final_price
+              assign has_compare_price = true
+            endif
+          -%}
+          {%- if has_compare_price -%}
+            <div class="m-cart-item__price-discounted m-cart-item__price-discounted--card-4">
+              <span class="m-cart-item__price--final">
+                {% if settings.currency_code_enabled %}
+                  {{- item.final_price | money_with_currency -}}
+                {% else %}
+                  {{- item.final_price | money -}}
+                {% endif %}
+              </span>
+              <del class="m-cart-item__price--regular m-cart-item__price--compare">
+                {% if settings.currency_code_enabled %}
+                  {{- compare_at_price | money_with_currency -}}
+                {% else %}
+                  {{- compare_at_price | money -}}
+                {% endif %}
+              </del>
+            </div>
+          {%- else -%}
+            <span class="m-cart-item__price--regular">
+              {% if settings.currency_code_enabled %}
+                {{- item.final_price | money_with_currency -}}
+              {% else %}
+                {{- item.final_price | money -}}
+              {% endif %}
+            </span>
+          {%- endif -%}
+        </div>
+      {% endif %}
 
       <div class="m-cart-drawer-item__variant m:text-color-subtext">
         {%- unless item.product.has_only_default_variant -%}
@@ -170,67 +312,77 @@
         {%- endfor -%}
       </div>
 
-      <div class="m-cart-item__price">
-        {%- if item.original_price != item.final_price -%}
-          <div class="m-cart-item__price-discounted">
-            <del class="m-cart-item__price--regular">
+      {% unless settings.cart_drawer_card_style == 'card_2' or settings.cart_drawer_card_style == 'card_3' or settings.cart_drawer_card_style == 'card_4' or use_compare_price_style %}
+        <div class="m-cart-item__price">
+          {%- if item.original_price != item.final_price -%}
+            <div class="m-cart-item__price-discounted">
+              <del class="m-cart-item__price--regular">
+                {% if settings.currency_code_enabled %}
+                  {{- item.original_price | money_with_currency -}}
+                {% else %}
+                  {{- item.original_price | money -}}
+                {% endif %}
+              </del>
+              <span class="m-cart-item__price--final">
+                {% if settings.currency_code_enabled %}
+                  {{- item.final_price | money_with_currency -}}
+                {% else %}
+                  {{- item.final_price | money -}}
+                {% endif %}
+              </span>
+            </div>
+          {%- else -%}
+            <span class="m-cart-item__price--regular">
               {% if settings.currency_code_enabled %}
                 {{- item.original_price | money_with_currency -}}
               {% else %}
                 {{- item.original_price | money -}}
               {% endif %}
-            </del>
-            <span class="m-cart-item__price--final">
-              {% if settings.currency_code_enabled %}
-                {{- item.final_price | money_with_currency -}}
-              {% else %}
-                {{- item.final_price | money -}}
-              {% endif %}
             </span>
-          </div>
-        {%- else -%}
-          <span class="m-cart-item__price--regular">
-            {% if settings.currency_code_enabled %}
-              {{- item.original_price | money_with_currency -}}
-            {% else %}
-              {{- item.original_price | money -}}
-            {% endif %}
-          </span>
-        {%- endif -%}
+          {%- endif -%}
 
-        <div class="m-cart-item__unit-price{% unless item.unit_price_measurement %} m:hidden{% endunless %}">
-          <span class="m:visually-hidden m:visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
-          <span class="m:text-sm m:text-color-subtext">
-            {%- capture unit_price_separator -%}
-            <span aria-hidden="true">/</span>
-            <span class="m:visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
-          {%- endcapture -%}
-
-            {%- capture unit_price_base_unit -%}
-              {%- if item.unit_price_measurement.reference_value != 1 -%}
-                {{- item.unit_price_measurement.reference_value -}}
-              {%- endif -%}
-              {{ item.unit_price_measurement.reference_unit }}
+          <div class="m-cart-item__unit-price{% unless item.unit_price_measurement %} m:hidden{% endunless %}">
+            <span class="m:visually-hidden m:visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
+            <span class="m:text-sm m:text-color-subtext">
+              {%- capture unit_price_separator -%}
+              <span aria-hidden="true">/</span>
+              <span class="m:visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
             {%- endcapture -%}
 
-            <span data-unit-price>{{ item.unit_price | money }}</span>
-            {{- unit_price_separator -}}
-            <span data-unit-price-base-unit>{{- unit_price_base_unit -}}</span>
-          </span>
+              {%- capture unit_price_base_unit -%}
+                {%- if item.unit_price_measurement.reference_value != 1 -%}
+                  {{- item.unit_price_measurement.reference_value -}}
+                {%- endif -%}
+                {{ item.unit_price_measurement.reference_unit }}
+              {%- endcapture -%}
+
+              <span data-unit-price>{{ item.unit_price | money }}</span>
+              {{- unit_price_separator -}}
+              <span data-unit-price-base-unit>{{- unit_price_base_unit -}}</span>
+            </span>
+          </div>
         </div>
-      </div>
+      {% endunless %}
 
       {%- if item.discounts.size > 0 -%}
-        <ul class="m-cart__discount" role="list">
+        {%- if settings.cart_drawer_card_style == 'card_3' -%}<div class="m-cart-item__discount-info">{%- endif -%}
+        <ul class="m-cart__discount{% if settings.cart_drawer_card_style == 'card_3' %} m-cart__discount--card-3{% endif %}" role="list">
           {%- for discount in item.discounts -%}
-            <li class="m-cart__discount--item">
-              <svg aria-hidden="true" width="20" height="20" focusable="false" role="presentation" viewBox="0 0 12 13">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M7 .5h3a2 2 0 0 1 2 2v3a.995.995 0 0 1-.293.707l-6 6a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l6-6A.995.995 0 0 1 7 .5zm2 2a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" fill="currentColor"></path>
-              </svg>
+            <li class="m-cart__discount--item m:inline-flex m:items-center{% if settings.cart_drawer_card_style == 'card_3' %} m-gradient m-color-{{ settings.sale_badge_color_scheme }}{% endif %}">
+              {%- if settings.cart_drawer_card_style == 'card_3' -%}
+                <svg class="m-cart__discount--card-3-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M2.8 4C2.48174 4 2.17652 3.87357 1.95147 3.64853C1.72643 3.42348 1.6 3.11826 1.6 2.8C1.6 2.48174 1.72643 2.17652 1.95147 1.95147C2.17652 1.72643 2.48174 1.6 2.8 1.6C3.11826 1.6 3.42348 1.72643 3.64853 1.95147C3.87357 2.17652 4 2.48174 4 2.8C4 3.11826 3.87357 3.42348 3.64853 3.64853C3.42348 3.87357 3.11826 4 2.8 4ZM15.528 7.664L8.328 0.464C8.04 0.176 7.64 0 7.2 0H1.6C0.712 0 0 0.712 0 1.6V7.2C0 7.64 0.176 8.04 0.472 8.328L7.664 15.528C7.96 15.816 8.36 16 8.8 16C9.24 16 9.64 15.816 9.928 15.528L15.528 9.928C15.824 9.64 16 9.24 16 8.8C16 8.352 15.816 7.952 15.528 7.664Z" fill="currentColor"/>
+                </svg>
+              {%- else -%}
+                <svg aria-hidden="true" width="20" height="20" focusable="false" role="presentation" viewBox="0 0 12 13">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M7 .5h3a2 2 0 0 1 2 2v3a.995.995 0 0 1-.293.707l-6 6a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l6-6A.995.995 0 0 1 7 .5zm2 2a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" fill="currentColor"></path>
+                </svg>
+              {%- endif -%}
               {{- discount.title -}}
             </li>
           {%- endfor -%}
         </ul>
+        {%- if settings.cart_drawer_card_style == 'card_3' -%}</div>{%- endif -%}
       {%- endif -%}
       <div class="m-cart-drawer-item__quantity m:flex m:items-center">
         {%- if gift_wrap_id == null or item.id != gift_wrap_id -%}
@@ -377,14 +529,22 @@
             </button>
           </m-gift-wrapping-input>
         {%- endif -%}
-        {%- if item.properties._parentKey == blank -%}
+        {%- if item.properties._parentKey == blank and settings.cart_drawer_card_style != 'card_4' -%}
           <m-cart-remove-button
             id="MinimogCartDrawer-Remove-{{ item.index | plus: 1 }}"
             data-index="{{ item.index | plus: 1 }}"
           >
-            <span class="m-cart-item__remove m-button--link{% unless gift_wrap_id == nil or item.id != gift_wrap_id %} m:hidden{% endunless %}">
-              {{- 'cart.general.remove' | t -}}
-            </span>
+            {% if settings.cart_drawer_card_style == 'card_3' %}
+              <button type="button" class="m-cart-item__remove m-cart-item__remove--icon{% unless gift_wrap_id == nil or item.id != gift_wrap_id %} m:hidden{% endunless %}" aria-label="{{ 'cart.general.remove' | t }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none" aria-hidden="true">
+                  <path d="M1.07143 16C1.07143 16.5304 1.29719 17.0391 1.69906 17.4142C2.10092 17.7893 2.64596 18 3.21429 18H11.7857C12.354 18 12.8991 17.7893 13.3009 17.4142C13.7028 17.0391 13.9286 16.5304 13.9286 16V4H1.07143V16ZM3.21429 6H11.7857V16H3.21429V6ZM11.25 1L10.1786 0H4.82143L3.75 1H0V3H15V1H11.25Z" fill="currentColor"/>
+                </svg>
+              </button>
+            {% else %}
+              <span class="m-cart-item__remove m-button--link{% unless gift_wrap_id == nil or item.id != gift_wrap_id %} m:hidden{% endunless %}">
+                {{- 'cart.general.remove' | t -}}
+              </span>
+            {% endif %}
           </m-cart-remove-button>
         {%- endif -%}
       </div>

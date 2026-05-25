@@ -4,18 +4,10 @@
 {% liquid
   assign blocks = section.blocks
   assign items_per_row = section.settings.item_per_row
-  assign items_per_row_tablet = items_per_row | divided_by: 2.0 | ceil
-  assign items_per_row_mobile = section.settings.item_per_row_mobile | default: 2
+  assign items_per_row_tablet = items_per_row | divided_by: 1.0 | ceil
   assign enable_slider = false
-  assign mobile_only_slider = false
   if section.blocks.size > items_per_row and section.settings.enable_slider
     assign enable_slider = true
-  endif
-  if section.settings.enable_slider_mobile and section.blocks.size > items_per_row_mobile
-    if enable_slider == false
-      assign mobile_only_slider = true
-      assign enable_slider = true
-    endif
   endif
 
   assign show_nav = section.settings.show_nav
@@ -95,18 +87,14 @@
 <style>
   #m-brand-list-{{ section.id }} {
     --items: {{ items_per_row }};
-    --items-mobile: {{ items_per_row_mobile }};
     --column-gap: {{ column_gap }}px;
     --column-gap-mobile: {{ column_gap_mobile }}px;
     --row-gap: {{ row_gap }}px;
     --row-gap-mobile: {{ row_gap_mobile }}px;
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
-  }
-  @media (max-width: 767px) {
-    #m-brand-list-{{ section.id }} .m-brands-list__inner {
-      grid-template-columns: repeat({{ items_per_row_mobile }}, minmax(0, 1fr)) !important;
-    }
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 <section
@@ -119,20 +107,18 @@
     {% render 'index-section-header', section_settings: section.settings %}
     <m-brand-list
       data-enable-slider="{{ enable_slider }}"
-      data-mobile-only-slider="{{ mobile_only_slider }}"
       {% if enable_slider %}
         data-enable-autoplay="{{ section.settings.autorotate }}"
         data-autoplay-speed="{{ section.settings.autorotate_speed }}"
         data-items="{{ items_per_row }}"
         data-items-tablet="{{ items_per_row_tablet }}"
-        data-items-mobile="{{ items_per_row_mobile }}"
       {% endif %}
-      class="m-swiper-overflow m:block{% if mobile_only_slider %} m-brand-list--mobile-only-slider{% endif %}"
+      class="m-swiper-overflow m:block"
     >
       <div class="m-mixed-layout">
         <div class="m-brands-list__wrapper{% if enable_slider %} swiper-container swiper--equal-height{% endif %}">
           <div
-            class="m-brands-list__inner m:grid m:grid-2-cols md:m:grid-{{ items_per_row_tablet }}-cols lg:m:grid-{{ items_per_row }}-cols"
+            class="m-brands-list__inner m:grid m:grid-{{ items_per_row }}-cols md:m:grid-{{ items_per_row_tablet }}-cols lg:m:grid-{{ items_per_row }}-cols"
             data-wrapper
           >
             {% for block in blocks %}
@@ -213,7 +199,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Brand list"
@@ -294,16 +280,6 @@
       "default": 4
     },
     {
-      "type": "range",
-      "id": "item_per_row_mobile",
-      "label": "Images per row (mobile)",
-      "info": "Aplica tanto na grade quanto no slider em telas menores que 768px",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 2
-    },
-    {
       "type": "header",
       "content": "Item gaps"
     },
@@ -360,13 +336,6 @@
     },
     {
       "type": "checkbox",
-      "id": "enable_slider_mobile",
-      "label": "Enable touch slider (mobile only)",
-      "default": false,
-      "info": "Habilita slider rotativo com touch apenas no mobile. Use junto com Auto-rotate slides para o efeito rotativo."
-    },
-    {
-      "type": "checkbox",
       "id": "show_nav",
       "label": "Show navigation",
       "default": false
@@ -414,6 +383,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

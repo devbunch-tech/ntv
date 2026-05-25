@@ -34,9 +34,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0">
     <meta name="theme-color" content="{{ settings.color_primary }}">
+    <meta name="google-site-verification" content="FazXCkLIUDTkMYD1DqeSwpmpJlxbiu-MCC7pT8b-wLY" />
     <link rel="canonical" href="{{ canonical_url }}">
     <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
     <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-PPHD2MJ');</script>
+    <!-- End Google Tag Manager -->
 
     {%- if settings.use_favicon == true and settings.favicon != blank -%}
       <link rel="shortcut icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
@@ -86,6 +95,9 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    
+    {% comment %}Importar Areviews <script src='https://areviewsapp.com/js_codes/collection_rating.js' defer></script> {% endcomment %}
+
     {% render 'theme-data' %}
     {% render 'custom-code-head' %}
   </head>
@@ -97,6 +109,12 @@
       data-product-id="{{ product.id }}"
     {% endif %}
   >
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PPHD2MJ"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     {%- liquid
       render 'page-transition'
       render 'scroll-top-button'
@@ -135,5 +153,86 @@
     {%- if settings.enable_cart_drawer and template != 'cart' -%}
       {% render 'cart-drawer' %}
     {%- endif -%}
+
+    {%- if settings.show_whatsapp_float_button and settings.social_whatsapp_link != blank -%}
+      {%- liquid
+        if template.name == 'product' and product != blank
+          assign wpp_prefix = 'Olá, gostaria de saber mais sobre o produto:'
+          assign wpp_msg = wpp_prefix | append: ' ' | append: product.title | url_encode
+          assign wpp_url = settings.social_whatsapp_link | append: '?text=' | append: wpp_msg
+        else
+          assign wpp_url = settings.social_whatsapp_link
+        endif
+      -%}
+      {% style %}
+        .m-whatsapp-float {
+          position: fixed;
+          right: 0;
+          bottom: 100px;
+          z-index: 39;
+          display: flex;
+          flex-direction: column;
+          align-items: stretch;
+          text-decoration: none;
+        }
+        .m-whatsapp-float__label {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 50px;
+          background-color: #f0f0f0;
+          border: 1px solid #0a0a0a;
+          border-right: none;
+        }
+        .m-whatsapp-float__label span {
+          writing-mode: vertical-rl;
+          transform: rotate(180deg);
+          font-family: 'Barlow Condensed', sans-serif;
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: -0.6px;
+          text-transform: uppercase;
+          color: #0a0a0a;
+          white-space: nowrap;
+        }
+        .m-whatsapp-float__icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 40px;
+          background-color: #F0F0F0;
+          border: 1px solid #0a0a0a;
+          border-right: none;
+          border-top: none;
+          transition: background-color 0.25s ease-in-out;
+        }
+        .m-whatsapp-float__icon svg {
+          fill: #0a0a0a;
+          transition: fill 0.25s ease-in-out;
+        }
+        .m-whatsapp-float:hover .m-whatsapp-float__icon {
+          background-color: #25d366;
+        }
+        .m-whatsapp-float:hover .m-whatsapp-float__icon svg {
+          fill: #fff;
+        }
+      {% endstyle %}
+      <a href="{{ wpp_url }}" class="m-whatsapp-float" target="_blank" rel="noopener" aria-label="WhatsApp - Ajuda">
+        <div class="m-whatsapp-float__label">
+          <span>Ajuda</span>
+        </div>
+        <div class="m-whatsapp-float__icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path></svg>
+        </div>
+      </a>
+    {%- endif -%}
+
+    {% comment %} {% if template.name == 'cart' %}
+      <!-- Não remova. Checkout Yampi. -->
+      {% capture yampi_snippet_content %}{% render 'YampiSnippet' %}{% endcapture %} {% unless yampi_snippet_content contains 'Liquid error' %} {% render 'YampiSnippet' %} {% endunless %}
+      <!-- Não remova. Checkout Yampi. --> 
+    {% endif %} Importar Yampi caso Ativa {% endcomment %}
   </body>
 </html>

@@ -109,6 +109,8 @@
   #m-section--{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --column-gap: {{ section.settings.item_gap }}px;
     --column-gap-mobile: {{ section.settings.item_gap_mobile }}px;
     --row-gap: {{ section.settings.item_gap | plus: 10 }}px;
@@ -175,7 +177,7 @@
                       {% endif %}
                       class="m-icon-box__icon {{ hover }} {{ icon_classes }}{% if color_scheme_inherit %} m:blocks-radius{% endif %}"
                       {% if section.settings.image_max_width != blank %}
-                        style="width: {{ section.settings.image_max_width }};"
+                        style="width: {{ section.settings.image_max_width }}; height: {{ section.settings.image_max_width }};"
                       {% endif %}
                     >
                       <div class="m-hover-box__wrapper m:w-full">
@@ -292,7 +294,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Designed for Your Comfort"
@@ -395,9 +397,9 @@
     {
       "type": "text",
       "id": "image_max_width",
-      "label": "Image width",
+      "label": "Image size",
       "default": "70px",
-      "info": "Leave blank to use original width."
+      "info": "Sets both width and height. Leave blank to use original size."
     },
     {
       "type": "select",
@@ -502,6 +504,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

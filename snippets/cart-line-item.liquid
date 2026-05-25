@@ -140,7 +140,7 @@
         {%- endif -%}
       </div>
 
-      <div class="m-cart-item__info">
+      <div class="m-cart-item__info m-cart-item__info--card-3">
         <a class="m-cart-item__title" href="{{ item.url }}" data-role="product-title">
           {{ item.product.title }}
         </a>
@@ -245,46 +245,30 @@
       {%- assign has_discount = true -%}
     {%- endif -%}
 
-    <div class="m-cart-item__price">
-      {%- comment -%}
-        Markup template for discount item
-      {%- endcomment -%}
-      <div class="m-cart-item__price-discounted m:justify-end md:m:justify-start{% unless has_discount %} m:hidden{% endunless %}">
-        <p class="m-cart-item__price--regular">
-          <span class="m:visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-          {%- if settings.currency_code_enabled -%}
-            <s>{{ item.original_price | money_with_currency }}</s>
-          {%- else -%}
-            <s>{{ item.original_price | money }}</s>
-          {%- endif -%}
-        </p>
-        <p class="m-cart-item__price--final">
-          <span class="m:visually-hidden">{{ 'products.product.sale_price' | t }}</span>
-          {%- if settings.currency_code_enabled -%}
-            <span>{{ item.final_price | money_with_currency }}</span>
-          {%- else -%}
-            <span>{{ item.final_price | money }}</span>
-          {%- endif -%}
-        </p>
-      </div>
+    {%- comment -%} Página do carrinho: sempre card 3 (compare_at + preço final) {%- endcomment -%}
+    <div class="m-cart-item__price m-cart-item__price--card-3">
+      {%- liquid
+        assign compare_at_price = item.variant.compare_at_price
+        assign has_compare_price = false
+        if compare_at_price != null and compare_at_price > item.final_price
+          assign has_compare_price = true
+        endif
+      -%}
+      {%- if has_compare_price -%}
+        <div class="m-cart-item__price-discounted m-cart-item__price-discounted--card-3">
+          <del class="m-cart-item__price--regular m-cart-item__price--compare">
+            {% if settings.currency_code_enabled %}{{ compare_at_price | money_with_currency }}{% else %}{{ compare_at_price | money }}{% endif %}
+          </del>
+          <span class="m-cart-item__price--final">
+            {% if settings.currency_code_enabled %}{{ item.final_price | money_with_currency }}{% else %}{{ item.final_price | money }}{% endif %}
+          </span>
+        </div>
+      {%- else -%}
+        <span class="m-cart-item__price--regular">
+          {% if settings.currency_code_enabled %}{{ item.final_price | money_with_currency }}{% else %}{{ item.final_price | money }}{% endif %}
+        </span>
+      {%- endif -%}
 
-      {%- comment -%}
-        Markup template for regular price item
-      {%- endcomment -%}
-      <div class="m-cart-item__price--regular m:text-right md:m:text-left{% if has_discount %} m:hidden{% endif %}">
-        <p>
-          <span class="m:visually-hidden">{{ 'products.product.regular_price' | t }}</span>
-          {%- if settings.currency_code_enabled -%}
-            {{ item.original_price | money_with_currency }}
-          {%- else -%}
-            {{ item.original_price | money }}
-          {%- endif -%}
-        </p>
-      </div>
-
-      {%- comment -%}
-        Markup template for unit price
-      {%- endcomment -%}
       <div class="m-cart-item__unit-price m:text-right md:m:text-left{% unless item.unit_price_measurement %} m:hidden{% endunless %}">
         <span class="m:visually-hidden m:visually-hidden--inline">{{ 'products.product.unit_price_label' | t }}</span>
         <span class="m:text-sm m:text-color-subtext">
@@ -292,14 +276,12 @@
             <span aria-hidden="true">/</span>
             <span class="m:visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}&nbsp;</span>
           {%- endcapture -%}
-
           {%- capture unit_price_base_unit -%}
             {%- if item.unit_price_measurement.reference_value != 1 -%}
               {{- item.unit_price_measurement.reference_value -}}
             {%- endif -%}
             {{ item.unit_price_measurement.reference_unit }}
           {%- endcapture -%}
-
           {%- if settings.currency_code_enabled -%}
             <span data-unit-price>{{ item.unit_price | money_with_currency }}</span>
           {%- else -%}
@@ -316,21 +298,24 @@
       {%- assign item_discounts = item.line_level_discount_allocations -%}
     {%- endif -%}
 
+    {%- comment -%} Página do carrinho: sempre card 3 (tags de desconto) {%- endcomment -%}
+    <div class="m-cart-item__discount-info">
     <ul
-      class="m-cart__discount{% if item.line_level_discount_allocations == blank %} m:hidden{% endif %}"
+      class="m-cart__discount m:flex m:flex-wrap m:justify-end md:m:justify-start{% if item.line_level_discount_allocations == blank %} !m:hidden{% endif %} m-cart__discount--card-3"
       aria-label="{{ 'customer.order.discount' | t }}"
       data-cart-item-discount-list
+      role="list"
     >
       {%- for discount_allocation in item_discounts -%}
-        <li class="m-cart__discount--item m:justify-end md:m:justify-start" data-cart-item-discount>
-          {%- liquid
-            assign discount_amount = discount_allocation.amount | money
-            if settings.currency_code_enabled
-              assign discount_amount = discount_allocation.amount | money_with_currency
-            endif
-          -%}
-          <svg aria-hidden="true" width="20" height="20" focusable="false" role="presentation" viewBox="0 0 12 13">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 .5h3a2 2 0 0 1 2 2v3a.995.995 0 0 1-.293.707l-6 6a1 1 0 0 1-1.414 0l-4-4a1 1 0 0 1 0-1.414l6-6A.995.995 0 0 1 7 .5zm2 2a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" fill="currentColor"></path>
+        {%- liquid
+          assign discount_amount = discount_allocation.amount | money
+          if settings.currency_code_enabled
+            assign discount_amount = discount_allocation.amount | money_with_currency
+          endif
+        -%}
+        <li class="m-cart__discount--item m:inline-flex m:items-center m-cart__discount--item--cart-page" data-cart-item-discount>
+          <svg class="m-cart__discount--card-3-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M2.8 4C2.48174 4 2.17652 3.87357 1.95147 3.64853C1.72643 3.42348 1.6 3.11826 1.6 2.8C1.6 2.48174 1.72643 2.17652 1.95147 1.95147C2.17652 1.72643 2.48174 1.6 2.8 1.6C3.11826 1.6 3.42348 1.72643 3.64853 1.95147C3.87357 2.17652 4 2.48174 4 2.8C4 3.11826 3.87357 3.42348 3.64853 3.64853C3.42348 3.87357 3.11826 4 2.8 4ZM15.528 7.664L8.328 0.464C8.04 0.176 7.64 0 7.2 0H1.6C0.712 0 0 0.712 0 1.6V7.2C0 7.64 0.176 8.04 0.472 8.328L7.664 15.528C7.96 15.816 8.36 16 8.8 16C9.24 16 9.64 15.816 9.928 15.528L15.528 9.928C15.824 9.64 16 9.24 16 8.8C16 8.352 15.816 7.952 15.528 7.664Z" fill="currentColor"/>
           </svg>
           <span data-cart-item-discount-title>
             {{- discount_allocation.discount_application.title -}}
@@ -339,6 +324,7 @@
         </li>
       {%- endfor -%}
     </ul>
+    </div>
   </div>
 
   <div class="m-cart__column m-cart__column--quantity m:display-flex m:items-center">

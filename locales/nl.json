@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "Inclusief belasting en verzendkosten berekend bij het afrekenen",
       "taxes_included_and_shipping_policy_html": "Inclusief belasting. <a href=\"{{ link }}\">Verzending</a> berekend bij het afrekenen.",
       "enter_discount_code": "Vul hier de kortingscode in",
+      "remove_discount": "Verwijder {{ code }}",
+      "discount_duplicate_error_message": "De kortingscode is al op uw winkelwagen toegepast.",
+      "discount_apply_error_message": "De kortingscode kan niet op uw winkelwagen worden toegepast.",
       "checkout": "Uitchecken",
       "viewcart": "Bekijk winkelwagen",
       "empty": "Je winkelwagen is momenteel leeg.",

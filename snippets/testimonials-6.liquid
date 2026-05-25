@@ -38,7 +38,7 @@
                     {% if block.settings.image_link != blank %}
                       href="{{ block.settings.image_link | default: '#' }}"
                     {% endif %}
-                    class="m-testimonial__image m:hidden md:m:block m:blocks-radius"
+                    class="m-testimonial__image md:m:block m:blocks-radius"
                   >
                     {% render 'responsive-image', image: block.settings.image %}
                   </{{ tag }}>

@@ -2,11 +2,17 @@
   <div class="m-payment-icons">
     <span class="m:hidden">{{ 'general.payment.options' | t }}: </span>
     <ul class="m-payment-icons--list m:flex m:flex-wrap{{ classes | prepend: ' ' }}">
+      {%comment%}
       {%- for type in shop.enabled_payment_types -%}
         <li class="m-payment-icons--item">
           {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
         </li>
       {%- endfor -%}
+      {%endcomment%}
+      {% assign enabled_payment_types = 'visa,master,american_express,elo,hypercard,diners_club,pix' | remove: ' ' | split: ',' %}
+      {% for type in enabled_payment_types %}
+        {{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}
+      {% endfor %}
     </ul>
   </div>
 {% else %}

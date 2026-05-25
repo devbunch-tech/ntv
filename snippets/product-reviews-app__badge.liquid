@@ -22,12 +22,11 @@
       data-raters="{{ product.metafields.loox.num_reviews }}"
     ></div>
   {% when 'growave' %}
-    {% capture the_snippet_review_avg %}{% render 'ssw-widget-avg-rate-listing', product: product %}{% endcapture %}
-    {% unless the_snippet_review_avg contains 'Liquid error' %}
-      {{ the_snippet_review_avg }}
-    {% else %}
-      {% render 'mm-ssw-widget-avg-rate-listing', product: product %}
-    {% endunless %}
+    <div
+      class="gw-rv-listing-average-placeholder"
+      data-gw-product-id="{{ product.id }}"
+      style="display: inline-block"
+    ></div>
   {% when 'ali_reviews' %}
     <div product-id="{{ product.id }}" class="arv-collection arv-collection--{{ product.id }}"></div>
   {% when 'automizely' %}

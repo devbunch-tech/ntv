@@ -1,0 +1,144 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "page-about-us",
+      "disabled": true,
+      "settings": {}
+    },
+    "slider_fRYziE": {
+      "type": "slider",
+      "blocks": {
+        "slider_item_xa3qaM": {
+          "type": "slider_item",
+          "settings": {
+            "background": "shopify://shop_images/banner_influencer.webp",
+            "mb_background": "shopify://shop_images/influencer_mob.webp",
+            "content_in_container": false,
+            "content_position": "right middle",
+            "text_alignment": "left",
+            "text_size": "medium",
+            "text_color": "white",
+            "subheading": "",
+            "title": "",
+            "description": "",
+            "image_link": "https://docs.google.com/forms/d/e/FORMA_TEMA_BASE_SUBSTITUIR/viewform",
+            "button_text": "",
+            "button_link": "",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "second_button_text": "",
+            "second_button_link": "",
+            "second_button_style": "m-button--primary",
+            "second_button_size": "",
+            "show_footer": false,
+            "footer_alignment": "end",
+            "footer_text": "",
+            "footer_button": "",
+            "footer_link": "",
+            "enable_preload_image": false
+          }
+        }
+      },
+      "block_order": [
+        "slider_item_xa3qaM"
+      ],
+      "custom_css": [
+        ".m-richtext__description {max-width: 450px;}",
+        ".m-button,.shopify-payment-button__button.shopify-payment-button__button--unbranded {width: 20vw; max-width: 450px; min-width: 250px;}",
+        "@media screen and (max-width: 767px) {.m-slider--content-stack .m-slide__wrapper {display: none; }}"
+      ],
+      "name": "Slideshow",
+      "settings": {
+        "container": "w-full",
+        "slideshow_height": "adapt",
+        "show_overlay": false,
+        "dots_position": "bottom",
+        "dots_color": "light",
+        "show_dots": false,
+        "show_arrows": false,
+        "autorotate": false,
+        "autorotate_speed": 2,
+        "use_content_above": false,
+        "custom_class": "",
+        "animations": "inherit"
+      }
+    },
+    "custom_content_fBCrad": {
+      "type": "custom-content",
+      "blocks": {
+        "image_zPq7gR": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/influencer.webp",
+            "link": "",
+            "width": "50%",
+            "alignment": "center",
+            "block_custom_class": "",
+            "animations": "inherit",
+            "enable_preload_image": false
+          }
+        },
+        "text_BRWGyE": {
+          "type": "text",
+          "settings": {
+            "title": "TEMA_BASE - Programa de influenciadores",
+            "subheading": "",
+            "text": "<p>Se você ama treinar, acredita em um estilo de vida saudável e vive inspirando pessoas ao seu redor a se movimentarem todos os dias… então você já tem tudo para ser parte do nosso time.Na TEMA_BASE, buscamos criadores que transmitam verdade, energia e propósito. Pessoas que querem transformar sua paixão por bem-estar em oportunidade — e crescer junto com uma marca que acredita na força da comunidade.Como influenciador TEMA_BASE, você terá:</p><p> ✨ Comissão por cada indicação através do seu link ou cupom<br/>✨ Acesso antecipado a lançamentos e novidades da marca<br/>✨ Produtos para testar, avaliar e mostrar ao seu público<br/>✨ Bonificações, desafios e premiações especiais<br/>✨ Reconhecimento e espaço para crescer como criador<br/>✨ Suporte próximo da nossa equipe, com materiais prontos e atualizados</p><p>Aqui, você não apenas divulga produtos — você inspira pessoas a elevarem sua saúde, sua rotina e sua autoestima.  E nós estaremos ao seu lado, construindo tudo isso com você.</p><p>Se você quer fazer parte de uma marca que valoriza autenticidade, estilo e performance…</p>",
+            "width": "50%",
+            "alignment": "center",
+            "align_text": "left",
+            "text_size": "small",
+            "text_color": "white",
+            "button_label": "PARTICIPAR AGORA MESMO",
+            "button_link": "https://docs.google.com/forms/d/e/FORMA_TEMA_BASE_SUBSTITUIR/viewform",
+            "button_style": "m-button--primary",
+            "button_size": "m-button--large",
+            "block_custom_class": "influencer-content-text",
+            "animations": "inherit"
+          }
+        }
+      },
+      "block_order": [
+        "image_zPq7gR",
+        "text_BRWGyE"
+      ],
+      "custom_css": [
+        "@media screen and (max-width: 767px) {.m-custom-content__wrapper {flex-direction: row-reverse; }}"
+      ],
+      "name": "Custom content",
+      "settings": {
+        "heading": "",
+        "heading_size": "h3",
+        "subheading": "",
+        "description": "",
+        "header_alignment": "center",
+        "container": "container-fluid",
+        "color_scheme": "",
+        "content_color_scheme": "",
+        "enable_parallax": false,
+        "parallax_direction": "vertical",
+        "gap": 100,
+        "gap_mobile": 16,
+        "use_scroll_mobile": false,
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "enable_preload_image": false,
+        "custom_class": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "slider_fRYziE",
+    "custom_content_fBCrad"
+  ]
+}

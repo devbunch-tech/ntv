@@ -1,200 +1,276 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "page-about-us",
+      "disabled": true,
+      "settings": {}
+    },
+    "slider_fRYziE": {
+      "type": "slider",
+      "blocks": {
+        "slider_item_xa3qaM": {
+          "type": "slider_item",
+          "settings": {
+            "background": "shopify://shop_images/Desktop_Banner_-_Sobre_Nos.png",
+            "mb_background": "shopify://shop_images/Mobile_Banner_-_Sobre_Nos.jpg",
+            "content_in_container": false,
+            "content_position": "center middle",
+            "text_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "subheading": "",
+            "title": "",
+            "description": "",
+            "image_link": "",
+            "button_text": "",
+            "button_link": "",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "second_button_text": "",
+            "second_button_link": "",
+            "second_button_style": "m-button--primary",
+            "second_button_size": "",
+            "show_footer": false,
+            "footer_alignment": "end",
+            "footer_text": "",
+            "footer_button": "",
+            "footer_link": "",
+            "enable_preload_image": true
+          }
+        }
+      },
+      "block_order": [
+        "slider_item_xa3qaM"
+      ],
+      "custom_css": [
+        ".container-fluid {padding: 0 0;}"
+      ],
+      "name": "Slideshow",
       "settings": {
+        "container": "container-fluid",
+        "slideshow_height": "adapt",
+        "show_overlay": false,
+        "dots_position": "bottom",
+        "dots_color": "light",
+        "show_dots": false,
+        "show_arrows": false,
+        "autorotate": false,
+        "autorotate_speed": 2,
+        "use_content_above": false,
+        "custom_class": "",
+        "animations": "inherit"
       }
     },
-    "custom-content": {
+    "custom_content_KmhJH4": {
       "type": "custom-content",
       "blocks": {
-        "be5d2488-3c71-471f-bb75-dbccb6970cb0": {
+        "image_YGJgHW": {
           "type": "image",
           "settings": {
-            "link": "",
-            "width": "100%",
-            "alignment": "center",
-            "block_custom_class": "",
-            "animations": "inherit"
-          }
-        },
-        "f5e88f1f-ff68-4d03-b686-0cb9fe62fab1": {
-          "type": "text",
-          "settings": {
-            "title": "<h4 class=\"about__block-heading\">It pains me physically to see woman victimized,<br> rendered pathetic by fashion.<\/h4>\n<p class=\"about__block-subheading\">Awkwardness gives me great comfort. I’ve never been cool, but I’ve felt cool. I’ve been in the<br> cool place, but I wasn’t really cool – I was trying to pass for hip or cool.<\/p>",
-            "subheading": "",
-            "text": "<p>A girl should be two things: classy and fabulous. I am convinced that there can be luxury in simplicity. I wanted to dress the woman who lives and works, not the woman in a painting. It’s hard to balance everything. It’s always challenging. My relationships with producers or photographers – these are relationships that took years. I can’t get sucked into that celebrity thing, because I think it’s just crass. My aim is to make the poor look rich and the rich look poor. Vanity is the healthiest thing in life. I believe that my clothes can give people a better image of themselves – that it can increase their feelings of confidence and happiness. You can hide so much behind theatrics, and I don’t need to do that any more. I don’t really know how to do casual clothes.<\/p>",
-            "width": "100%",
-            "alignment": "center",
-            "align_text": "center",
-            "text_size": "medium",
-            "text_color": "black",
-            "button_label": "",
-            "button_link": "",
-            "button_style": "m-button--primary",
-            "button_size": "",
-            "block_custom_class": "sf__about-block sf__about-block-text sf__about-block-text-1",
-            "animations": "inherit"
-          }
-        },
-        "4e1fb14f-ef60-4693-b6a2-2b26063e1b70": {
-          "type": "image",
-          "settings": {
+            "image": "shopify://shop_images/ONC_-_Sobre_Nos.jpg",
             "link": "",
             "width": "50%",
             "alignment": "center",
-            "block_custom_class": "",
-            "animations": "inherit"
+            "block_custom_class": "about-img-1",
+            "animations": "inherit",
+            "enable_preload_image": false
           }
         },
-        "9a3a8077-de29-4141-9162-b9484d4a85f8": {
-          "type": "html",
+        "text_xLrQei": {
+          "type": "text",
           "settings": {
-            "code": "<div class=\"sf__about-custom-list\">\n  <h3>We are proudly<br> Australian.<\/h3>\n  <ul>\n    <li>\n      <span><img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0561\/2742\/2636\/files\/icon1.svg?v=1627616411\"><\/span>\n      <div class=\"rte\">\n          <h4>Soft Fabric<\/h4>\n          <p class=\"text-color-subtext\">Get complimentary ground shipping on every<br> order.Don’t love it? Send it back, on us.<\/p>\n      <\/div>\n    <\/li>\n    <li>\n      <span><img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0561\/2742\/2636\/files\/icon2_daf1b6c2-ef2e-416c-ae6a-a7ddd145b6c5.svg?v=1627616411\"><\/span>\n      <div class=\"rte\">\n          <h4>Lightweight<\/h4>\n          <p class=\"text-color-subtext\">Join Minimog Rewards to earn gift cards<br>\nand enjoy exclusive member benefits.<\/p>\n      <\/div>\n    <\/li>\n    <li>\n      <span><img src=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0561\/2742\/2636\/files\/icon3.svg?v=1627616411\"><\/span>\n      <div class=\"rte\">\n          <h4>All Day Comfort<\/h4>\n          <p class=\"text-color-subtext\">We believe getting dressed should be the<br> easiest part of your day.<\/p>\n      <\/div>\n    <\/li>\n  <\/ul>\n<\/div>",
+            "title": "YAGUAR UNA. ONÇA PRETA.",
+            "subheading": "",
+            "text": "<p>Em Tupi-Guarani, Yaguar Una significa onça preta — o animal mais raro, selvagem e poderoso da floresta. Um nome que não foi escolhido por acaso.<br/><br/>A marca nasceu em Jaguaruna, no litoral sul de Santa Catarina, carregando no nome a homenagem à terra que a viu surgir e a essência da mulher que ela veio vestir: rara, poderosa e impossível de ignorar.<br/><br/>Assim como a onça não precisa anunciar sua chegada, a mulher que veste Onça Preta também não precisa. Ela simplesmente é notada.</p>",
             "width": "50%",
-            "block_custom_class": "sf__about-custom-html",
-            "animations": "inherit"
-          }
-        },
-        "28e3ce35-e364-43f3-ba87-18b633233063": {
-          "type": "text",
-          "settings": {
-            "title": "<h4 class=\"about__block-heading\">The world needs to move fast to make a meaningful<br> difference in the fight against climate change.<\/h4>",
-            "subheading": "",
-            "text": "<p>A girl should be two things: classy and fabulous. I am convinced that there can be luxury in simplicity. I wanted to dress the woman who lives and works, not the woman in a painting. It’s hard to balance everything. It’s always challenging. My relationships with producers or photographers – these are relationships that took years. I can’t get sucked into that celebrity thing, because I think it’s just crass. My aim is to make the poor look rich and the rich look poor. Vanity is the healthiest thing in life. I believe that my clothes can give people a better image of themselves – that it can increase their feelings of confidence and happiness. You can hide so much behind theatrics, and I don’t need to do that any more. I don’t really know how to do casual clothes.<\/p>",
-            "width": "100%",
             "alignment": "center",
-            "align_text": "center",
+            "align_text": "left",
             "text_size": "medium",
-            "text_color": "black",
+            "text_color": "inherit",
             "button_label": "",
             "button_link": "",
             "button_style": "m-button--primary",
             "button_size": "",
-            "block_custom_class": "sf__about-block sf__about-block-text sf__about-block-text-2",
-            "animations": "inherit"
-          }
-        },
-        "c6a8b57f-c54c-43f1-9771-9ea5d88a2f36": {
-          "type": "text",
-          "settings": {
-            "title": "Our Team",
-            "subheading": "",
-            "text": "",
-            "width": "100%",
-            "alignment": "center",
-            "align_text": "center",
-            "text_size": "medium",
-            "text_color": "black",
-            "button_label": "",
-            "button_link": "",
-            "button_style": "m-button--primary",
-            "button_size": "",
-            "block_custom_class": "sf__about-custom-heading",
-            "animations": "inherit"
-          }
-        },
-        "859f4ef2-676f-4587-9ae8-3a19ffa439dd": {
-          "type": "image_card",
-          "settings": {
-            "width": "33%",
-            "color_scheme": "",
-            "content_position": "bottom_left",
-            "content_alignment": "left",
-            "text_size": "medium",
-            "text_color": "black",
-            "link": "",
-            "title": "Edward Lindgren",
-            "subtitle": "<span class=\"text-color-subtext\">CHIEF OPERATING OFFICER<\/span>",
-            "description": "",
-            "button_label": "",
-            "button_style": "m-button--primary",
-            "button_size": "",
-            "button_fixed": false,
-            "use_content_above": false,
-            "block_custom_class": "sf__about-card-custom",
-            "animations": "inherit"
-          }
-        },
-        "a1a4a67f-c83f-4629-a006-e44f56c80bf5": {
-          "type": "image_card",
-          "settings": {
-            "width": "33%",
-            "color_scheme": "",
-            "content_position": "bottom_left",
-            "content_alignment": "left",
-            "text_size": "medium",
-            "text_color": "black",
-            "link": "",
-            "title": "Chineze Afamefuna",
-            "subtitle": "<span class=\"text-color-subtext\">MARKETING<\/span>",
-            "description": "",
-            "button_label": "",
-            "button_style": "m-button--primary",
-            "button_size": "",
-            "button_fixed": false,
-            "use_content_above": false,
-            "block_custom_class": "sf__about-card-custom",
-            "animations": "inherit"
-          }
-        },
-        "dc4597e9-ca80-4d0f-9e30-ff28c96dd3aa": {
-          "type": "image_card",
-          "settings": {
-            "width": "33%",
-            "color_scheme": "",
-            "content_position": "bottom_left",
-            "content_alignment": "left",
-            "text_size": "medium",
-            "text_color": "black",
-            "link": "",
-            "title": "Nado Husa",
-            "subtitle": "<span class=\"text-color-subtext\">CO-FOUNDER<\/span>",
-            "description": "",
-            "button_label": "",
-            "button_style": "m-button--primary",
-            "button_size": "",
-            "button_fixed": false,
-            "use_content_above": false,
-            "block_custom_class": "sf__about-card-custom",
+            "block_custom_class": "",
             "animations": "inherit"
           }
         }
       },
       "block_order": [
-        "be5d2488-3c71-471f-bb75-dbccb6970cb0",
-        "f5e88f1f-ff68-4d03-b686-0cb9fe62fab1",
-        "4e1fb14f-ef60-4693-b6a2-2b26063e1b70",
-        "9a3a8077-de29-4141-9162-b9484d4a85f8",
-        "28e3ce35-e364-43f3-ba87-18b633233063",
-        "c6a8b57f-c54c-43f1-9771-9ea5d88a2f36",
-        "859f4ef2-676f-4587-9ae8-3a19ffa439dd",
-        "a1a4a67f-c83f-4629-a006-e44f56c80bf5",
-        "dc4597e9-ca80-4d0f-9e30-ff28c96dd3aa"
+        "image_YGJgHW",
+        "text_xLrQei"
       ],
       "custom_css": [
-        "@media (min-width: 1280px) {#m-custom__block--9a3a8077-de29-4141-9162-b9484d4a85f8 {padding-left: 100px; }}"
+        ".container-fluid {padding: 0 0;}"
       ],
+      "name": "Custom content",
       "settings": {
         "heading": "",
         "heading_size": "h3",
         "subheading": "",
         "description": "",
         "header_alignment": "center",
-        "container": "container",
+        "container": "container-fluid",
         "color_scheme": "",
         "content_color_scheme": "",
-        "gap": 30,
+        "enable_parallax": false,
+        "parallax_direction": "vertical",
+        "gap": 0,
+        "gap_mobile": 0,
         "use_scroll_mobile": false,
-        "gap_mobile": 16,
         "padding_top": 0,
         "padding_bottom": 0,
-        "custom_class": "m-about-page"
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "enable_preload_image": false,
+        "custom_class": "about-s1"
+      }
+    },
+    "custom_content_8Hfgwq": {
+      "type": "custom-content",
+      "blocks": {
+        "text_P4fYUK": {
+          "type": "text",
+          "settings": {
+            "title": "A HISTÓRIA DE JOELMA",
+            "subheading": "DE UMA AGULHA E FIO À MARCA QUE TRANSFORMA",
+            "text": "<p>Tudo começou com uma jovem de 15 anos que aprendeu a costurar e nunca mais parou.<br/><br/>Joelma fundou a Onça Preta em 2009 com uma convicção simples, mas poderosa: toda mulher merece se olhar no espelho e se sentir extraordinária. Não uma mulher específica. Toda mulher.<br/><br/>Ao longo de 15 anos, ela construiu uma marca do zero — com as mãos, com coragem e com um olhar aguçado para o que faz uma peça realmente funcionar no corpo feminino. Hoje, à frente de um time de mais de 50 colaboradoras, Joelma continua sendo a voz, a visão e a alma por trás de cada coleção.<br/><br/>Quando você veste uma peça Onça Preta, você veste o trabalho de uma mulher que acredita em você — mesmo sem te conhecer.<br/><br/></p>",
+            "width": "50%",
+            "alignment": "center",
+            "align_text": "left",
+            "text_size": "medium",
+            "text_color": "inherit",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "block_custom_class": "",
+            "animations": "inherit"
+          }
+        },
+        "image_qggU8Q": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Joelma_-_ONC_-_Sobre_Nos.jpg",
+            "link": "",
+            "width": "50%",
+            "alignment": "center",
+            "block_custom_class": "about-img-2",
+            "animations": "inherit",
+            "enable_preload_image": false
+          }
+        }
+      },
+      "block_order": [
+        "text_P4fYUK",
+        "image_qggU8Q"
+      ],
+      "custom_css": [
+        ".container-fluid {padding: 0 0;}"
+      ],
+      "name": "Custom content",
+      "settings": {
+        "heading": "",
+        "heading_size": "h3",
+        "subheading": "",
+        "description": "",
+        "header_alignment": "center",
+        "container": "container-fluid",
+        "color_scheme": "",
+        "content_color_scheme": "",
+        "enable_parallax": false,
+        "parallax_direction": "vertical",
+        "gap": 0,
+        "gap_mobile": 0,
+        "use_scroll_mobile": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "enable_preload_image": false,
+        "custom_class": "about-s2"
+      }
+    },
+    "custom_content_ybAzq4": {
+      "type": "custom-content",
+      "blocks": {
+        "image_HmqAzc": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Equipe_ONC_-_Sobre_Nos.jpg",
+            "link": "",
+            "width": "50%",
+            "alignment": "center",
+            "block_custom_class": "about-img-3",
+            "animations": "inherit",
+            "enable_preload_image": false
+          }
+        },
+        "text_zTei7B": {
+          "type": "text",
+          "settings": {
+            "title": "PROPÓSITO E VALORES",
+            "subheading": "NÃO FAZEMOS ROUPA. FAZEMOS A MULHER APARECER.",
+            "text": "<p>A Onça Preta nasceu para curar uma dor real: a autoestima baixa. A sensação de entrar em um lugar e querer ser invisível. De não se sentir digna de ocupar espaço.<br/><br/>Cada peça que criamos é uma resposta a essa dor. Um vestido que valoriza as curvas sem ser vulgar. Uma calça que faz você se sentir poderosa antes de sair de casa. Um look que comunica quem você é antes de você abrir a boca.<br/>Esse é o nosso propósito — e é o que nos guia há 15 anos.</p><ul><li>Honestidade</li><li>Comprometimento</li><li>Confiança</li><li>Ética</li><li>Paixão pela moda</li><li>Paixão pela mulher</li></ul>",
+            "width": "50%",
+            "alignment": "center",
+            "align_text": "left",
+            "text_size": "medium",
+            "text_color": "inherit",
+            "button_label": "",
+            "button_link": "",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "block_custom_class": "",
+            "animations": "inherit"
+          }
+        }
+      },
+      "block_order": [
+        "image_HmqAzc",
+        "text_zTei7B"
+      ],
+      "custom_css": [
+        ".container-fluid {padding: 0 0;}"
+      ],
+      "name": "Custom content",
+      "settings": {
+        "heading": "",
+        "heading_size": "h3",
+        "subheading": "",
+        "description": "",
+        "header_alignment": "center",
+        "container": "container-fluid",
+        "color_scheme": "",
+        "content_color_scheme": "",
+        "enable_parallax": false,
+        "parallax_direction": "vertical",
+        "gap": 0,
+        "gap_mobile": 0,
+        "use_scroll_mobile": false,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "padding_top_mobile": 0,
+        "padding_bottom_mobile": 0,
+        "enable_preload_image": false,
+        "custom_class": "about-s3"
       }
     }
   },
   "order": [
     "main",
-    "custom-content"
+    "slider_fRYziE",
+    "custom_content_KmhJH4",
+    "custom_content_8Hfgwq",
+    "custom_content_ybAzq4"
   ]
 }

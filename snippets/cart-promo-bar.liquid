@@ -1,0 +1,145 @@
+{%- liquid
+  assign show_promo_bar = false
+  if settings.cart_drawer_progress_type == 'free_shipping'
+    assign show_promo_bar = true
+  elsif settings.cart_drawer_progress_type == 'gift' and settings.cart_drawer_gift_product != blank
+    assign show_promo_bar = true
+  endif
+-%}
+{%- if show_promo_bar -%}
+  {%- liquid
+    assign threshold_type = settings.cart_drawer_promo_threshold_type | default: 'value'
+    assign cart_total = cart.total_price | divided_by: 100.0
+    assign is_goal_reached = false
+    assign progress_percentage = 0
+    assign remaining_amount = 0
+  -%}
+  {%- if threshold_type == 'quantity' -%}
+    {%- liquid
+      assign promo_threshold_qty = settings.cart_drawer_promo_threshold_quantity | default: 3
+      assign progress_percentage = cart.item_count | times: 100 | divided_by: promo_threshold_qty | at_least: 0 | at_most: 100
+      assign remaining_amount = promo_threshold_qty | minus: cart.item_count | at_least: 0
+      if cart.item_count >= promo_threshold_qty
+        assign is_goal_reached = true
+      endif
+    -%}
+  {%- else -%}
+    {%- liquid
+      assign promo_threshold = settings.cart_drawer_promo_threshold
+      assign progress_percentage = cart_total | times: 100 | divided_by: promo_threshold | at_least: 0 | at_most: 100
+      assign remaining_amount = promo_threshold | minus: cart_total | at_least: 0
+      if cart_total >= promo_threshold
+        assign is_goal_reached = true
+      endif
+    -%}
+  {%- endif -%}
+
+  {%- liquid
+    assign progress_color = settings.cart_drawer_promo_bar_color | default: 'linear-gradient(90deg, #4ade80, #22c55e)'
+    assign progress_bg_color = settings.cart_drawer_promo_bar_bg_color | default: '#e5e7eb'
+    assign display_value = 'none'
+    if cart.item_count > 0
+      assign display_value = 'block'
+    endif
+    assign bar_style = settings.cart_drawer_promo_bar_style | default: 'default'
+  -%}
+
+  {%- liquid
+    assign success_text = settings.promo_bar_success_text | default: 'Parabéns! Você ganhou Frete Grátis'
+    assign remaining_text = settings.promo_bar_remaining_text | default: 'Faltam {{ amount }} para você ganhar o Frete Grátis'
+    assign info_text = settings.promo_bar_info_text | default: 'Frete Grátis a partir de {{ amount }}'
+  -%}
+
+  {%- if threshold_type == 'quantity' -%}
+    {%- capture remaining_amount_formatted -%}{% if remaining_amount == 1 %}1 item{% else %}{{ remaining_amount }} itens{% endif %}{%- endcapture -%}
+    {%- capture threshold_amount_formatted -%}{% if promo_threshold_qty == 1 %}1 item{% else %}{{ promo_threshold_qty }} itens{% endif %}{%- endcapture -%}
+  {%- else -%}
+    {%- capture remaining_amount_formatted -%}{{ remaining_amount | money_without_currency | round: 2 }}{%- endcapture -%}
+    {%- capture threshold_amount_formatted -%}{{ settings.cart_drawer_promo_threshold | times: 100 | money }}{%- endcapture -%}
+  {%- endif -%}
+
+  {%- if threshold_type == 'quantity' -%}
+    {%- assign data_threshold_value = promo_threshold_qty -%}
+  {%- else -%}
+    {%- assign data_threshold_value = promo_threshold -%}
+  {%- endif -%}
+
+  <m-cart-promo-bar
+    class="m-cart-promo-bar{% if bar_style == 'inline' %} m-cart-promo-bar--inline{% endif %}"
+    data-cart-promo-bar
+    data-threshold-type="{{ threshold_type }}"
+    data-cart-total="{{ cart_total }}"
+    data-cart-item-count="{{ cart.item_count }}"
+    data-threshold="{{ data_threshold_value }}"
+    data-style="{{ bar_style }}"
+    data-msg-success="{{ success_text | escape }}"
+    data-msg-remaining="{{ remaining_text | escape }}"
+    style="--progress-color: {{ progress_color }}; --progress-bg-color: {{ progress_bg_color }}; --progress-percentage: {{ progress_percentage }}%; display: {{ display_value }};"
+  >
+    {%- if bar_style == 'default' -%}
+      <div class="m-cart-promo-bar__message">
+        {%- if is_goal_reached -%}
+          <span class="m-cart-promo-bar__success">
+            {{ success_text | replace: 'Frete Grátis', '<green>Frete Grátis</green>' }}
+          </span>
+        {%- else -%}
+          <span class="m-cart-promo-bar__remaining">
+            {%- assign remaining_parts = remaining_text | split: '{{ amount }}' -%}
+            {{ remaining_parts[0] }}{{ remaining_amount_formatted }}{% if remaining_parts[1] %}{{ remaining_parts[1] }}{% endif %}
+          </span>
+        {%- endif -%}
+      </div>
+
+      <div class="m-cart-promo-bar__bar">
+        <div class="m-cart-promo-bar__bar-bg"></div>
+        <div class="m-cart-promo-bar__bar-fill"></div>
+        <div class="m-cart-promo-bar__icon">
+          {%- if settings.cart_drawer_progress_type == 'gift' -%}
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="40" height="40" rx="20" fill="black"/>
+              <path transform="translate(7, 8.5)" d="M24.8182 11.5V20.7C24.8182 21.31 24.5692 21.895 24.1259 22.3263C23.6826 22.7577 23.0814 23 22.4545 23H3.54545C2.91858 23 2.31738 22.7577 1.87411 22.3263C1.43084 21.895 1.18182 21.31 1.18182 20.7V11.5C0.86838 11.5 0.56778 11.3788 0.346146 11.1632C0.124513 10.9475 0 10.655 0 10.35V6.9C0 6.29 0.249025 5.70499 0.692293 5.27365C1.13556 4.84232 1.73676 4.6 2.36364 4.6H6.11C5.97643 4.23054 5.90849 3.84165 5.90909 3.45C5.90909 2.535 6.28263 1.65748 6.94753 1.01048C7.61243 0.363481 8.51423 0 9.45455 0C10.6364 0 11.6764 0.575 12.3264 1.426V1.4145L13 2.3L13.6736 1.4145V1.426C14.3236 0.575 15.3636 0 16.5455 0C17.4858 0 18.3876 0.363481 19.0525 1.01048C19.7174 1.65748 20.0909 2.535 20.0909 3.45C20.0915 3.84165 20.0236 4.23054 19.89 4.6H23.6364C24.2632 4.6 24.8644 4.84232 25.3077 5.27365C25.751 5.70499 26 6.29 26 6.9V10.35C26 10.655 25.8755 10.9475 25.6539 11.1632C25.4322 11.3788 25.1316 11.5 24.8182 11.5ZM3.54545 20.7H11.8182V11.5H3.54545V20.7ZM22.4545 20.7V11.5H14.1818V20.7H22.4545ZM9.45455 2.3C9.14111 2.3 8.84051 2.42116 8.61887 2.63683C8.39724 2.85249 8.27273 3.145 8.27273 3.45C8.27273 3.755 8.39724 4.04751 8.61887 4.26317C8.84051 4.47884 9.14111 4.6 9.45455 4.6C9.76798 4.6 10.0686 4.47884 10.2902 4.26317C10.5119 4.04751 10.6364 3.755 10.6364 3.45C10.6364 3.145 10.5119 2.85249 10.2902 2.63683C10.0686 2.42116 9.76798 2.3 9.45455 2.3ZM16.5455 2.3C16.232 2.3 15.9314 2.42116 15.7098 2.63683C15.4881 2.85249 15.3636 3.145 15.3636 3.45C15.3636 3.755 15.4881 4.04751 15.7098 4.26317C15.9314 4.47884 16.232 4.6 16.5455 4.6C16.8589 4.6 17.1595 4.47884 17.3811 4.26317C17.6028 4.04751 17.7273 3.755 17.7273 3.45C17.7273 3.145 17.6028 2.85249 17.3811 2.63683C17.1595 2.42116 16.8589 2.3 16.5455 2.3ZM2.36364 6.9V9.2H11.8182V6.9H2.36364ZM14.1818 6.9V9.2H23.6364V6.9H14.1818Z" fill="white"/>
+            </svg>
+          {%- else -%}
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect width="40" height="40" rx="20" fill="black"/>
+              <path d="M23.1963 12.6442C23.5756 12.6442 23.9007 12.7785 24.1709 13.0485C24.4409 13.3187 24.5752 13.6438 24.5752 14.0231V16.483H26.2998C26.5182 16.483 26.7255 16.5319 26.9209 16.6295C27.1161 16.7273 27.277 16.8625 27.4033 17.0348L29.9775 20.4596C30.0234 20.5169 30.0581 20.5803 30.0811 20.649C30.104 20.718 30.1162 20.7932 30.1162 20.8737V23.9313C30.1162 24.1266 30.05 24.2904 29.918 24.4225C29.7857 24.5548 29.6212 24.6207 29.4258 24.6207H28.4834C28.4834 25.3717 28.2203 26.0119 27.6934 26.5406C27.1665 27.0693 26.5261 27.3336 25.7734 27.3336C25.0209 27.3335 24.3802 27.0698 23.8516 26.5426C23.3228 26.0152 23.0586 25.3743 23.0586 24.6207H16.8281C16.8281 25.3717 16.565 26.0119 16.0381 26.5406C15.5113 27.0691 14.8716 27.3335 14.1191 27.3336C13.3664 27.3336 12.725 27.07 12.1963 26.5426C11.6676 26.0152 11.4033 25.3743 11.4033 24.6207H10.5752C10.38 24.6206 10.216 24.5547 10.084 24.4225C9.95187 24.2905 9.88578 24.1265 9.88574 23.9313V20.0006H16.3232V19.0807H9.88574V18.1617H13.5654V17.2418H9.88574V16.3219H15.4004V15.402H9.88574V14.0231C9.88574 13.6553 10.0239 13.3331 10.2998 13.0573C10.5756 12.7815 10.8979 12.6442 11.2656 12.6442H23.1963ZM14.1162 23.2877C13.7485 23.2877 13.4343 23.4179 13.1738 23.6783C12.9133 23.9389 12.7822 24.2529 12.7822 24.6207C12.7822 24.9885 12.9133 25.3026 13.1738 25.5631C13.4343 25.8236 13.7485 25.9537 14.1162 25.9537C14.4839 25.9537 14.7981 25.8236 15.0586 25.5631C15.319 25.3026 15.4492 24.9885 15.4492 24.6207C15.4492 24.253 15.3191 23.9389 15.0586 23.6783C14.7981 23.4179 14.4839 23.2878 14.1162 23.2877ZM25.7715 23.2877C25.4037 23.2877 25.0887 23.4178 24.8281 23.6783C24.5678 23.9388 24.4375 24.2531 24.4375 24.6207C24.4375 24.9884 24.5678 25.3026 24.8281 25.5631C25.0887 25.8237 25.4037 25.9537 25.7715 25.9537C26.1391 25.9536 26.4534 25.8236 26.7139 25.5631C26.9743 25.3026 27.1045 24.9884 27.1045 24.6207C27.1045 24.253 26.9743 23.9388 26.7139 23.6783C26.4534 23.4179 26.1391 23.2878 25.7715 23.2877ZM24.5752 21.2643H28.8516L26.2998 17.8619H24.5752V21.2643Z" fill="white"/>
+            </svg>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="m-cart-promo-bar__info">
+        <p class="m-cart-promo-bar__info-text">
+          {%- assign info_parts = info_text | split: '{{ amount }}' -%}
+          {{ info_parts[0] }}<span class="m-cart-promo-bar__info-value">{{ threshold_amount_formatted }}</span>{% if info_parts[1] %}{{ info_parts[1] }}{% endif %}
+        </p>
+      </div>
+    {%- else -%}
+      <div class="m-cart-promo-bar__bar">
+        <div class="m-cart-promo-bar__bar-bg"></div>
+        <div class="m-cart-promo-bar__bar-fill"></div>
+        <div class="m-cart-promo-bar__content">
+          {%- unless is_goal_reached -%}
+            <div class="m-cart-promo-bar__lock-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="21" viewBox="0 0 16 21" fill="none" aria-hidden="true">
+                <path d="M2 21C1.45 21 0.979333 20.8043 0.588 20.413C0.196666 20.0217 0.000666667 19.5507 0 19V9C0 8.45 0.196 7.97933 0.588 7.588C0.98 7.19667 1.45067 7.00067 2 7H3V5C3 3.61667 3.48767 2.43767 4.463 1.463C5.43833 0.488334 6.61733 0.000667349 8 6.82593e-07C9.38267 -0.000665984 10.562 0.487001 11.538 1.463C12.514 2.439 13.0013 3.618 13 5V7H14C14.55 7 15.021 7.196 15.413 7.588C15.805 7.98 16.0007 8.45067 16 9V19C16 19.55 15.8043 20.021 15.413 20.413C15.0217 20.805 14.5507 21.0007 14 21H2ZM2 19H14V9H2V19ZM8 16C8.55 16 9.021 15.8043 9.413 15.413C9.805 15.0217 10.0007 14.5507 10 14C9.99933 13.4493 9.80367 12.9787 9.413 12.588C9.02233 12.1973 8.55133 12.0013 8 12C7.44867 11.9987 6.978 12.1947 6.588 12.588C6.198 12.9813 6.002 13.452 6 14C5.998 14.548 6.194 15.019 6.588 15.413C6.982 15.807 7.45267 16.0027 8 16ZM5 7H11V5C11 4.16667 10.7083 3.45833 10.125 2.875C9.54167 2.29167 8.83333 2 8 2C7.16667 2 6.45833 2.29167 5.875 2.875C5.29167 3.45833 5 4.16667 5 5V7Z" fill="currentColor"/>
+              </svg>
+            </div>
+          {%- endunless -%}
+          <div class="m-cart-promo-bar__message">
+            {%- if is_goal_reached -%}
+              <span class="m-cart-promo-bar__success">
+                {{ success_text | replace: 'Frete Grátis', '<green>Frete Grátis</green>' | replace: '<br>', ' ' | replace: '<br/>', ' ' | replace: '<br />', ' ' }}
+              </span>
+            {%- else -%}
+              <span class="m-cart-promo-bar__remaining">
+                {%- assign remaining_parts_inline = remaining_text | split: '{{ amount }}' -%}
+                {{ remaining_parts_inline[0] }}{{ remaining_amount_formatted }}{% if remaining_parts_inline[1] %}{{ remaining_parts_inline[1] }}{% endif %}
+              </span>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+  </m-cart-promo-bar>
+{%- endif -%}

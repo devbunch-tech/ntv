@@ -17,13 +17,12 @@
     assign section_header_empty = false
   endif
 %}
-{%- capture select_options -%}
-  {%- render 'new-locale', key: 'products.product.select_options' -%}
-{%- endcapture -%}
 <style>
   #m-product-bundles-{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
     --column-gap: 30px;
     --column-gap-mobile: 0px;
     --row-gap-mobile: 0px;
@@ -235,7 +234,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Product bundles"
@@ -326,6 +325,10 @@
           "label": "1:1"
         },
         {
+          "value": "2/3",
+          "label": "2:3"
+        },
+        {
           "value": "3/4",
           "label": "3:4"
         },
@@ -365,6 +368,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

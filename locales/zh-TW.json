@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "含稅和運費在結帳時計算",
       "taxes_included_and_shipping_policy_html": "含稅。 <a href=\"{{ link }}\">運費</a>在結帳時計算。",
       "enter_discount_code": "在此輸入折扣碼",
+      "remove_discount": "刪除{{ code }}",
+      "discount_duplicate_error_message": "折扣代碼已經應用於您的購物車。",
+      "discount_apply_error_message": "折扣代碼不能應用於您的購物車。",
       "checkout": "查看",
       "viewcart": "查看購物車",
       "empty": "您的購物車目前是空的。",

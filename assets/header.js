@@ -30,6 +30,7 @@ class MHeader extends HTMLElement {
       this.domNodes && this.domNodes.headers[0] && this.domNodes.headers[0].dataset.transparent === "true";
     this.initAddon();
     this.handleSticky();
+    this.handleMegaListDropdowns();
     document.addEventListener("matchMobile", () => this.handleSticky());
     document.addEventListener("unmatchMobile", () => this.handleSticky());
     this.siteNav = new SiteNav(this);
@@ -88,6 +89,20 @@ class MHeader extends HTMLElement {
         document.body.classList.add(this.classes.headerScrollUp);
       }
       lastScroll = currentScroll;
+    });
+  }
+  handleMegaListDropdowns() {
+    this.querySelectorAll(".m-menu__item--mega-list .m-sub-menu__item--level-1").forEach((li) => {
+      const column = li.querySelector(".m-mega-menu__column");
+      if (!column) return;
+      li.addEventListener("mouseenter", () => {
+        const ul = li.closest(".m-sub-menu--level-1");
+        if (!ul) return;
+        const ulRect = ul.getBoundingClientRect();
+        const liRect = li.getBoundingClientRect();
+        column.style.left = (liRect.right - ulRect.left) + "px";
+        column.style.top = "0";
+      });
     });
   }
 }

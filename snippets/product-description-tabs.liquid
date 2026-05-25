@@ -1,0 +1,84 @@
+<!-- /snippets/product-description-tabs.liquid -->
+{%- liquid
+  assign tab1_content = product.description
+  assign tab1_title = tab1_title | default: 'Descrição da peça'
+  assign tab2_title = tab2_title | default: 'Composição & Modelagem'
+
+  assign has_tab1 = false
+  assign has_tab2 = false
+  if tab1_content != blank
+    assign has_tab1 = true
+  endif
+  if tab2_content != blank
+    assign has_tab2 = true
+  endif
+-%}
+
+{%- if has_tab1 or has_tab2 -%}
+<m-product-desc-tabs class="m-product-desc-tabs">
+  {%- if has_tab1 and has_tab2 -%}
+    <div class="m-product-desc-tabs__header">
+      <button class="m-tab-header m-product-desc-tabs__tab active" data-index="0" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="8" viewBox="0 0 11 8" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32608 0.774194C4.89835 0.774194 4.6231 1.07974 4.6231 1.3729C4.6231 1.47557 4.58267 1.57403 4.51071 1.64662C4.43874 1.71922 4.34114 1.76 4.23937 1.76C4.1376 1.76 4.04 1.71922 3.96804 1.64662C3.89608 1.57403 3.85565 1.47557 3.85565 1.3729C3.85565 0.576516 4.55351 0 5.32608 0C6.09864 0 6.7965 0.576516 6.7965 1.3729C6.7965 1.72387 6.66962 2.0511 6.44348 2.29884C6.37185 2.37781 6.29306 2.45626 6.22092 2.52852L6.18306 2.56568C6.10471 2.64244 6.02944 2.72233 5.95743 2.80516C5.91918 2.84972 5.88413 2.89698 5.85254 2.94658C6.14798 3.00204 6.42901 3.11798 6.67832 3.28723L10.4813 5.87303C10.9673 6.20335 11.0988 6.7489 10.93 7.20877C10.7637 7.6609 10.3206 8 9.74503 8H1.25452C0.685583 8 0.244557 7.6671 0.0746953 7.22064C-0.098236 6.76645 0.0235322 6.224 0.498326 5.88748L4.12835 3.31097C4.39927 3.1195 4.70951 2.99212 5.03598 2.93832C5.0897 2.67665 5.23705 2.46452 5.37264 2.30348C5.46064 2.19923 5.55682 2.10168 5.64329 2.01548L5.68422 1.97419C5.75738 1.90194 5.82082 1.83845 5.87864 1.77497C5.97176 1.67277 6.02906 1.53342 6.02906 1.37239C6.02906 1.07974 5.7538 0.774194 5.32608 0.774194ZM6.24957 3.92877C5.99884 3.76119 5.70354 3.67443 5.40282 3.68C5.10519 3.68181 4.81497 3.77389 4.56989 3.94426L0.939863 6.52026C0.762839 6.64568 0.739816 6.80826 0.79149 6.94297C0.845212 7.0849 0.997678 7.22581 1.25452 7.22581H9.74503C10.0055 7.22581 10.1574 7.08284 10.2106 6.93935C10.2602 6.8031 10.2347 6.63897 10.052 6.5151L6.24957 3.92877Z" fill="currentColor"/>
+        </svg>
+        <span>{{ tab1_title }}</span>
+      </button>
+      <button class="m-tab-header m-product-desc-tabs__tab" data-index="1" type="button">
+        <span>{{ tab2_title }}</span>
+      </button>
+    </div>
+    <div class="m-product-desc-tabs__content">
+      <div class="m-tab-content m-product-desc-tabs__panel active" data-index="0">
+        {{ tab1_content }}
+      </div>
+      <div class="m-tab-content m-product-desc-tabs__panel" data-index="1">
+        {{ tab2_content }}
+      </div>
+    </div>
+  {%- elsif has_tab1 -%}
+    <div class="m-product-desc-tabs__header">
+      <button class="m-tab-header m-product-desc-tabs__tab active" data-index="0" type="button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="8" viewBox="0 0 11 8" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M5.32608 0.774194C4.89835 0.774194 4.6231 1.07974 4.6231 1.3729C4.6231 1.47557 4.58267 1.57403 4.51071 1.64662C4.43874 1.71922 4.34114 1.76 4.23937 1.76C4.1376 1.76 4.04 1.71922 3.96804 1.64662C3.89608 1.57403 3.85565 1.47557 3.85565 1.3729C3.85565 0.576516 4.55351 0 5.32608 0C6.09864 0 6.7965 0.576516 6.7965 1.3729C6.7965 1.72387 6.66962 2.0511 6.44348 2.29884C6.37185 2.37781 6.29306 2.45626 6.22092 2.52852L6.18306 2.56568C6.10471 2.64244 6.02944 2.72233 5.95743 2.80516C5.91918 2.84972 5.88413 2.89698 5.85254 2.94658C6.14798 3.00204 6.42901 3.11798 6.67832 3.28723L10.4813 5.87303C10.9673 6.20335 11.0988 6.7489 10.93 7.20877C10.7637 7.6609 10.3206 8 9.74503 8H1.25452C0.685583 8 0.244557 7.6671 0.0746953 7.22064C-0.098236 6.76645 0.0235322 6.224 0.498326 5.88748L4.12835 3.31097C4.39927 3.1195 4.70951 2.99212 5.03598 2.93832C5.0897 2.67665 5.23705 2.46452 5.37264 2.30348C5.46064 2.19923 5.55682 2.10168 5.64329 2.01548L5.68422 1.97419C5.75738 1.90194 5.82082 1.83845 5.87864 1.77497C5.97176 1.67277 6.02906 1.53342 6.02906 1.37239C6.02906 1.07974 5.7538 0.774194 5.32608 0.774194ZM6.24957 3.92877C5.99884 3.76119 5.70354 3.67443 5.40282 3.68C5.10519 3.68181 4.81497 3.77389 4.56989 3.94426L0.939863 6.52026C0.762839 6.64568 0.739816 6.80826 0.79149 6.94297C0.845212 7.0849 0.997678 7.22581 1.25452 7.22581H9.74503C10.0055 7.22581 10.1574 7.08284 10.2106 6.93935C10.2602 6.8031 10.2347 6.63897 10.052 6.5151L6.24957 3.92877Z" fill="currentColor"/>
+        </svg>
+        <span>{{ tab1_title }}</span>
+      </button>
+    </div>
+    <div class="m-product-desc-tabs__content">
+      <div class="m-tab-content m-product-desc-tabs__panel active" data-index="0">
+        {{ tab1_content }}
+      </div>
+    </div>
+  {%- elsif has_tab2 -%}
+    <div class="m-product-desc-tabs__header">
+      <button class="m-tab-header m-product-desc-tabs__tab active" data-index="0" type="button">
+        <span>{{ tab2_title }}</span>
+      </button>
+    </div>
+    <div class="m-product-desc-tabs__content">
+      <div class="m-tab-content m-product-desc-tabs__panel active" data-index="0">
+        {{ tab2_content }}
+      </div>
+    </div>
+  {%- endif -%}
+</m-product-desc-tabs>
+
+<script>
+  if (!customElements.get('m-product-desc-tabs')) {
+    class MProductDescTabs extends HTMLElement {
+      connectedCallback() {
+        this.initTabs();
+      }
+      initTabs() {
+        if (typeof MinimogTheme !== 'undefined' && MinimogTheme.Tabs) {
+          this.tabs = new MinimogTheme.Tabs(this);
+        } else {
+          setTimeout(() => this.initTabs(), 100);
+        }
+      }
+    }
+    customElements.define('m-product-desc-tabs', MProductDescTabs);
+  }
+</script>
+{%- endif -%}

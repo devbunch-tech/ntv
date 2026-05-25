@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "Đã bao gồm thuế và phí vận chuyển được tính khi thanh toán",
       "taxes_included_and_shipping_policy_html": "Đã bao gồm thuế. <a href=\"{{ link }}\">Phí vận chuyển</a> được tính khi thanh toán.",
       "enter_discount_code": "Nhập mã giảm giá vào đây",
+      "remove_discount": "Xóa {{ code }}",
+      "discount_duplicate_error_message": "Mã giảm giá đã được áp dụng cho giỏ hàng của bạn.",
+      "discount_apply_error_message": "--",
       "checkout": "Thủ tục thanh toán",
       "viewcart": "Xem giỏ hàng",
       "empty": "Giỏ hàng của bạn hiện đang trống.",

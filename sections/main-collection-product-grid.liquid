@@ -1,3 +1,4 @@
+{%- render 'schema-collection-itemlist' -%}
 {{ 'component-product-inventory.css' | asset_url | stylesheet_tag }}
 {{ 'collection.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'collection.js' | asset_url }}" defer="defer"></script>
@@ -75,28 +76,213 @@
               <p class="m-collection--empty-text">{{ 'collections.general.no_matches' | t }}</p>
             </div>
           {%- else -%}
+            {%- liquid
+              comment
+                Verificar se a opção de separar por variante de cor está ativa
+              endcomment
+              assign split_by_color = section.settings.split_by_color_variant
+
+              comment
+                Detectar nome da opção de cor configurada no tema
+              endcomment
+              assign color_option_name = settings.pcard_option_name | default: 'Cor' | downcase
+
+              comment
+                Verificar se há filtro de cor ativo e capturar TODOS os valores ativos
+                Verificamos vários nomes possíveis: cor, cores, color, colours, etc.
+              endcomment
+              assign has_active_color_filter = false
+              assign active_color_filters = ''
+
+              if split_by_color
+                for filter in collection.filters
+                  assign filter_label_downcase = filter.label | downcase
+                  assign is_color_filter = false
+                  if filter_label_downcase == color_option_name
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'cor'
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'cores'
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'color'
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'colors'
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'colour'
+                    assign is_color_filter = true
+                  elsif filter_label_downcase == 'colours'
+                    assign is_color_filter = true
+                  endif
+
+                  if is_color_filter
+                    if filter.active_values.size > 0
+                      assign has_active_color_filter = true
+                      comment
+                        Criar uma string com todos os valores ativos separados por vírgula (lowercase e trim)
+                        IMPORTANTE: Usar .label em vez de .value porque o Shopify pode usar metaobjects/swatches
+                        onde .value é um ID (gid://shopify/metaobject/...) e .label é o nome legível
+                      endcomment
+                      for active_value in filter.active_values
+                        assign active_value_clean = active_value.label | downcase | strip
+                        if active_color_filters == ''
+                          assign active_color_filters = active_value_clean
+                        else
+                          assign active_color_filters = active_color_filters | append: ',' | append: active_value_clean
+                        endif
+                      endfor
+                    endif
+                    break
+                  endif
+                endfor
+              endif
+            -%}
             <div
               class="m-collection-products m:flex m:flex-wrap m-cols-{{ initial_column }}"
               data-total-pages="{{ paginate.pages }}"
               data-product-container
             >
+              {%- assign card_index = 0 -%}
               {%- for product in collection.products -%}
-                <div class="m-product-item m:w-6/12 md:m:w-4/12">
-                  {% liquid
-                    case settings.pcard_layout
-                      when '1'
-                        render 'product-card-1', product: product, section: section, index: forloop.index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
-                      when '2'
-                        render 'product-card-2', product: product, section: section, index: forloop.index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
-                      when '3'
-                        render 'product-card-3', product: product, section: section, index: forloop.index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
-                      when '4'
-                        render 'product-card-4', product: product, section: section, index: forloop.index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
-                      when '5'
-                        render 'product-card-5', product: product, section: section, index: forloop.index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
-                    endcase
-                  %}
-                </div>
+                {%- if split_by_color -%}
+                  {%- liquid
+                    comment
+                      Encontrar a opção de cor do produto
+                    endcomment
+                    assign color_option = null
+                    for option in product.options_with_values
+                      assign option_name_downcase = option.name | downcase
+                      if option_name_downcase == color_option_name or option_name_downcase == 'color' or option_name_downcase == 'colour'
+                        assign color_option = option
+                        break
+                      endif
+                    endfor
+                  -%}
+
+                  {%- if color_option != null -%}
+                    {%- comment -%} Produto tem opção de cor - renderizar um card por cor {%- endcomment -%}
+                    {%- for color_value in color_option.values -%}
+                      {%- liquid
+                        assign color_value_clean = color_value | downcase | strip
+
+                        comment
+                          Se há filtro de cor ativo, só mostrar o card se a cor estiver na lista de filtros ativos
+                        endcomment
+                        assign should_render = true
+                        if has_active_color_filter
+                          comment
+                            Verificar se a cor do card está na lista de filtros ativos
+                          endcomment
+                          assign color_in_filter = false
+                          assign active_colors_array = active_color_filters | split: ','
+                          for active_color in active_colors_array
+                            assign active_color_clean = active_color | strip
+                            if color_value_clean == active_color_clean
+                              assign color_in_filter = true
+                              break
+                            endif
+                          endfor
+                          unless color_in_filter
+                            assign should_render = false
+                          endunless
+                        endif
+                      -%}
+
+                      {%- if should_render -%}
+                        {%- liquid
+                          assign card_index = card_index | plus: 1
+
+                          comment
+                            Encontrar uma variante disponível com essa cor
+                          endcomment
+                          assign color_variant = null
+                          for variant in product.variants
+                            if variant.options contains color_value
+                              if variant.available or color_variant == null
+                                assign color_variant = variant
+                                if variant.available
+                                  break
+                                endif
+                              endif
+                            endif
+                          endfor
+
+                          comment
+                            Se não encontrou variante, usar a primeira
+                          endcomment
+                          if color_variant == null
+                            assign color_variant = product.first_available_variant
+                          endif
+                        -%}
+                        <div class="m-product-item m:w-6/12 md:m:w-4/12">
+                          {% liquid
+                            case settings.pcard_layout
+                              when '1'
+                                render 'product-card-1', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '2'
+                                render 'product-card-2', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '3'
+                                render 'product-card-3', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '4'
+                                render 'product-card-4', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '5'
+                                render 'product-card-5', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '6'
+                                render 'product-card-6', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                              when '7'
+                                render 'product-card-7', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection, forced_variant: color_variant, forced_color: color_value
+                            endcase
+                          %}
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- else -%}
+                    {%- comment -%} Produto sem opção de cor - renderizar normalmente {%- endcomment -%}
+                    {%- assign card_index = card_index | plus: 1 -%}
+                    <div class="m-product-item m:w-6/12 md:m:w-4/12">
+                      {% liquid
+                        case settings.pcard_layout
+                          when '1'
+                            render 'product-card-1', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '2'
+                            render 'product-card-2', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '3'
+                            render 'product-card-3', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '4'
+                            render 'product-card-4', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '5'
+                            render 'product-card-5', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '6'
+                            render 'product-card-6', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                          when '7'
+                            render 'product-card-7', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        endcase
+                      %}
+                    </div>
+                  {%- endif -%}
+                {%- else -%}
+                  {%- comment -%} Modo normal: um card por produto {%- endcomment -%}
+                  {%- assign card_index = card_index | plus: 1 -%}
+                  <div class="m-product-item m:w-6/12 md:m:w-4/12">
+                    {% liquid
+                      case settings.pcard_layout
+                        when '1'
+                          render 'product-card-1', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '2'
+                          render 'product-card-2', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '3'
+                          render 'product-card-3', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '4'
+                          render 'product-card-4', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '5'
+                          render 'product-card-5', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '6'
+                          render 'product-card-6', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                        when '7'
+                          render 'product-card-7', product: product, section: section, index: card_index, section_index: section.index, animated: animated, animation_effect: animation_effect, context: collection
+                      endcase
+                    %}
+                  </div>
+                {%- endif -%}
               {%- endfor -%}
             </div>
             {% if paginate.pages > 1 %}
@@ -229,6 +415,13 @@
       "default": true
     },
     {
+      "type": "checkbox",
+      "id": "hide_columns_switcher_mobile",
+      "label": "Replaces sort and filter selector with buttons on mobile if enabled",
+      "info": "It hides the column switcher on mobile when active",
+      "default": true
+    },
+    {
       "type": "header",
       "content": "Pagination"
     },
@@ -354,6 +547,13 @@
     },
     {
       "type": "checkbox",
+      "id": "split_by_color_variant",
+      "label": "Separate listing by color variant",
+      "default": false,
+      "info": "Show one product card per color variant instead of one card per product. This fills up the collection page with more visual variety."
+    },
+    {
+      "type": "checkbox",
       "id": "show_product_count",
       "label": "Show results count on filter item",
       "default": true
@@ -387,6 +587,71 @@
         }
       ],
       "default": "inline"
+    },
+    {
+      "type": "header",
+      "content": "Product card settings"
+    },
+    {
+      "type": "select",
+      "id": "button_style_inside3",
+      "label": "Button style",
+      "default": "m-button--primary",
+      "options": [
+        {
+          "value": "m-button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "m-button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "m-button--white",
+          "label": "White"
+        },
+        {
+          "value": "m-button--link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_color_inside3",
+      "label": "Button color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_text_hover_color_inside3",
+      "label": "Button text color on hover",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient_inside3",
+      "label": "Background gradient"
     }
   ],
   "blocks": [

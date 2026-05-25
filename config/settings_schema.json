@@ -2,7 +2,7 @@
   {
     "name": "theme_info",
     "theme_name": "Minimog - OS 2.0",
-    "theme_version": "5.7.0",
+    "theme_version": "5.8.0",
     "theme_author": "FoxEcom",
     "theme_documentation_url": "https://docs.foxecom.com/minimog-theme/",
     "theme_support_url": "https://foxecom.com"
@@ -126,7 +126,7 @@
         "type": "font_picker",
         "id": "type_base_font",
         "label": "Font",
-        "default": "helvetica_n4"
+        "default": "assistant_n4"
       },
       {
         "type": "checkbox",
@@ -217,7 +217,7 @@
         "type": "font_picker",
         "id": "type_header_font",
         "label": "Font",
-        "default": "helvetica_n7"
+        "default": "assistant_n7"
       },
       {
         "type": "checkbox",
@@ -329,9 +329,9 @@
         "id": "type_header_spacing",
         "label": "Letter spacing",
         "default": 0,
-        "min": 0,
+        "min": -3,
         "max": 10,
-        "step": 1,
+        "step": 0.5,
         "unit": "px"
       },
       {
@@ -365,7 +365,7 @@
         "default": 0,
         "min": 0,
         "max": 20,
-        "step": 1,
+        "step": 0.5,
         "unit": "px"
       },
       {
@@ -687,10 +687,10 @@
         "content": "Use for cart count bubble, wishlist count bubble, compare count bubble"
       },
       {
-        "type": "color",
+        "type": "color_background",
         "id": "bg_cart_wishlist_count",
         "label": "Background",
-        "default": "#da3f3f"
+        "default": "#a07830"
       },
       {
         "type": "color",
@@ -838,6 +838,72 @@
 		]
 	},
   {
+    "name": "Configurações de pagamento",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "show_installments",
+        "label": "Mostrar parcelamento",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "modo_parcelamento",
+        "min": 2,
+        "max": 12,
+        "step": 1,
+        "unit": "x",
+        "label": "Em quantas vezes o parcelamento",
+        "default": 12
+      },
+      {
+        "type": "text",
+        "id": "taxa_parcela",
+        "label": "Parcela",
+        "info": "Adicione utilizando (.) e com pelo menos uma casa decimal. (Deixe 0 para sem juros)",
+        "default": "19.79"
+      },
+      {
+        "type": "header",
+        "content": "Cashback",
+        "info": "Visivel no card 6 apenas"
+      },
+      {
+        "type": "range",
+        "id": "cashback_percentage",
+        "min": 0,
+        "max": 50,
+        "step": 0.5,
+        "unit": "%",
+        "label": "Porcentagem de cashback",
+        "info": "Defina 0 para desativar o cashback",
+        "default": 0
+      },
+      {
+        "type": "text",
+        "id": "cashback_message",
+        "label": "Mensagem de cashback",
+        "default": "GANHE {{ value }} DE CASHBACK",
+        "info": "Use {{ value }} para o valor calculado"
+      },
+      {
+        "type": "header",
+        "content": "Pagamento via PIX"
+      },
+      {
+        "type": "range",
+        "id": "pix_discount_percentage",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "%",
+        "label": "Porcentagem de desconto no PIX",
+        "info": "Defina 0 para ocultar o bloco de desconto PIX no carrinho",
+        "default": 10
+      }
+    ]
+  },
+  {
     "name": "Product card",
     "settings": [
       {
@@ -852,7 +918,7 @@
         "type": "select",
         "id": "pcard_layout",
         "label": "Card style",
-        "default": "1",
+        "default": "7",
         "options": [
           {
             "value": "1",
@@ -873,6 +939,14 @@
           {
             "value": "5",
             "label": "Style 5"
+          },
+          {
+            "value": "6",
+            "label": "Style 6"
+          },
+          {
+            "value": "7",
+            "label": "Style 7"
           }
         ]
       },
@@ -915,6 +989,10 @@
             "label": "1:1"
           },
           {
+            "value": "2/3",
+            "label": "2:3"
+          },
+          {
             "value": "3/4",
             "label": "3:4"
           },
@@ -925,6 +1003,10 @@
           {
             "value": "16/9",
             "label": "16:9"
+          },
+          {
+            "value": "7/10",
+            "label": "7:10"
           }
         ]
       },
@@ -1068,6 +1150,13 @@
         ]
       },
       {
+        "type": "checkbox",
+        "id": "hide_card_action_mobile",
+        "label": "Hide action buttons on mobile",
+        "info": "Hides the Add To Cart, Quickview, Wishlist, and Compare buttons on mobile devices",
+        "default": false
+      },
+      {
         "type": "header",
         "content": "Badges"
       },
@@ -1108,6 +1197,13 @@
         "id": "show_badge_sale",
         "label": "Show custom tag badges",
         "info": "How to set up custom product tags? [Read How-to](https://foxecom.link/VafwzY).",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "pcard_tags_vertical_layout",
+        "label": "Display tags vertically",
+        "info": "Tags will be displayed one below the other with no border radius",
         "default": false
       },
       {
@@ -1191,6 +1287,10 @@
             "label": "1:1"
           },
           {
+            "value": "2/3",
+            "label": "2:3"
+          },
+          {
             "value": "3/4",
             "label": "3:4"
           },
@@ -1238,6 +1338,12 @@
       },
       {
         "type": "checkbox",
+        "id": "article_show_author",
+        "label": "Show author",
+        "default": false
+      },
+      {
+        "type": "checkbox",
         "id": "article_show_excerpt",
         "label": "Show excerpt",
         "default": true
@@ -1247,6 +1353,30 @@
         "id": "article_show_button",
         "label": "Show read more link",
         "default": true
+      },
+      {
+        "type": "select",
+        "id": "article_title_line_clamp",
+        "label": "Article title line limit",
+        "default": "2",
+        "options": [
+          {
+            "value": "unset",
+            "label": "No limit"
+          },
+          {
+            "value": "1",
+            "label": "1 line"
+          },
+          {
+            "value": "2",
+            "label": "2 lines"
+          },
+          {
+            "value": "3",
+            "label": "3 lines"
+          }
+        ]
       }
     ]
   },
@@ -1375,6 +1505,13 @@
           }
         ],
         "default": "color"
+      },
+      {
+        "type": "checkbox",
+        "id": "variant_option_image_round2",
+        "label": "Round image style (like color swatch)",
+        "default": true,
+        "info": "Makes the image selector round and smaller (70px)"
       },
       {
         "type": "text",
@@ -2115,19 +2252,22 @@
         "type": "color_scheme",
         "id": "hot_badge_color_scheme",
         "label": "Hot badge color scheme",
-        "default": "badge-hot"
+        "default": "badge-hot",
+        "info": "tag__hot_TEXTO"
       },
       {
         "type": "color_scheme",
         "id": "new_badge_color_scheme",
         "label": "New badge color scheme",
-        "default": "badge-new"
+        "default": "badge-new",
+        "info": "tag__new_TEXTO"
       },
       {
         "type": "color_scheme",
         "id": "sale_badge_color_scheme",
         "label": "Sale badge color scheme",
-        "default": "badge-sale"
+        "default": "badge-sale",
+        "info": "tag__sale_TEXTO"
       },
       {
         "type": "color_scheme",
@@ -2306,6 +2446,12 @@
         "label": "Whatsapp link"
       },
       {
+        "type": "checkbox",
+        "id": "show_whatsapp_float_button",
+        "label": "Mostrar botão flutuante do WhatsApp",
+        "default": false
+      },
+      {
         "type": "text",
         "id": "social_whatsapp_label",
         "label": "Whatsapp label"
@@ -2360,6 +2506,12 @@
         "default": true
       },
       {
+        "type": "color_scheme",
+        "id": "cart_drawer_color_scheme",
+        "label": "Color scheme",
+        "default": "default"
+      },
+      {
         "type": "checkbox",
         "id": "cart_drawer_show_accelerated_button",
         "label": "Show accelerated checkout",
@@ -2368,6 +2520,46 @@
       {
         "type": "header",
         "content": "Cart addons"
+      },
+      {
+        "id": "cart_drawer_footer_style",
+        "type": "select",
+        "label": "Estilo do footer do carrinho",
+        "default": "footer_01",
+        "options": [
+          {
+            "value": "footer_01",
+            "label": "Estilo 1"
+          },
+          {
+            "value": "footer_02",
+            "label": "Estilo 2"
+          }
+        ]
+      },
+      {
+        "id": "cart_drawer_card_style",
+        "type": "select",
+        "label": "Cart card",
+        "default": "card_1",
+        "options": [
+          {
+            "value": "card_1",
+            "label": "Card 1"
+          },
+          {
+            "value": "card_2",
+            "label": "Card 2"
+          },
+          {
+            "value": "card_3",
+            "label": "Card 3"
+          },
+          {
+            "value": "card_4",
+            "label": "Card 4"
+          }
+        ]
       },
       {
         "type": "checkbox",
@@ -2380,6 +2572,14 @@
         "id": "discount_code_enable",
         "label": "Show discount code",
         "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "discount_code_alternative_layout",
+        "label": "Use alternative discount code layout",
+        "default": false,
+        "info": "Show discount code in a separate row with PIX discount block (uses PIX percentage from Payment settings)",
+        "visible_if": "{{ settings.discount_code_enable }}"
       },
       {
         "type": "checkbox",
@@ -2400,6 +2600,12 @@
         "default": false
       },
       {
+        "type": "checkbox",
+        "id": "cart_drawer_show_view_cart",
+        "label": "Show View Cart",
+        "default": true
+      },
+      {
         "type": "text",
         "id": "default_country_estimate_shipping",
         "label": "Default country for estimate shipping",
@@ -2407,9 +2613,172 @@
         "info": "Default country for estimate shipping rates form. Enter country name, for example: United States. Refer to the country name [here](https://zest-docs.foxecom.com/theme-settings/cart#3.-country-code)"
       },
       {
+        "type": "select",
+        "id": "cart_drawer_trust_badge_style",
+        "label": "Trust badge style",
+        "default": "style_1",
+        "options": [
+          {
+            "value": "style_1",
+            "label": "Estilo 1 (dentro do footer)"
+          },
+          {
+            "value": "style_2",
+            "label": "Estilo 2 (barra de benefícios)"
+          }
+        ]
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_trust_badge_text",
+        "label": "Trust badge text"
+      },
+      {
+        "type": "text",
+        "id": "cart_drawer_trust_badge_text_2",
+        "label": "Trust badge text 2",
+        "visible_if": "{{ settings.cart_drawer_trust_badge_style == 'style_2' }}"
+      },
+      {
+        "type": "image_picker",
+        "id": "cart_drawer_trust_badge_image",
+        "label": "Trust badge image"
+      },
+      {
+        "type": "image_picker",
+        "id": "cart_drawer_trust_badge_image_2",
+        "label": "Trust badge image 2",
+        "visible_if": "{{ settings.cart_drawer_trust_badge_style == 'style_2' }}"
+      },
+      {
         "type": "image_picker",
         "id": "cart_drawer_trust_badge",
         "label": "Trust badge"
+      },
+      {
+        "type": "header",
+        "content": "Barra de Promoção do Carrinho"
+      },
+      {
+        "type": "select",
+        "id": "cart_drawer_progress_type",
+        "label": "Tipo de barra de progresso",
+        "default": "none",
+        "options": [
+          {
+            "value": "none",
+            "label": "Nenhum"
+          },
+          {
+            "value": "free_shipping",
+            "label": "Frete Grátis"
+          },
+          {
+            "value": "gift",
+            "label": "Brinde"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "cart_drawer_promo_bar_style",
+        "label": "Estilo da barra de progresso",
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "Padrão (mensagem acima)"
+          },
+          {
+            "value": "inline",
+            "label": "Inline (mensagem dentro da barra)"
+          }
+        ]
+      },
+      {
+        "type": "product",
+        "id": "cart_drawer_gift_product",
+        "label": "Produto brinde",
+        "info": "Selecione o produto que será exibido como brinde quando o cliente atingir a meta. Apenas usado quando o tipo de barra for Brinde."
+      },
+      {
+        "type": "select",
+        "id": "cart_drawer_promo_threshold_type",
+        "label": "Meta baseada em",
+        "default": "value",
+        "options": [
+          {
+            "value": "value",
+            "label": "Valor do carrinho"
+          },
+          {
+            "value": "quantity",
+            "label": "Quantidade de itens"
+          }
+        ]
+      },
+      {
+        "type": "number",
+        "id": "cart_drawer_promo_threshold",
+        "label": "Valor mínimo para atingir a meta",
+        "default": 349,
+        "visible_if": "{{ settings.cart_drawer_promo_threshold_type == 'value' }}"
+      },
+      {
+        "type": "number",
+        "id": "cart_drawer_promo_threshold_quantity",
+        "label": "Quantidade mínima de itens no carrinho",
+        "default": 3,
+        "visible_if": "{{ settings.cart_drawer_promo_threshold_type == 'quantity' }}"
+      },
+      {
+        "type": "color_background",
+        "id": "cart_drawer_promo_bar_color",
+        "label": "Cor da barra de progresso",
+        "default": "linear-gradient(90deg, #4ade80, #22c55e)"
+      },
+      {
+        "type": "color",
+        "id": "cart_drawer_promo_bar_bg_color",
+        "label": "Cor de fundo da barra de progresso",
+        "default": "#e5e7eb"
+      },
+      {
+        "type": "header",
+        "content": "Textos da barra de promoção"
+      },
+      {
+        "type": "textarea",
+        "id": "promo_bar_success_text",
+        "label": "Mensagem de sucesso (meta atingida)",
+        "default": "Parabéns! Você ganhou Frete Grátis",
+        "info": "Texto exibido quando o cliente atinge o valor mínimo"
+      },
+      {
+        "type": "textarea",
+        "id": "promo_bar_remaining_text",
+        "label": "Mensagem de progresso",
+        "default": "Faltam {{ amount }} para você ganhar o Frete Grátis",
+        "info": "Use {{ amount }} para mostrar o valor restante"
+      },
+      {
+        "type": "textarea",
+        "id": "promo_bar_info_text",
+        "label": "Texto informativo (abaixo da barra)",
+        "default": "Frete Grátis a partir de {{ amount }}",
+        "info": "Use {{ amount }} para mostrar o valor mínimo. Apenas para o estilo Padrão.",
+        "visible_if": "{{ settings.cart_drawer_promo_bar_style == 'default' }}"
+      },
+      {
+        "type": "header",
+        "content": "Bundle expansion"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_bundle_expansion",
+        "label": "Habilitar expansão automática de bundles",
+        "info": "Quando habilitado, bundles são automaticamente expandidos em seus componentes individuais antes do checkout Yampi (Usando o app de Bundles nativo da Shopify)",
+        "default": true
       }
     ]
   },

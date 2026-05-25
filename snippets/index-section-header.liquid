@@ -1,6 +1,8 @@
 {% comment %}
   Accepts:
   - section_settings: {Obj} Section settings (required)
+  - show_header_nav: {Boolean} Show slider navigation in header (optional)
+  - header_arrow_style: {String} Arrow style: default/line (optional)
 
   Usage:
   {% render 'index-section-header', section_settings: section.settings %}
@@ -20,7 +22,10 @@
   assign header_alignment = section_settings.header_alignment | default: 'left'
   assign classes = 'm-section__header' | append: ' m:text-' | append: header_alignment | append: ' ' | append: custom_classes
   if show_button_on_header
-    assign classes = classes | append: 'm-section__header-with-button'
+    assign classes = classes | append: ' m-section__header-with-button'
+    if inline_mobile
+      assign classes = classes | append: ' m-section__header--inline-mobile'
+    endif
   endif
 %}
 
@@ -30,20 +35,23 @@
 %}
   <div class="{{ classes }}">
     {% if show_button_on_header %}<div class="m-section__header-content">{% endif %}
-    {% if section_settings.subheading != blank %}
-      <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
-        {{ section_settings.subheading }}
-      </p>
-    {% endif %}
     {% if section_settings.heading != blank %}
       <h2 class="m-section__heading {{ heading_size }}{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
         {{ section_settings.heading }}
       </h2>
     {% endif %}
+    {% if section_settings.subheading != blank %}
+      <p class="m-section__subheading{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
+        {{ section_settings.subheading }}
+      </p>
+    {% endif %}
     {% if section_settings.description != blank %}
       <div class="m-section__description rte{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
         {{ section_settings.description }}
       </div>
+    {% endif %}
+    {% if show_title_divider or section_settings.show_title_divider %}
+      <div class="m-featured-collection__mobile-divider"></div>
     {% endif %}
     {% if show_button_on_header %}</div>{% endif %}
     {% if show_button_on_header and button_label != blank %}
@@ -59,11 +67,28 @@
       %}
       <div class="m-section__button{% if animated %} m-scroll-trigger animate--{{ animation_effect }}{% endif %}">
         <a
-          class="m-button{% if is_button_icon %} m-button--text-with-icon{% endif %} {{ button_style }} {{ button_size }}"
+          class="m-button{% if is_button_icon %} m-button--text-with-icon{% endif %} {{ button_style | replace: 'm-button--link-arrow', 'm-button--link m-button--link-arrow' }} {{ button_size }}"
           href="{{ button_link }}"
         >
-          {{- button_label | replace: '[arrow]', arrow -}}
+          <span>{{- button_label | replace: '[arrow]', arrow -}}</span>
+          {% if button_style == 'm-button--link-arrow' %}
+            <span class="m-button-arrow-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 16 16" fill="none">
+                <path d="M12.3536 8.35355C12.5488 8.15829 12.5488 7.84171 12.3536 7.64645L9.17157 4.46447C8.97631 4.2692 8.65973 4.2692 8.46447 4.46447C8.2692 4.65973 8.2692 4.97631 8.46447 5.17157L11.2929 8L8.46447 10.8284C8.2692 11.0237 8.2692 11.3403 8.46447 11.5355C8.65973 11.7308 8.97631 11.7308 9.17157 11.5355L12.3536 8.35355ZM3 8V8.5H12V8V7.5H3V8Z" fill="#BDBDBD"/>
+                <circle cx="8" cy="8" r="7.5" stroke="#BDBDBD"/>
+              </svg>
+            </span>
+          {% endif %}
         </a>
+        {% if show_header_nav %}
+          <div class="m-section__header-nav m:hidden md:m:flex">
+            {% render 'slider-controls',
+              show_nav: true,
+              show_pagination: false,
+              arrow_style: header_arrow_style
+            %}
+          </div>
+        {% endif %}
       </div>
     {% endif %}
   </div>

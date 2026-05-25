@@ -32,6 +32,8 @@
     --column-gap-mobile: {{ section.settings.gap_mobile }}px;
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 {% if enable_parallax %}
@@ -171,11 +173,17 @@
                         style="--animation-order: {{ forloop.index }};"
                       {% endif %}
                     >
-                      {% if block.settings.image != blank %}
+                      {% if block.settings.image != blank or block.settings.mb_image != blank %}
                         {%- liquid
                           assign tag = 'div'
                           if block.settings.link
                             assign tag = 'a'
+                          endif
+                          assign has_mobile_image = false
+                          assign desktop_wrapper_class = ''
+                          if block.settings.mb_image != blank
+                            assign has_mobile_image = true
+                            assign desktop_wrapper_class = 'm:hidden md:m:block'
                           endif
                         -%}
                         <{{ tag }}
@@ -183,12 +191,24 @@
                             href="{{ block.settings.link }}"
                           {% endif %}
                         >
+                          {%- if block.settings.image != blank -%}
                           {% render 'responsive-image',
                             image: block.settings.image,
                             section_index: section.index,
                             index: 1,
-                            enable_preload_image: block.settings.enable_preload_image
+                              enable_preload_image: block.settings.enable_preload_image,
+                              wrapper_class: desktop_wrapper_class
+                            %}
+                          {%- endif -%}
+                          {%- if has_mobile_image -%}
+                            {% render 'responsive-image',
+                              image: block.settings.mb_image,
+                              section_index: section.index,
+                              index: 1,
+                              enable_preload_image: block.settings.enable_preload_image,
+                              wrapper_class: 'md:m:hidden'
                           %}
+                          {%- endif -%}
                         </{{ tag }}>
                       {% else %}
                         {% if block.settings.width == '100%' %}
@@ -404,6 +424,10 @@
                             render 'product-card-4', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect
                           when '5'
                             render 'product-card-5', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '6'
+                            render 'product-card-6', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect
+                          when '7'
+                            render 'product-card-7', product: product, index: forloop.index, animated: animated, animation_effect: animation_effect
                         endcase
                       %}
                     {% else %}
@@ -988,6 +1012,10 @@
                                         render 'product-card-4', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
                                       when '5'
                                         render 'product-card-5', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                                      when '6'
+                                        render 'product-card-6', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
+                                      when '7'
+                                        render 'product-card-7', product: product, image_ratio: image_ratio, show_vendor: show_vendor, hide_title: hide_title, index: forloop.index, animated: animated, animation_effect: animation_effect
                                     endcase
                                   %}
                                 </div>
@@ -1287,7 +1315,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "Custom content"
@@ -1463,6 +1491,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },
@@ -1736,7 +1784,12 @@
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Image"
+          "label": "Image on desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "mb_image",
+          "label": "Image on mobile"
         },
         {
           "type": "url",
@@ -3498,6 +3551,10 @@
               "label": "1:1"
             },
             {
+              "value": "2/3",
+              "label": "2:3"
+            },
+            {
               "value": "3/4",
               "label": "3:4"
             },
@@ -5037,6 +5094,67 @@
         },
         {
           "type": "select",
+          "id": "button_style_inside3",
+          "label": "Button style",
+          "default": "m-button--primary",
+          "options": [
+            {
+              "value": "m-button--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "m-button--secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "m-button--white",
+              "label": "White"
+            },
+            {
+              "value": "m-button--link",
+              "label": "Link"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_color_inside3",
+          "label": "Button color",
+          "default": "light",
+          "options": [
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_text_hover_color_inside3",
+          "label": "Button text color on hover",
+          "default": "light",
+          "options": [
+            {
+              "value": "light",
+              "label": "Light"
+            },
+            {
+              "value": "dark",
+              "label": "Dark"
+            }
+          ]
+        },
+        {
+          "type": "color_background",
+          "id": "background_gradient_inside3",
+          "label": "Background gradient"
+        },
+        {
+          "type": "select",
           "id": "pcard_layout",
           "label": "Design layout",
           "default": "",
@@ -5064,6 +5182,14 @@
             {
               "value": "5",
               "label": "Style 5"
+            },
+            {
+              "value": "6",
+              "label": "Style 6"
+            },
+            {
+              "value": "7",
+              "label": "Product card 7"
             }
           ]
         },
@@ -5084,6 +5210,10 @@
             {
               "value": "1/1",
               "label": "1:1"
+            },
+            {
+              "value": "2/3",
+              "label": "2:3"
             },
             {
               "value": "3/4",

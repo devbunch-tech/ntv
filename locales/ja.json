@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "税込み、送料はチェックアウト時に計算されます",
       "taxes_included_and_shipping_policy_html": "税込み。 <a href=\"{{ link }}\">送料</a>はチェックアウト時に計算されます。",
       "enter_discount_code": "ここに割引コードを入力してください",
+      "remove_discount": "{{ code }}を削除します",
+      "discount_duplicate_error_message": "割引コードはすでにカートに適用されています。",
+      "discount_apply_error_message": "割引コードはカートに適用できません。",
       "checkout": "チェックアウト",
       "viewcart": "かごの中身を見る",
       "empty": "あなたのカートは現在空です。",

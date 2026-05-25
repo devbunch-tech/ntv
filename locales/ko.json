@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "세금 포함 및 배송비는 결제 시 계산됩니다.",
       "taxes_included_and_shipping_policy_html": "세금 포함. <a href=\"{{ link }}\">배송비</a>는 결제 시 계산됩니다.",
       "enter_discount_code": "여기에 할인코드를 입력하세요",
+      "remove_discount": "{{ code }} 제거",
+      "discount_duplicate_error_message": "할인 코드는 이미 카트에 적용되었습니다.",
+      "discount_apply_error_message": "할인 코드는 카트에 적용 할 수 없습니다.",
       "checkout": "확인해 보세요",
       "viewcart": "장바구니보기",
       "empty": "당신의 카트는 현재 비어 있습니다.",

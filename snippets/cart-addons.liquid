@@ -53,9 +53,8 @@
           <span class="m-tooltip__content">{{ 'cart.general.delivery_time' | t }}</span>
         </button>
       {% endif %}
-      {% if settings.discount_code_enable %}
+      {% if settings.discount_code_enable and settings.discount_code_alternative_layout == false %}
         <button data-open="coupon" type="button" class="m-cart-addon--trigger-button m-tooltip m-tooltip--top">
-          <span data-discount-noti class="m-cart-addon__icon--noti m:hidden m:rounded-full"></span>
           <svg class="m-cart-addon__icon--discount" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.875 4.70825V15.9583" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2.25 13.395C2.25015 13.251 2.29998 13.1115 2.39108 13.0001C2.48218 12.8886 2.60896 12.812 2.75 12.7833C3.31514 12.6685 3.82324 12.3619 4.18819 11.9154C4.55314 11.4689 4.75251 10.9099 4.75251 10.3333C4.75251 9.75657 4.55314 9.19763 4.18819 8.75112C3.82324 8.30462 3.31514 7.99801 2.75 7.88325C2.60896 7.85446 2.48218 7.77787 2.39108 7.66642C2.29998 7.55496 2.25015 7.41548 2.25 7.27153V5.33325C2.25 5.16749 2.31585 5.00852 2.43306 4.89131C2.55027 4.7741 2.70924 4.70825 2.875 4.70825H17.875C18.0408 4.70825 18.1997 4.7741 18.3169 4.89131C18.4342 5.00852 18.5 5.16749 18.5 5.33325V7.27153C18.4998 7.41548 18.45 7.55496 18.3589 7.66642C18.2678 7.77787 18.141 7.85446 18 7.88325C17.4349 7.99801 16.9268 8.30462 16.5618 8.75112C16.1969 9.19763 15.9975 9.75657 15.9975 10.3333C15.9975 10.9099 16.1969 11.4689 16.5618 11.9154C16.9268 12.3619 17.4349 12.6685 18 12.7833C18.141 12.812 18.2678 12.8886 18.3589 13.0001C18.45 13.1115 18.4998 13.251 18.5 13.395V15.3333C18.5 15.499 18.4342 15.658 18.3169 15.7752C18.1997 15.8924 18.0408 15.9583 17.875 15.9583H2.875C2.70924 15.9583 2.55027 15.8924 2.43306 15.7752C2.31585 15.658 2.25 15.499 2.25 15.3333V13.395Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -65,6 +64,22 @@
         </button>
       {% endif %}
     </div>
+
+    {% comment %} Alternative Discount Code Layout {% endcomment %}
+    {% if settings.discount_code_enable and settings.discount_code_alternative_layout %}
+      {%- assign pix_discount = settings.pix_discount_percentage | default: 0 -%}
+      <div class="m-cart-discount-alternative">
+        <div class="m-cart-discount-alternative__row">
+          <button data-open="coupon" type="button" class="m-cart-addon--trigger-button m-cart-discount-alternative__coupon-button">
+            <span class="m-cart-discount-alternative__coupon-text">{{ 'cart.general.enter_discount_code' | t }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" aria-hidden="true">
+              <path d="M10.7271 4.27107C10.5374 4.08133 10.28 3.97473 10.0117 3.97473C9.74336 3.97473 9.48602 4.08133 9.29628 4.27107C9.10654 4.46082 8.99995 4.71817 8.99995 4.98651C8.99995 5.25486 9.10654 5.51221 9.29628 5.70196C9.48602 5.8917 9.74336 5.9983 10.0117 5.9983C10.28 5.9983 10.5374 5.8917 10.7271 5.70196C10.9168 5.51221 11.0234 5.25486 11.0234 4.98651C11.0234 4.71817 10.9168 4.46082 10.7271 4.27107Z" fill="#E0E0E0"/>
+              <path d="M14.4552 0.544842L15 7.62846L7.62879 15L0 7.37087L7.37121 0L14.4552 0.544842ZM8.58154 3.5563C8.39122 3.74361 8.23986 3.96675 8.13619 4.21284C8.03253 4.45894 7.97861 4.72313 7.97756 4.99017C7.9765 5.2572 8.02833 5.52181 8.13004 5.76872C8.23176 6.01563 8.38135 6.23995 8.57019 6.42876C8.75903 6.61756 8.98338 6.76711 9.2303 6.86877C9.47722 6.97043 9.74183 7.02219 10.0089 7.02107C10.2759 7.01995 10.54 6.96597 10.7861 6.86225C11.0322 6.75852 11.2553 6.6071 11.4425 6.41672C11.8167 6.03626 12.0254 5.52334 12.0232 4.98969C12.021 4.45603 11.808 3.94488 11.4306 3.56757C11.0532 3.19026 10.542 2.97736 10.0084 2.97525C9.47474 2.97314 8.9619 3.18199 8.58154 3.5563Z" fill="#E0E0E0"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    {% endif %}
     {% if settings.cart_notes_enable %}
       <div class="m-cart-addon__body" id="m-addons-note">
         <div class="m-cart-addon__title m:font-medium">
@@ -120,126 +135,55 @@
           <span>{{ 'cart.general.estimate_shipping_title' | t }}</span>
         </div>
         <div class="m-cart-addon__content">
-          <div data-address="root">
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressFirstName">{{ 'customer.addresses.first_name' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressFirstName"
-                name="address[first_name]"
-                value="{{ form.first_name }}"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressLastName">{{ 'customer.addresses.last_name' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressLastName"
-                name="address[last_name]"
-                value="{{ form.last_name }}"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressCompany">{{ 'customer.addresses.company' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressCompany"
-                name="address[company]"
-                value="{{ form.company }}"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressAddress1">{{ 'customer.addresses.address1' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressAddress1"
-                name="address[address1]"
-                value="{{ form.address1 }}"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressAddress2">{{ 'customer.addresses.address2' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressAddress2"
-                name="address[address2]"
-                value="{{ form.address2 }}"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressCity">{{ 'customer.addresses.city' | t }}</label>
-              <input class="form-field" type="text" id="AddressCity" name="address[city]" value="{{ form.city }}">
-            </div>
-
-            <div class="form-field-group" id="MadrressCountry">
-              <label class="form-field--label" for="AddressCountry">{{ 'customer.addresses.country' | t }}</label>
-              <select
-                class="form-field"
-                id="AddressCountry"
-                name="address[country]"
-                data-default="{{ settings.default_country_estimate_shipping | default: 'US' }}"
-              ></select>
-            </div>
-
-            <div class="form-field-group" id="AddressProvinceContainer">
-              <label class="form-field--label" for="AddressProvince">{{ 'customer.addresses.province' | t }}</label>
-              <select
-                class="form-field"
-                id="AddressProvince"
-                name="address[province]"
-                data-default="{{ form.province }}"
-              ></select>
-            </div>
-
-            <div class="form-field-group">
-              <label class="form-field--label" for="AddressZip">{{ 'customer.addresses.zip' | t }}</label>
-              <input
-                class="form-field"
-                type="text"
-                id="AddressZip"
-                name="address[zip]"
-                value="{{ form.zip }}"
-                autocapitalize="characters"
-              >
-            </div>
-
-            <div class="form-field-group m:hidden">
-              <label class="form-field--label" for="AddressPhone">{{ 'customer.addresses.phone' | t }}</label>
-              <input class="form-field" type="tel" id="AddressPhone" name="address[phone]" value="{{ form.phone }}">
-            </div>
-          </div>
+          {% render 'shipping-calculator-cart' %}
         </div>
-        {%- liquid
-          assign show_delivery_days = settings.show_delivery_days
-        -%}
-        <div
-          class="m-cart-addon__action m:flex m:items-center m:justify-center"
-          data-show-delivery-days="{{ show_delivery_days }}"
-          {% if show_delivery_days %}
-            data-delivery-one="{{ 'cart.general.delivery_days.one' | t }}"
-            data-delivery-other="{{ 'cart.general.delivery_days.other' | t }}"
-          {% endif %}
-        >
-          <button class="m-button m-button--secondary m-cart-addon--close" data-action="shipping">
+        <div class="m-cart-addon__action m:flex m:items-center m:justify-center">
+          <button type="button" class="m-button m-button--secondary m-cart-addon--close" data-action="shipping">
+            {{ 'general.accessibility.close' | t }}
+          </button>
+        </div>
+      </div>
+    {% endif %}
+    {% if settings.discount_code_enable %}
+      <div
+        class="m-cart-addon__body"
+        id="m-addons-coupon"
+        is="m-cart-discount"
+      >
+        <label class="m-cart-addon__title m:font-medium" for="CartCouponInput">
+          <svg
+            class="m-cart-addon__icon--discount"
+            viewBox="0 0 21 21"
+            fill="none"
+            aria-hidden="true"
+            focusable="false"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M7.875 4.70825V15.9583" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2.25 13.395C2.25015 13.251 2.29998 13.1115 2.39108 13.0001C2.48218 12.8886 2.60896 12.812 2.75 12.7833C3.31514 12.6685 3.82324 12.3619 4.18819 11.9154C4.55314 11.4689 4.75251 10.9099 4.75251 10.3333C4.75251 9.75657 4.55314 9.19763 4.18819 8.75112C3.82324 8.30462 3.31514 7.99801 2.75 7.88325C2.60896 7.85446 2.48218 7.77787 2.39108 7.66642C2.29998 7.55496 2.25015 7.41548 2.25 7.27153V5.33325C2.25 5.16749 2.31585 5.00852 2.43306 4.89131C2.55027 4.7741 2.70924 4.70825 2.875 4.70825H17.875C18.0408 4.70825 18.1997 4.7741 18.3169 4.89131C18.4342 5.00852 18.5 5.16749 18.5 5.33325V7.27153C18.4998 7.41548 18.45 7.55496 18.3589 7.66642C18.2678 7.77787 18.141 7.85446 18 7.88325C17.4349 7.99801 16.9268 8.30462 16.5618 8.75112C16.1969 9.19763 15.9975 9.75657 15.9975 10.3333C15.9975 10.9099 16.1969 11.4689 16.5618 11.9154C16.9268 12.3619 17.4349 12.6685 18 12.7833C18.141 12.812 18.2678 12.8886 18.3589 13.0001C18.45 13.1115 18.4998 13.251 18.5 13.395V15.3333C18.5 15.499 18.4342 15.658 18.3169 15.7752C18.1997 15.8924 18.0408 15.9583 17.875 15.9583H2.875C2.70924 15.9583 2.55027 15.8924 2.43306 15.7752C2.31585 15.658 2.25 15.499 2.25 15.3333V13.395Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>{{ 'cart.general.coupon_title' | t }}</span>
+        </label>
+        <div class="m-cart-addon__content">
+          <input
+            id="CartCouponInput"
+            class="form-field"
+            type="text"
+            name="discount_code"
+            placeholder="{{ 'cart.general.enter_discount_code' | t }}"
+            required
+            aria-required="true"
+          >
+          <div class="m-cart-addon-message-error"></div>
+        </div>
+        <div class="m-cart-addon__action m:flex m:items-center m:justify-center">
+          <button type="button" class="m-button m-button--secondary m-cart-addon--close">
             {{ 'cart.general.cancel' | t }}
           </button>
-          <button
-            class="m-spinner-button m-button m-button--primary m-cart-addon--calculate"
-            data-action="shipping"
-          >
+          <button type="submit" class="m-button m-button--primary m-spinner-button">
             <span class="m-spinner-icon">
               <svg
-                class="animate-spin m-svg-icon--medium"
+                class="animate-spin m-svg-icon"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -248,40 +192,7 @@
                 <path fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
             </span>
-            <span>
-              {{ 'cart.general.estimate_shipping_button' | t }}
-            </span>
-          </button>
-        </div>
-        <div class="m-cart-addon__shipping-rate"></div>
-      </div>
-    {% endif %}
-    {% if settings.discount_code_enable %}
-      <div class="m-cart-addon__body" id="m-addons-coupon">
-        <div class="m-cart-addon__title m:font-medium">
-          <svg class="m-cart-addon__icon--discount" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M7.875 4.70825V15.9583" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M2.25 13.395C2.25015 13.251 2.29998 13.1115 2.39108 13.0001C2.48218 12.8886 2.60896 12.812 2.75 12.7833C3.31514 12.6685 3.82324 12.3619 4.18819 11.9154C4.55314 11.4689 4.75251 10.9099 4.75251 10.3333C4.75251 9.75657 4.55314 9.19763 4.18819 8.75112C3.82324 8.30462 3.31514 7.99801 2.75 7.88325C2.60896 7.85446 2.48218 7.77787 2.39108 7.66642C2.29998 7.55496 2.25015 7.41548 2.25 7.27153V5.33325C2.25 5.16749 2.31585 5.00852 2.43306 4.89131C2.55027 4.7741 2.70924 4.70825 2.875 4.70825H17.875C18.0408 4.70825 18.1997 4.7741 18.3169 4.89131C18.4342 5.00852 18.5 5.16749 18.5 5.33325V7.27153C18.4998 7.41548 18.45 7.55496 18.3589 7.66642C18.2678 7.77787 18.141 7.85446 18 7.88325C17.4349 7.99801 16.9268 8.30462 16.5618 8.75112C16.1969 9.19763 15.9975 9.75657 15.9975 10.3333C15.9975 10.9099 16.1969 11.4689 16.5618 11.9154C16.9268 12.3619 17.4349 12.6685 18 12.7833C18.141 12.812 18.2678 12.8886 18.3589 13.0001C18.45 13.1115 18.4998 13.251 18.5 13.395V15.3333C18.5 15.499 18.4342 15.658 18.3169 15.7752C18.1997 15.8924 18.0408 15.9583 17.875 15.9583H2.875C2.70924 15.9583 2.55027 15.8924 2.43306 15.7752C2.31585 15.658 2.25 15.499 2.25 15.3333V13.395Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          <span>{{ 'cart.general.coupon_title' | t }}</span>
-        </div>
-        <div class="m-cart-addon__content">
-          <input
-            {% if form_id %}
-              form="{{ form_id }}"
-            {% endif %}
-            placeholder="{{ 'cart.general.enter_discount_code' | t }}"
-            type="text"
-            name="discount"
-            class="form-field"
-          >
-        </div>
-        <div class="m-cart-addon__action m:flex m:items-center m:justify-center">
-          <button class="m-button m-button--secondary m-cart-addon--close" data-action="coupon">
-            {{ 'cart.general.cancel' | t }}
-          </button>
-          <button class="m-button m-button--primary m-cart-addon--save" data-action="coupon">
-            {{ 'cart.general.save' | t }}
+            <span>{{ 'cart.general.save' | t }}</span>
           </button>
         </div>
       </div>

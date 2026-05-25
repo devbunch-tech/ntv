@@ -312,8 +312,6 @@ if (!customElements.get("m-cart-addons")) {
         country: '[name="address[country]"]',
         addressForm: '[data-address="root"]',
         shippingMessage: ".m-cart-addon__shipping-rate",
-        cartDiscountCode: '[name="discount"]',
-        cartDiscountCodeNoti: "[data-discount-noti]",
         cartNote: '[name="note"]',
         saveAddonButton: ".m-cart-addon--save",
         closeAddonButton: ".m-cart-addon--close",
@@ -350,7 +348,7 @@ if (!customElements.get("m-cart-addons")) {
     }
 
     init() {
-      const { cartDiscountCode, cartDiscountCodeNoti, devliveryTime } = this.domNodes;
+      const { devliveryTime } = this.domNodes;
 
       this.querySelectorAll(this.selectors.triggerAddonButton).forEach((button) => {
         button.addEventListener('click', this.handleOpenAddon.bind(this));
@@ -371,15 +369,7 @@ if (!customElements.get("m-cart-addons")) {
         context: this.cartWrapper,
         handler: this.calcShipping.bind(this),
       });
-      if (cartDiscountCode) {
-        const code = localStorage.getItem(this.discountCodeKey);
-        if (code) {
-          cartDiscountCode.value = code;
-          if (cartDiscountCodeNoti) {
-            cartDiscountCodeNoti.style.display = "inline";
-          }
-        }
-      }
+
       if (devliveryTime) {
         const code = localStorage.getItem(this.deliveryCodeKey);
         if (code) devliveryTime.value = code;
@@ -511,18 +501,7 @@ if (!customElements.get("m-cart-addons")) {
     handleSaveAddonValue(e) {
       e.preventDefault();
       const { target } = e;
-
-      const { cartDiscountCode, cartDiscountCodeNoti, devliveryTime } = this.domNodes;
-      if (target.dataset.action === "coupon" && cartDiscountCode) {
-        const code = cartDiscountCode.value;
-        localStorage.setItem(this.discountCodeKey, code);
-        if (code !== "" && cartDiscountCodeNoti) {
-          cartDiscountCodeNoti.style.display = "inline";
-        } else {
-          cartDiscountCodeNoti.style.display = "none";
-        }
-        this.close(e);
-      }
+      const { devliveryTime } = this.domNodes;
       if (target.dataset.action === "note") {
         this.updateCartNote();
         this.close(e);
@@ -556,3 +535,275 @@ if (!customElements.get("m-cart-addons")) {
   }
   customElements.define("m-cart-addons", MCartAddons);
 }
+
+class MCartDiscount extends HTMLDivElement {
+  constructor() {
+    super();
+
+    this.submitEl.addEventListener('click', this.handleFormSubmit.bind(this));
+    this.couponEl.addEventListener('keydown', this.handleInputKey.bind(this));
+  }
+
+  get submitEl() {
+    return (this._submitEl = this._submitEl || this.querySelector('[type="submit"]'));
+  }
+
+  get messageEl() {
+    return (this._messageEl = this._messageEl || this.querySelector('.m-cart-addon-message-error'));
+  }
+
+  get couponEl() {
+    return (this._couponEl = this._couponEl || this.querySelector('input[name="discount_code"]'));
+  }
+
+  get cartAddonDrawer() {
+    return this.closest('.m-cart-addon');
+  }
+
+  get cartDiscountsEl() {
+    return document.querySelector('[data-minimog-cart-discounts]');
+  }
+
+  getDiscounts() {
+    const discounts = [];
+
+    if (this.cartDiscountsEl) {
+      const items = this.cartDiscountsEl.querySelectorAll('.m-cart__discount--item');
+      items &&
+        items.forEach((item) => {
+          discounts.push(item.dataset.discountCode);
+        });
+    }
+
+    return discounts;
+  }
+
+  handleInputKey(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.handleFormSubmit(event);
+    }
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+
+    if (this.submitEl.getAttribute('aria-disabled') === 'true') return;
+
+    this.displayFormErrors();
+
+    const newDiscountCode = this.couponEl.value;
+
+    if (!this.couponEl.checkValidity()) {
+      this.couponEl.reportValidity();
+      return;
+    }
+
+    const discounts = this.getDiscounts();
+
+    if (discounts.includes(newDiscountCode)) {
+      this.displayFormErrors(MinimogStrings.duplicateDiscountError);
+      return;
+    }
+
+    discounts.push(newDiscountCode);
+
+    let sectionsToBundle = [];
+    document.documentElement.dispatchEvent(
+      new CustomEvent('cart:grouped-sections', { bubbles: true, detail: { sections: sectionsToBundle } })
+    );
+
+    const config = fetchConfig('javascript');
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    delete config.headers['Content-Type'];
+
+    const formData = new FormData();
+    formData.append('sections', sectionsToBundle);
+    formData.append('sections_url', window.location.pathname);
+    formData.append('discount', discounts.join(','));
+
+    config.body = formData;
+
+    this.submitEl.setAttribute('aria-disabled', 'true');
+    this.submitEl.classList.add('m-spinner-loading');
+
+    fetch(MinimogSettings.routes.cart_update_url, config)
+      .then((response) => response.json())
+      .then(async (parsedState) => {
+        if (
+          parsedState.discount_codes.find((/** @type {{ code: string; applicable: boolean; }} */ discount) => {
+            return discount.code === newDiscountCode && discount.applicable === false;
+          })
+        ) {
+          this.couponEl.value = '';
+          this.displayFormErrors(MinimogStrings.applyDiscountError);
+          return;
+        }
+
+        if (this.cartAddonDrawer) {
+          this.cartAddonDrawer.close(event);
+        }
+
+        const cartJson = await (await fetch(`${MinimogSettings.routes.cart}`, { ...fetchConfig() })).json();
+        cartJson['sections'] = parsedState['sections'];
+
+        this.updateCartState(cartJson);
+      })
+      .catch((e) => {
+        console.error(e);
+      })
+      .finally(() => {
+        this.submitEl.removeAttribute('aria-disabled');
+        this.submitEl.classList.remove('m-spinner-loading');
+      });
+  }
+
+  updateCartState = (cartJson) => {
+    window.MinimogEvents.emit(MinimogTheme.pubSubEvents.cartUpdate, { cart: cartJson });
+  };
+
+  displayFormErrors = (errorMessage = false) => {
+    if (!this.messageEl) {
+      if (errorMessage !== false) {
+        alert(errorMessage);
+      }
+    } else {
+      this.messageEl.classList.toggle('!m:hidden', !errorMessage);
+      if (errorMessage !== false) {
+        this.messageEl.innerText = errorMessage;
+      }
+    }
+  };
+}
+customElements.define('m-cart-discount', MCartDiscount, { extends: 'div' });
+
+class MCartDiscountRemove extends HTMLButtonElement {
+  constructor() {
+    super();
+
+    this.selectors = {
+      list: '.m-cart__discount',
+      item: '.m-cart__discount--item',
+    };
+
+    this.clickHandler = this.handleClick.bind(this);
+  }
+
+  connectedCallback() {
+    this.listEl = this.closest(this.selectors.list);
+
+    this.addEventListener('click', this.clickHandler);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('click', this.clickHandler);
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    if (this.getAttribute('aria-disabled') === 'true') return;
+
+    this.setAttribute('aria-disabled', 'true');
+    this.classList.add('m-spinner-loading');
+
+    this.discounts = [];
+
+    const thisItem = this.closest('li');
+    const items = this.listEl.querySelectorAll(this.selectors.item);
+    items &&
+      items.forEach((item) => {
+        if (item != thisItem) {
+          this.discounts.push(item.dataset.discountCode);
+        }
+      });
+
+    this.updateCartDiscounts();
+  }
+
+  updateCartDiscounts() {
+    let sectionsToBundle = [];
+    document.documentElement.dispatchEvent(
+      new CustomEvent('cart:grouped-sections', { bubbles: true, detail: { sections: sectionsToBundle } })
+    );
+
+    const config = fetchConfig('javascript');
+    config.headers['X-Requested-With'] = 'XMLHttpRequest';
+    delete config.headers['Content-Type'];
+
+    const formData = new FormData();
+    formData.append('sections', sectionsToBundle);
+    formData.append('sections_url', window.location.pathname);
+    formData.append('discount', this.discounts.join(','));
+
+    config.body = formData;
+
+    fetch(MinimogSettings.routes.cart_update_url, config)
+      .then((response) => response.json())
+      .then(async (parsedState) => {
+        const cartJson = await (await fetch(`${MinimogSettings.routes.cart}`, { ...fetchConfig() })).json();
+        cartJson['sections'] = parsedState['sections'];
+
+        this.updateCartState(cartJson);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+  }
+
+  updateCartState = (cartJson) => {
+    window.MinimogEvents.emit(MinimogTheme.pubSubEvents.cartUpdate, { cart: cartJson });
+  };
+}
+customElements.define('m-cart-discount-remove', MCartDiscountRemove, { extends: 'button' });
+
+class MCartForm extends HTMLFormElement {
+  constructor() {
+    super();
+
+    this.addEventListener('submit', this.handleSubmit.bind(this));
+  }
+
+  /**
+   * Compatible with Foxkit Discount Code
+   * This input auto append by Foxkit that make lost discounts when submit form.
+   * We need re-add discounts to the input before submit form.
+   */
+  get discountInput() {
+    return this.querySelector('input[name="discount"]');
+  }
+
+  get cartDiscountsEl() {
+    return document.querySelector('[data-minimog-cart-discounts]');
+  }
+
+  getDiscounts() {
+    const discounts = [];
+
+    if (this.cartDiscountsEl) {
+      const items = this.cartDiscountsEl.querySelectorAll('.m-cart__discount--item');
+      items &&
+        items.forEach((item) => {
+          discounts.push(item.dataset.discountCode);
+        });
+    }
+
+    return discounts;
+  }
+
+  handleSubmit() {
+    if (this.discountInput) {
+      const discounts = this.getDiscounts();
+
+      if (discounts.length > 0) {
+        const foxkitDiscount = this.discountInput.value;
+
+        if (foxkitDiscount !== '') {
+          discounts.push(foxkitDiscount);
+        }
+
+        this.discountInput.value = discounts.join(',');
+      }
+    }
+  }
+}
+customElements.define('m-cart-form', MCartForm, { extends: 'form' });

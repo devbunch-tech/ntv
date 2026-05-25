@@ -27,6 +27,8 @@
   #m-custom-{{ section.id }} {
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 </style>
 <section
@@ -311,6 +313,67 @@
     },
     {
       "type": "select",
+      "id": "button_style_inside3",
+      "label": "Button style",
+      "default": "m-button--primary",
+      "options": [
+        {
+          "value": "m-button--primary",
+          "label": "Primary"
+        },
+        {
+          "value": "m-button--secondary",
+          "label": "Secondary"
+        },
+        {
+          "value": "m-button--white",
+          "label": "White"
+        },
+        {
+          "value": "m-button--link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_color_inside3",
+      "label": "Button color",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_text_hover_color_inside3",
+      "label": "Button text color on hover",
+      "default": "light",
+      "options": [
+        {
+          "value": "light",
+          "label": "Light"
+        },
+        {
+          "value": "dark",
+          "label": "Dark"
+        }
+      ]
+    },
+    {
+      "type": "color_background",
+      "id": "background_gradient_inside3",
+      "label": "Background gradient"
+    },
+    {
+      "type": "select",
       "id": "pcard_image_ratio",
       "label": "Image aspect ratio",
       "default": "original",
@@ -322,6 +385,10 @@
         {
           "value": "1/1",
           "label": "1:1"
+        },
+        {
+          "value": "2/3",
+          "label": "2:3"
         },
         {
           "value": "3/4",
@@ -358,6 +425,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -114,7 +123,9 @@
       "read_more": "Read more",
       "related_title": "Related Articles",
       "next_post": "Next",
-      "previous_post": "Previous"
+      "previous_post": "Previous",
+      "share": "Share",
+      "link_copied": "Link copied!"
     },
     "comments": {
       "title": "Leave a Comment",
@@ -147,9 +158,16 @@
       "subtotal": "Subtotal",
       "taxes_and_shipping_at_checkout": "Taxes and shipping calculated at checkout",
       "taxes_and_shipping_policy_at_checkout_html": "Taxes and <a href=\"{{ link }}\">shipping</a> calculated at checkout",
+      "free_shipping_progress": {
+        "success": "Congratulations! You've earned Free Shipping",
+        "remaining": "Add {{ amount }} more to get free shipping"
+      },
       "taxes_included_but_shipping_at_checkout": "Tax included and shipping calculated at checkout",
       "taxes_included_and_shipping_policy_html": "Tax included. <a href=\"{{ link }}\">Shipping</a> calculated at checkout.",
       "enter_discount_code": "Enter discount code here",
+      "remove_discount": "Remove {{ code }}",
+      "discount_duplicate_error_message": "The discount code has already been applied to your cart.",
+      "discount_apply_error_message": "The discount code cannot be applied to your cart.",
       "checkout": "Check out",
       "viewcart": "View Cart",
       "empty": "Your cart is currently empty.",
@@ -372,7 +390,9 @@
     },
     "customer": {
       "account": "Account",
-      "log_in": "Log in"
+      "log_in": "Log in",
+      "log_in_or": "Log in or",
+      "register": "Create account"
     }
   },
   "pages": {
@@ -400,6 +420,7 @@
       "add_a_question": "Ask a question",
       "remove_from_compare": "Remove from compare",
       "quick_add": "Quick Add",
+      "view_product": "VIEW PRODUCT",
       "zoom_in": "Zoom in",
       "quick_view": "Quick view",
       "collection": "Collection",

@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin language editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "general": {
     "404": {
@@ -150,6 +159,9 @@
       "taxes_included_but_shipping_at_checkout": "Налог включен, стоимость доставки рассчитывается при оформлении заказа.",
       "taxes_included_and_shipping_policy_html": "Включая налог. <a href=\"{{ link }}\">Доставка</a> рассчитывается при оформлении заказа.",
       "enter_discount_code": "Введите код скидки здесь",
+      "remove_discount": "Удалить {{ code }}",
+      "discount_duplicate_error_message": "Код скидки уже был применен к вашей корзине.",
+      "discount_apply_error_message": "Код скидки не может быть применен к вашей корзине.",
       "checkout": "Проверить",
       "viewcart": "Посмотреть корзину",
       "empty": "Ваша корзина на данный момент пуста.",

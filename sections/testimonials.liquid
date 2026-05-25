@@ -81,6 +81,8 @@
     --star-color: {{ section.settings.star_color }};
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --section-padding-top-mobile: {{ section.settings.padding_top_mobile }}px;
+    --section-padding-bottom-mobile: {{ section.settings.padding_bottom_mobile }}px;
   }
 {%- endstyle -%}
 
@@ -158,7 +160,7 @@
       "content": "Section header"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "heading",
       "label": "Heading",
       "default": "What People Are Saying"
@@ -204,6 +206,13 @@
           "label": "Center"
         }
       ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title_divider",
+      "label": "Show divider line",
+      "default": false,
+      "info": "Display a horizontal divider line between heading and content"
     },
     {
       "type": "header",
@@ -330,6 +339,26 @@
       "default": 50,
       "min": 0,
       "max": 100,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding Top (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding Bottom (Mobile)",
+      "default": 20,
+      "min": 0,
+      "max": 60,
       "step": 2,
       "unit": "px"
     },
