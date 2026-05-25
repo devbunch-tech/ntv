@@ -67,7 +67,6 @@
       </m-cart-items>
       <div class="m-cart-drawer__footer" id="MinimogCartDrawerFooter">
         <div class="m-cart-drawer__footer--wrapper{% if cart == empty %} m:hidden{% else %} m:block{% endif %}">
-          {% render 'cart-drawer-upsell' %}
           {% render 'cart-addons', form_id: 'cart-drawer-form' %}
           <div class="m-cart-drawer__gift-wrapping">
             <div class="m:hidden">{{ gift_wrapping.object.variants.first | json }}</div>

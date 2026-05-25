@@ -7,15 +7,12 @@
   <div class="m-menu-drawer__wrapper">
     <div class="m-menu-drawer__content">
       <ul class="m-menu-drawer__navigation m-menu-mobile">
-        {%- if section.settings.menu_html_mobile != blank -%}
-          {{ section.settings.menu_html_mobile }}
-        {%- else -%}
         {%- comment -%} HARDCODED ITEMS START {%- endcomment -%}
         <li class="m-menu-mobile__item" data-url="/collections/casamento" data-index="0">
           <a href="/collections/casamento" class="m-menu-mobile__link"><span>Casamento</span></a>
         </li>
-        <li class="m-menu-mobile__item" data-url="https://www.edilan.com.br/collections/devocionais" data-index="1">
-          <a href="https://www.edilan.com.br/collections/devocionais" class="m-menu-mobile__link"><span>Devocional</span></a>
+        <li class="m-menu-mobile__item" data-url="/collections/devocional" data-index="1">
+          <a href="/collections/devocional" class="m-menu-mobile__link"><span>Devocional</span></a>
         </li>
         <li class="m-menu-mobile__item" data-url="/collections/mulheres" data-index="2">
           <a href="/collections/mulheres" class="m-menu-mobile__link"><span>Mulheres</span></a>
@@ -54,7 +51,6 @@
           </div>
         </li>
         {%- comment -%} HARDCODED ITEMS END {%- endcomment -%}
-        {%- endif -%}
         {%- comment -%} Original linklist loop disabled in favor of hardcoded items above {%- endcomment -%}
         {%- if false -%}
         {% for link in linklists[menu].links %}

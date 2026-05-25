@@ -1,15 +1,8 @@
-{%- comment -%}
-This file has been modified by the Yoast SEO for Shopify app.
-You can learn more about this (and learn how to cleanly revert these changes) at https://yoa.st/removing-theme-changes.
-{%- endcomment -%}
 {{ 'header.css' | asset_url | stylesheet_tag }}
 
 <script src="{{ 'mega-menu.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'header.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'localization-form.js' | asset_url }}" defer="defer"></script>
-{%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
-{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
-{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.organization -%}
 <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -31,16 +24,11 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     ],
     "url": {{ shop.url | append: page.url | json }}
   }
-{%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
 </script>
-{%- endif -%}
 
 {% if request.page_type == 'index' %}
   {% assign potential_action_target = shop.url | append: routes.search_url | append: '?q={search_term_string}' %}
-  {%- comment -%}Yoast SEO schema control block: start.{%- endcomment -%}
-{%- assign yoast_seo_settings = shop.metafields.yoast_seo.settings.value | default: shop.metafields.yoast_seo.settings -%}
-{%- if disabled_by_yoast_seo or yoast_seo_settings.schema.useTheme.schema or yoast_seo_settings.schema.useTheme.website -%}
-<script type="application/ld+json">
+  <script type="application/ld+json">
     {
       "@context": "http://schema.org",
       "@type": "WebSite",
@@ -52,9 +40,7 @@ You can learn more about this (and learn how to cleanly revert these changes) at
       },
       "url": {{ shop.url | append: page.url | json }}
     }
-  {%- comment -%}Yoast SEO schema control block: end.{%- endcomment -%}
-</script>
-{%- endif -%}
+  </script>
 {% endif %}
 
 {% liquid
@@ -759,18 +745,6 @@ You can learn more about this (and learn how to cleanly revert these changes) at
     {
       "type": "header",
       "content": "Menu"
-    },
-    {
-      "type": "html",
-      "id": "menu_html_desktop",
-      "label": "Menu desktop (HTML)",
-      "info": "Cole aqui o HTML completo dos itens do menu desktop (incluindo \"Outras Categorias\" antes de \"Autores\"). Quando preenchido, este HTML substitui o menu padrão. Se deixar em branco, o menu padrão do tema será exibido."
-    },
-    {
-      "type": "html",
-      "id": "menu_html_mobile",
-      "label": "Menu mobile / drawer (HTML)",
-      "info": "Cole aqui o HTML completo dos itens do menu mobile (drawer). Quando preenchido, substitui o menu padrão do drawer. Se deixar em branco, o menu padrão do tema será exibido."
     },
     {
       "type": "link_list",

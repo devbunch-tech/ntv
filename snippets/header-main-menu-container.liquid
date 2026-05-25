@@ -10,158 +10,76 @@
 
 {%- if menu_id == 'main_menu' -%}
   <div class="m-header__menu m-header__menu--hardcoded{% if custom_classes != blank %} {{ custom_classes }}{% endif %}">
-    {%- if section.settings.menu_html_desktop != blank -%}
-      {{ section.settings.menu_html_desktop }}
-    {%- else -%}
-      <ul class="m-menu m-menu--hardcoded">
-        <li class="m-menu__item" data-index="0">
-          <a href="/collections/casamento" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Casamento
-          </a>
-        </li>
-        <li class="m-menu__item" data-index="1">
-          <a href="https://www.edilan.com.br/collections/devocionais" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Devocional
-          </a>
-        </li>
-        <li class="m-menu__item" data-index="2">
-          <a href="/collections/mulheres" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Mulheres
-          </a>
-        </li>
-        <li class="m-menu__item" data-index="3">
-          <a href="/collections/espirito-santo" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Espírito Santo
-          </a>
-        </li>
-        <li class="m-menu__item m-menu__item--parent m-menu__item--has-submenu m-menu__item--dropdown" data-index="4">
-          <a href="/collections" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Outras Categorias
-            <span class="m-menu__arrow">
-              <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
-              </svg>
-            </span>
-          </a>
-          <div class="m-mega-menu m-gradient m-color-{{ section.settings.color_scheme }}">
-            <div class="m-mega-menu__container container">
-              <div class="m-mega-menu__inner">
-                <ul class="m-sub-menu m-sub-menu--level-1" style="column-count: 3; column-gap: 32px; column-fill: balance;">
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/best-sellers" class="m-menu__link">Best Sellers</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/casamento" class="m-menu__link">Casamento</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/cursos" class="m-menu__link">Cursos</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/devocional" class="m-menu__link">Devocional</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/discipulado-e-escola-de-lideres" class="m-menu__link">Discipulado e Escola de Líderes</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/empresarios" class="m-menu__link">Empresários</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/espirito-santo" class="m-menu__link">Espírito Santo</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/evangelismo" class="m-menu__link">Evangelismo</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/ficcao" class="m-menu__link">Ficção</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/identidade" class="m-menu__link">Identidade</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/jovens-e-adolescentes" class="m-menu__link">Jovens e Adolescentes</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/lideranca" class="m-menu__link">Liderança</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/louvor-e-adoracao" class="m-menu__link">Louvor e Adoração</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/motivacional" class="m-menu__link">Motivacional</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/mulheres" class="m-menu__link">Mulheres</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/ofertas" class="m-menu__link">Ofertas</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/oracao-e-intercessao" class="m-menu__link">Oração e Intercessão</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/paradidatico" class="m-menu__link">Paradidático</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/vida-crista" class="m-menu__link">Vida Cristã</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1" style="break-inside: avoid;">
-                    <a href="/collections/vida-financeira" class="m-menu__link">Vida Financeira</a>
-                  </li>
-                </ul>
-              </div>
+    <ul class="m-menu m-menu--hardcoded">
+      <li class="m-menu__item" data-index="0">
+        <a href="/collections/casamento" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
+          Casamento
+        </a>
+      </li>
+      <li class="m-menu__item" data-index="1">
+        <a href="/collections/devocional" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
+          Devocional
+        </a>
+      </li>
+      <li class="m-menu__item" data-index="2">
+        <a href="/collections/mulheres" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
+          Mulheres
+        </a>
+      </li>
+      <li class="m-menu__item" data-index="3">
+        <a href="/collections/espirito-santo" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
+          Espírito Santo
+        </a>
+      </li>
+      <li class="m-menu__item m-menu__item--parent m-menu__item--has-submenu m-menu__item--dropdown" data-index="4">
+        <a href="/collections" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
+          Autores
+          <span class="m-menu__arrow">
+            <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
+            </svg>
+          </span>
+        </a>
+        <div class="m-mega-menu m-gradient m-color-{{ section.settings.color_scheme }}">
+          <div class="m-mega-menu__container container">
+            <div class="m-mega-menu__inner">
+              <ul class="m-sub-menu m-sub-menu--level-1">
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/john-bevere" class="m-menu__link">John Bevere</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/lisa-bevere" class="m-menu__link">Lisa Bevere</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/larry-stockstill" class="m-menu__link">Larry Stockstill</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/philip-murdoch" class="m-menu__link">Philip Murdoch</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/craig-groeschel" class="m-menu__link">Craig Groeschel</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/robert-morris" class="m-menu__link">Robert Morris</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/renee-murdoch" class="m-menu__link">Renee Murdoch</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/jonathan-stockstill" class="m-menu__link">Jonathan Stockstill</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/mary-duarte" class="m-menu__link">Mary Duarte</a>
+                </li>
+                <li class="m-sub-menu__item m-sub-menu__item--level-1">
+                  <a href="/collections/claudio-duarte" class="m-menu__link">Claudio Duarte</a>
+                </li>
+              </ul>
             </div>
           </div>
-        </li>
-        <li class="m-menu__item m-menu__item--parent m-menu__item--has-submenu m-menu__item--dropdown" data-index="5">
-          <a href="/collections" class="m-menu__link m-menu__link--main{% if section.settings.uppercase_parent_level %} m:uppercase{% endif %}">
-            Autores
-            <span class="m-menu__arrow">
-              <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                <path fill="currentColor" d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
-              </svg>
-            </span>
-          </a>
-          <div class="m-mega-menu m-gradient m-color-{{ section.settings.color_scheme }}">
-            <div class="m-mega-menu__container container">
-              <div class="m-mega-menu__inner">
-                <ul class="m-sub-menu m-sub-menu--level-1">
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/john-bevere" class="m-menu__link">John Bevere</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/lisa-bevere" class="m-menu__link">Lisa Bevere</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/larry-stockstill" class="m-menu__link">Larry Stockstill</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/philip-murdoch" class="m-menu__link">Philip Murdoch</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/craig-groeschel" class="m-menu__link">Craig Groeschel</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/robert-morris" class="m-menu__link">Robert Morris</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/renee-murdoch" class="m-menu__link">Renee Murdoch</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/jonathan-stockstill" class="m-menu__link">Jonathan Stockstill</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/mary-duarte" class="m-menu__link">Mary Duarte</a>
-                  </li>
-                  <li class="m-sub-menu__item m-sub-menu__item--level-1">
-                    <a href="/collections/claudio-duarte" class="m-menu__link">Claudio Duarte</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    {%- endif -%}
+        </div>
+      </li>
+    </ul>
   </div>
 {%- else -%}
   {%- comment -%} Fallback para outros menus (ex.: secondary_menu) usando linklist do Shopify {%- endcomment -%}

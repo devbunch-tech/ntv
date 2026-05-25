@@ -1,27 +1,3 @@
-/* ====== Botão Compre Já (verde do topbar) ====== */
-.m-add-to-cart,
-button.m-add-to-cart.m-button,
-.m-product-dynamic-checkout .shopify-payment-button__button,
-.m-product-dynamic-checkout .shopify-payment-button__button--unbranded{
-  background-color:#49a594 !important;
-  border-color:#49a594 !important;
-  color:#ffffff !important;
-  text-transform:uppercase !important;
-  letter-spacing:.6px;
-  font-weight:600;
-}
-.m-add-to-cart:hover,
-button.m-add-to-cart.m-button:hover,
-.m-add-to-cart:focus,
-.m-product-dynamic-checkout .shopify-payment-button__button:hover,
-.m-product-dynamic-checkout .shopify-payment-button__button--unbranded:hover{
-  background-color:#3a8a7c !important;
-  border-color:#3a8a7c !important;
-  color:#ffffff !important;
-}
-.m-add-to-cart .m-add-to-cart--text{text-transform:uppercase}
-.m-product-dynamic-checkout .shopify-payment-button__button *{text-transform:uppercase !important}
-
 /* ====== Dados Técnicos ====== */
 .m-product-tech-data{
   list-style:none;
