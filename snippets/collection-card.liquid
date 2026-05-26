@@ -3,6 +3,13 @@
   if image_rounded
     assign aspect_ratio = 1
   endif
+  assign has_video = false
+  if video != blank
+    assign has_video = true
+    if image == blank
+      assign aspect_ratio = video.aspect_ratio | default: 1
+    endif
+  endif
   for i in (1..index)
     capture current
       cycle 1, 2, 3, 4, 5, 6
@@ -35,6 +42,33 @@
   endif
 -%}
 
+{%- capture card_media -%}
+  {%- if has_video -%}
+    <div class="m-collection-card__video-wrapper" style="--aspect-ratio: {{ aspect_ratio | default: 1 }};">
+      <video
+        class="m-collection-card__video m:w-full"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="metadata"
+        {%- if video.preview_image != blank %} poster="{{ video.preview_image | image_url: width: 1100 }}"{% endif -%}
+        aria-label="{{ title | default: collection.title | escape }}"
+      >
+        {%- for source in video.sources -%}
+          <source src="{{ source.url }}" type="{{ source.mime_type }}">
+        {%- endfor -%}
+      </video>
+    </div>
+  {%- elsif image != blank -%}
+    {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
+  {%- else -%}
+    <div style="--aspect-ratio: 1/1;">
+      {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
 <div class="m:column{% if enable_slider %} swiper-slide{% endif %}">
   <div
     class="m-collection-card m-collection-card--{{ card_style }}{{ classes }}"
@@ -52,13 +86,7 @@
             aria-label="{{ collection.title | default: "collection"  }}"
           >
             <div class="m-hover-box__wrapper">
-              {% if image != blank %}
-                {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
-              {% else %}
-                <div style="--aspect-ratio: 1/1;">
-                  {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
-                </div>
-              {% endif %}
+              {{ card_media }}
             </div>
           </a>
           <div class="m-collection-card__info m:text-{{ text_alignment }}">
@@ -99,13 +127,7 @@
             aria-label="{{ collection.title | default: "collection"  }}"
           >
             <div class="m-hover-box__wrapper">
-              {% if image != blank %}
-                {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
-              {% else %}
-                <div style="--aspect-ratio: 1/1;">
-                  {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
-                </div>
-              {% endif %}
+              {{ card_media }}
             </div>
           </a>
           <div class="m-collection-card__info m:text-{{ text_alignment }}">
@@ -132,13 +154,7 @@
             aria-label="{{ collection.title | default: "collection"  }}"
           >
             <div class="m-hover-box__wrapper">
-              {% if image != blank %}
-                {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
-              {% else %}
-                <div style="--aspect-ratio: 1/1;">
-                  {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
-                </div>
-              {% endif %}
+              {{ card_media }}
             </div>
           </a>
           {% if show_product_count == true %}
@@ -155,13 +171,7 @@
             aria-label="{{ collection.title | default: "collection"  }}"
           >
             <div class="m-hover-box__wrapper">
-              {% if image != blank %}
-                {% render 'responsive-image', image: image, image_class: 'm:w-full', aspect_ratio: aspect_ratio %}
-              {% else %}
-                <div style="--aspect-ratio: 1/1;">
-                  {{ placeholder_image | placeholder_svg_tag: 'm-placeholder-svg' }}
-                </div>
-              {% endif %}
+              {{ card_media }}
             </div>
           </a>
           <div class="m-collection-card__info m:text-{{ text_alignment }}">

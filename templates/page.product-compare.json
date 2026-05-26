@@ -1,11 +1,1 @@
-{
-  "name": "Page product compare",
-  "sections": {
-    "main": {
-      "type": "page-product-compare"
-    }
-  },
-  "order": [
-    "main"
-  ]
-}
+{"sections":{"main":{"type":"page-product-compare","settings":{}}},"order":["main"]}

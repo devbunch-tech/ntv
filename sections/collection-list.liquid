@@ -81,6 +81,28 @@
   #m-collection-list-{{ section.id }} {
     --offset-margin: calc((100vw - {{ container_width }}px) / 2);
   }
+  #m-collection-list-{{ section.id }} .m-collection-card__video-wrapper {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  #m-collection-list-{{ section.id }} .m-collection-card__video-wrapper::before {
+    content: "";
+    display: block;
+    padding-block-end: calc(100% / (0.0001 + var(--aspect-ratio, 1)));
+  }
+  #m-collection-list-{{ section.id }} .m-collection-card__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  #m-collection-list-{{ section.id }} .m-collection-card__image-rounded .m-collection-card__video-wrapper,
+  #m-collection-list-{{ section.id }} .m-collection-card__image-rounded .m-collection-card__video {
+    border-radius: 9999px;
+  }
   {% if enable_slider and section.settings.container != 'w-full' and expanded %}
     {% if layout != 'left-side' %}
       @media (min-width: 1280px) {
@@ -186,19 +208,20 @@
                   assign collection = collections[block.settings.collection]
                   assign default_label = 'homepage.onboarding.collection_title' | t
                 %}
-                {% render 'collection-card', 
-                  section: section, 
-                  collection: collection, 
-                  card_style: card_style, 
-                  text_alignment: section.settings.text_alignment, 
-                  image: block.settings.item_image, 
-                  show_product_count: section.settings.show_product_count, 
-                  enable_slider: enable_slider, 
-                  image_rounded: section.settings.image_rounded, 
-                  hover_effect: section.settings.hover_effect, 
+                {% render 'collection-card',
+                  section: section,
+                  collection: collection,
+                  card_style: card_style,
+                  text_alignment: section.settings.text_alignment,
+                  image: block.settings.item_image,
+                  video: block.settings.item_video,
+                  show_product_count: section.settings.show_product_count,
+                  enable_slider: enable_slider,
+                  image_rounded: section.settings.image_rounded,
+                  hover_effect: section.settings.hover_effect,
                   title: block.settings.title,
                   index: forloop.index,
-                  animated: animated, 
+                  animated: animated,
                   animation_effect: animation_effect
                 %}
               {% when 'banner' %}
@@ -701,6 +724,12 @@
           "type": "image_picker",
           "id": "item_image",
           "label": "Featured image"
+        },
+        {
+          "type": "video",
+          "id": "item_video",
+          "label": "Featured video",
+          "info": "Quando preenchido, substitui a imagem do card. Reproduz em loop, sem som."
         }
       ]
     },
