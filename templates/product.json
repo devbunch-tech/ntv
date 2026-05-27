@@ -33,7 +33,7 @@
         "price": {
           "type": "price",
           "settings": {
-            "show_saving": false,
+            "show_saving": true,
             "sale_badge_type": "percentage"
           }
         },
