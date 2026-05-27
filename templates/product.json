@@ -74,6 +74,10 @@
             "shipping_text": "<p><strong>Free Shipping & Returns: </strong>On all orders over $75</p>"
           }
         },
+        "description_dpPGL7": {
+          "type": "description",
+          "settings": {}
+        },
         "trust_badge_NyBMd4": {
           "type": "trust_badge",
           "settings": {
@@ -91,6 +95,7 @@
         "buy_buttons",
         "addons",
         "shipping_VBJFtx",
+        "description_dpPGL7",
         "trust_badge_NyBMd4"
       ],
       "settings": {
@@ -134,6 +139,7 @@
         "description",
         "tab"
       ],
+      "disabled": true,
       "custom_css": [
         ".m-tabs__header {justify-content: flex-start;}"
       ],
