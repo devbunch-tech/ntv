@@ -22,6 +22,28 @@
               {%- endif -%}
             </div>
           {% endif %}
+          {% if section.settings.footer_bottom_logo != blank %}
+            {%- assign logo_width = section.settings.footer_bottom_logo_width | default: 120 -%}
+            <div class="m-footer--bottom-logo m:w-full xl:m:w-auto" style="--footer-bottom-logo-width: {{ logo_width }}px;">
+              {%- if section.settings.footer_bottom_logo_link != blank -%}
+                <a href="{{ section.settings.footer_bottom_logo_link }}" class="m-footer--bottom-logo-link">
+                  <img
+                    src="{{ section.settings.footer_bottom_logo | image_url: width: 600 }}"
+                    alt="{{ section.settings.footer_bottom_logo.alt | default: shop.name | escape }}"
+                    width="{{ logo_width }}"
+                    height="{{ logo_width | divided_by: section.settings.footer_bottom_logo.aspect_ratio | default: logo_width }}"
+                    loading="lazy">
+                </a>
+              {%- else -%}
+                <img
+                  src="{{ section.settings.footer_bottom_logo | image_url: width: 600 }}"
+                  alt="{{ section.settings.footer_bottom_logo.alt | default: shop.name | escape }}"
+                  width="{{ logo_width }}"
+                  height="{{ logo_width | divided_by: section.settings.footer_bottom_logo.aspect_ratio | default: logo_width }}"
+                  loading="lazy">
+              {%- endif -%}
+            </div>
+          {% endif %}
           <div class="m-footer--bottom-right m:w-full m:flex-col lg:m:flex-row m:flex m:flex-wrap xl:m:justify-end">
             {% if section.settings.show_currency_selector or section.settings.show_language_selector %}
               <div class="m-footer--currency-language m:display-flex">
