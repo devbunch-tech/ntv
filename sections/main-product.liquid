@@ -1102,6 +1102,155 @@
           "default": "<p>Backordered</p>"
         }
       ]
+    },
+    {
+      "type": "coupon_card",
+      "name": "Cupom de desconto",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ícone (opcional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Ganhe 10% OFF na primeira compra"
+        },
+        {
+          "type": "text",
+          "id": "coupon_code",
+          "label": "Código do cupom",
+          "default": "BEMVINDA10"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto do botão",
+          "default": "COPIAR CUPOM"
+        },
+        {
+          "type": "text",
+          "id": "copied_label",
+          "label": "Texto após copiar",
+          "default": "COPIADO!"
+        }
+      ]
+    },
+    {
+      "type": "exchange_card",
+      "name": "Card Troca",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ícone (opcional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Troca descomplicada"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Descrição",
+          "default": "30 dias para trocar ou devolver, sem perguntas ou burocracia"
+        }
+      ]
+    },
+    {
+      "type": "installments_card",
+      "name": "Card Parcelamento",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Ícone (opcional)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Parcelamento flexível"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Descrição",
+          "default": "Parcele todas as suas compras em até 6x sem juros"
+        }
+      ]
+    },
+    {
+      "type": "cep_shipping",
+      "name": "Calculadora de Frete (CEP)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Calcula frete via API do Shopify (/cart/shipping_rates.json). Requer app de frete (Melhor Envio, Frenet, etc.) ou tarifas configuradas em Settings → Shipping."
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "default": "Calcule seu Frete"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder do CEP",
+          "default": "Digite seu CEP"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Texto do botão",
+          "default": "CALCULAR"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_free_shipping_note",
+          "label": "Exibir aviso de frete grátis",
+          "default": true
+        },
+        {
+          "type": "richtext",
+          "id": "free_shipping_note",
+          "label": "Aviso de frete grátis",
+          "default": "<p>Frete grátis acima de R$ 499,90</p>"
+        },
+        {
+          "type": "text",
+          "id": "error_invalid_cep",
+          "label": "Mensagem CEP inválido",
+          "default": "CEP inválido. Tente novamente."
+        },
+        {
+          "type": "text",
+          "id": "error_no_rates",
+          "label": "Mensagem sem opções",
+          "default": "Nenhuma opção de entrega encontrada para este CEP."
+        },
+        {
+          "type": "text",
+          "id": "link_correios_label",
+          "label": "Texto link Correios",
+          "default": "Não sei meu CEP"
+        },
+        {
+          "type": "url",
+          "id": "link_correios_url",
+          "label": "Link para consulta de CEP",
+          "default": "https://buscacepinter.correios.com.br/app/endereco/index.php"
+        }
+      ]
     }
   ]
 }

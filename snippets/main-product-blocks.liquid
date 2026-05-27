@@ -962,6 +962,140 @@
             </li>
           {% endif %}
         </ul>
+      {%- when 'coupon_card' -%}
+        <div class="product-block-group product-block-group--coupon">
+          <div class="m-product-coupon">
+            <div class="m-product-coupon__head">
+              <span class="m-product-coupon__icon">
+                {% if block.settings.icon != blank %}
+                  {% render 'responsive-image', image: block.settings.icon %}
+                {% else %}
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.59 13.41L13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="7" cy="7" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+                  </svg>
+                {% endif %}
+              </span>
+              {% if block.settings.title != blank %}
+                <p class="m-product-coupon__title">{{ block.settings.title }}</p>
+              {% endif %}
+            </div>
+            {% if block.settings.coupon_code != blank %}
+              <button
+                type="button"
+                class="m-product-coupon__btn"
+                data-copy-coupon
+                data-code="{{ block.settings.coupon_code | escape }}"
+                data-default-label="{{ block.settings.button_label | escape }}"
+                data-copied-label="{{ block.settings.copied_label | escape }}"
+              >
+                <span class="m-product-coupon__code">{{ block.settings.coupon_code }}</span>
+                <span class="m-product-coupon__action">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="9" y="9" width="13" height="13" rx="2" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span class="m-product-coupon__label">{{ block.settings.button_label }}</span>
+                </span>
+              </button>
+            {% endif %}
+          </div>
+        </div>
+        <script src="{{ 'copy-coupon.js' | asset_url }}" defer="defer"></script>
+      {%- when 'exchange_card' -%}
+        <div class="product-block-group product-block-group--benefit">
+          <div class="m-product-benefit">
+            <span class="m-product-benefit__icon">
+              {% if block.settings.icon != blank %}
+                {% render 'responsive-image', image: block.settings.icon %}
+              {% else %}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 7h13l-3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M21 17H8l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              {% endif %}
+            </span>
+            <div class="m-product-benefit__content">
+              {% if block.settings.title != blank %}
+                <h4 class="m-product-benefit__title">{{ block.settings.title }}</h4>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p class="m-product-benefit__desc">{{ block.settings.description }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {%- when 'installments_card' -%}
+        <div class="product-block-group product-block-group--benefit">
+          <div class="m-product-benefit">
+            <span class="m-product-benefit__icon">
+              {% if block.settings.icon != blank %}
+                {% render 'responsive-image', image: block.settings.icon %}
+              {% else %}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2.5" y="5.5" width="19" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M2.5 10h19" stroke="currentColor" stroke-width="1.5"/>
+                  <path d="M6 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              {% endif %}
+            </span>
+            <div class="m-product-benefit__content">
+              {% if block.settings.title != blank %}
+                <h4 class="m-product-benefit__title">{{ block.settings.title }}</h4>
+              {% endif %}
+              {% if block.settings.description != blank %}
+                <p class="m-product-benefit__desc">{{ block.settings.description }}</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {%- when 'cep_shipping' -%}
+        <div class="product-block-group product-block-group--cep">
+          <cep-shipping-calculator
+            class="m-product-cep"
+            data-product-id="{{ product.id }}"
+            data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+            data-error-invalid="{{ block.settings.error_invalid_cep | escape }}"
+            data-error-no-rates="{{ block.settings.error_no_rates | escape }}"
+          >
+            <div class="m-product-cep__header m:display-flex m:items-center m:justify-between">
+              {% if block.settings.heading != blank %}
+                <p class="m-product-cep__title">{{ block.settings.heading }}</p>
+              {% endif %}
+              {% if block.settings.show_free_shipping_note and block.settings.free_shipping_note != blank %}
+                <div class="m-product-cep__free rte">{{ block.settings.free_shipping_note }}</div>
+              {% endif %}
+            </div>
+            <form class="m-product-cep__form m:display-flex" data-cep-form novalidate>
+              <input
+                type="tel"
+                inputmode="numeric"
+                maxlength="9"
+                autocomplete="postal-code"
+                class="m-product-cep__input"
+                placeholder="{{ block.settings.placeholder }}"
+                data-cep-input
+                aria-label="{{ block.settings.placeholder }}"
+              >
+              <button type="submit" class="m-product-cep__btn" data-cep-submit>
+                {{ block.settings.button_label }}
+              </button>
+            </form>
+            {% if block.settings.link_correios_url != blank %}
+              <a href="{{ block.settings.link_correios_url }}" target="_blank" rel="noopener" class="m-product-cep__link">
+                {{ block.settings.link_correios_label }}
+              </a>
+            {% endif %}
+            <div class="m-product-cep__address" data-cep-address hidden></div>
+            <ul class="m-product-cep__rates" data-cep-rates hidden></ul>
+            <p class="m-product-cep__error" data-cep-error hidden></p>
+            <div class="m-product-cep__loading" data-cep-loading hidden>
+              <span class="m-product-cep__spinner" aria-hidden="true"></span>
+              <span>Calculando...</span>
+            </div>
+          </cep-shipping-calculator>
+        </div>
+        <script src="{{ 'cep-shipping.js' | asset_url }}" defer="defer"></script>
       {%- when 'complementary' -%}
         {{ 'product-complementary.css' | asset_url | stylesheet_tag }}
         {%- if settings.show_swatch_option == false and block.settings.enable_variant_options -%}
