@@ -312,6 +312,106 @@
         "animations": "inherit"
       }
     },
+    "testimonials_QDpReT": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_qAUkFr": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        },
+        "testimonial_3rB4RT": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        },
+        "testimonial_XaPBA6": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        },
+        "testimonial_NYR83T": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        },
+        "testimonial_pVYr4P": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        },
+        "testimonial_76PAmN": {
+          "type": "testimonial",
+          "settings": {
+            "title": "Love it so much",
+            "description": "<p>\"Short dress in a printed viscose weave with a round neckline, opening with a button at the back of the Seams with small frill trims at the waist and on the sleeves and skirt. Unlined.\"</p>",
+            "footer": "<p>Dean D. US</p>",
+            "image_text": "",
+            "image_link": "",
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_qAUkFr",
+        "testimonial_3rB4RT",
+        "testimonial_XaPBA6",
+        "testimonial_NYR83T",
+        "testimonial_pVYr4P",
+        "testimonial_76PAmN"
+      ],
+      "name": "Testimonials",
+      "settings": {
+        "heading": "What People Are Saying",
+        "heading_size": "h3",
+        "subheading": "",
+        "description": "",
+        "header_alignment": "center",
+        "container": "w-full",
+        "color_scheme": "",
+        "design": "testimonials-1",
+        "show_stars": true,
+        "autorotate": false,
+        "show_navigation": false,
+        "show_pagination": true,
+        "star_color": "#000",
+        "item_color_scheme": "",
+        "padding_top": 50,
+        "padding_bottom": 50,
+        "custom_class": "",
+        "animations": "inherit"
+      }
+    },
     "collapsible_tabs_JndiBV": {
       "type": "collapsible-tabs",
       "blocks": {
@@ -369,7 +469,7 @@
       ],
       "settings": {
         "container": "container",
-        "color_scheme": "",
+        "color_scheme": "footer",
         "image_position": "left",
         "column_gap": 100,
         "heading": "Discover more in our FAQ",
@@ -378,60 +478,10 @@
         "description": "",
         "header_alignment": "center",
         "padding_top": 100,
-        "padding_bottom": 0,
+        "padding_bottom": 100,
         "enable_preload_image": false,
         "animations": "inherit",
         "custom_class": ""
-      }
-    },
-    "product-recommendations": {
-      "type": "product-recommendations",
-      "settings": {
-        "container": "container-fluid",
-        "color_scheme": "",
-        "remove_params": false,
-        "heading": "Você pode gostar também",
-        "heading_size": "h3",
-        "text_align": "center",
-        "limit": 9,
-        "columns": 3,
-        "column_gap": 30,
-        "enable_slider": true,
-        "show_pagination": false,
-        "show_navigation": true,
-        "use_scroll_mobile": true,
-        "padding_top": 100,
-        "padding_bottom": 100,
-        "custom_class": "",
-        "animations": "inherit"
-      }
-    },
-    "recent-viewed-products": {
-      "type": "recent-viewed-products",
-      "disabled": true,
-      "settings": {
-        "container": "container-fluid",
-        "color_scheme": "",
-        "heading": "Recently Viewed Products",
-        "heading_size": "h3",
-        "text_align": "center",
-        "limit": 8,
-        "columns": 5,
-        "column_gap": 30,
-        "pcard_layout": "",
-        "pcard_image_ratio": "",
-        "show_vendor": false,
-        "hide_title": false,
-        "enable_slider": true,
-        "show_pagination": false,
-        "show_navigation": false,
-        "mobile_disable_slider": false,
-        "use_scroll_mobile": true,
-        "item_gap_mobile": 16,
-        "padding_top": 0,
-        "padding_bottom": 100,
-        "custom_class": "",
-        "animations": "inherit"
       }
     }
   },
@@ -441,8 +491,7 @@
     "product-details-tabs",
     "scrolling_promotion_MVNN6Q",
     "icon_box_9UtNky",
-    "collapsible_tabs_JndiBV",
-    "product-recommendations",
-    "recent-viewed-products"
+    "testimonials_QDpReT",
+    "collapsible_tabs_JndiBV"
   ]
 }
