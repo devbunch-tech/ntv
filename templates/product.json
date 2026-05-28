@@ -117,42 +117,6 @@
         "sticky_atc_compare": false
       }
     },
-    "product-details-tabs": {
-      "type": "product-details-tabs",
-      "blocks": {
-        "description": {
-          "type": "description",
-          "settings": {
-            "header": "Product description"
-          }
-        },
-        "tab": {
-          "type": "tab",
-          "settings": {
-            "header": "Shipping & Return",
-            "content": "<p>Shipping cost is based on weight. Just add products to your cart and use the Shipping Calculator to see the shipping price.</p><p>We want you to be 100% satisfied with your purchase. Items can be returned or exchanged within 30 days of delivery.</p>",
-            "content_page": ""
-          }
-        }
-      },
-      "block_order": [
-        "description",
-        "tab"
-      ],
-      "disabled": true,
-      "custom_css": [
-        ".m-tabs__header {justify-content: flex-start;}"
-      ],
-      "settings": {
-        "container": "container",
-        "color_scheme": "",
-        "default_open": true,
-        "padding_top": 0,
-        "padding_bottom": 50,
-        "custom_class": "",
-        "animations": "inherit"
-      }
-    },
     "scrolling_promotion_MVNN6Q": {
       "type": "scrolling-promotion",
       "blocks": {
@@ -231,83 +195,117 @@
         "custom_class": ""
       }
     },
-    "icon_box_9UtNky": {
-      "type": "icon-box",
+    "image_with_text_1_jqbGWP": {
+      "type": "image-with-text-1",
       "blocks": {
-        "iconbox_pJbJGA": {
-          "type": "iconbox",
+        "item_gkRRih": {
+          "type": "item",
           "settings": {
-            "card_color_scheme": "",
-            "image_by_url": "",
-            "title": "100 Days Return",
-            "description": "<p>Enjoy a seamless shopping experience, facilitated<br/> by our complimentary shipping.</p>",
+            "color_scheme": "",
             "link": "",
-            "button_label": "Learn more [arrow]",
-            "button_link": "",
-            "button_style": "m-button--plain",
-            "button_size": ""
+            "content_position": "center_center",
+            "content_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "title": "Image card",
+            "subtitle": "",
+            "button_label": "Shop now",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "button_fixed": false
           }
         },
-        "iconbox_RW46nE": {
-          "type": "iconbox",
+        "item_MCGR7p": {
+          "type": "item",
           "settings": {
-            "card_color_scheme": "",
-            "image_by_url": "",
-            "title": "Lifetime Warranty",
-            "description": "<p>Our dedicated team provides timely assistance, <br/>committed to addressing your queries.</p>",
+            "color_scheme": "",
             "link": "",
-            "button_label": "Learn more [arrow]",
-            "button_link": "",
-            "button_style": "m-button--plain",
-            "button_size": ""
+            "content_position": "center_center",
+            "content_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "title": "Image card",
+            "subtitle": "",
+            "button_label": "Shop now",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "button_fixed": false
           }
         },
-        "iconbox_EiwgTg": {
-          "type": "iconbox",
+        "item_QqtTFR": {
+          "type": "item",
           "settings": {
-            "card_color_scheme": "",
-            "image_by_url": "",
-            "title": "Customers Services",
-            "description": "<p>Invest in our activewear with absolute confidence, backed by our 30-day satisfaction guarantee.</p>",
+            "color_scheme": "",
             "link": "",
-            "button_label": "Learn more [arrow]",
-            "button_link": "",
-            "button_style": "m-button--plain",
-            "button_size": ""
+            "content_position": "center_center",
+            "content_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "title": "Image card",
+            "subtitle": "",
+            "button_label": "Shop now",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "button_fixed": false
+          }
+        },
+        "item_QFcLmD": {
+          "type": "item",
+          "settings": {
+            "color_scheme": "",
+            "link": "",
+            "content_position": "center_center",
+            "content_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "title": "Image card",
+            "subtitle": "",
+            "button_label": "Shop now",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "button_fixed": false
+          }
+        },
+        "item_hEHBny": {
+          "type": "item",
+          "settings": {
+            "color_scheme": "",
+            "link": "",
+            "content_position": "center_center",
+            "content_alignment": "center",
+            "text_size": "medium",
+            "text_color": "black",
+            "title": "Image card",
+            "subtitle": "",
+            "button_label": "Shop now",
+            "button_style": "m-button--primary",
+            "button_size": "",
+            "button_fixed": false
           }
         }
       },
       "block_order": [
-        "iconbox_pJbJGA",
-        "iconbox_RW46nE",
-        "iconbox_EiwgTg"
+        "item_gkRRih",
+        "item_MCGR7p",
+        "item_QqtTFR",
+        "item_QFcLmD",
+        "item_hEHBny"
       ],
-      "disabled": true,
-      "custom_css": [
-        ".m-icon-box__heading {font-weight: 400;}"
-      ],
+      "name": "Image cards",
       "settings": {
-        "container": "container",
-        "color_scheme": "",
-        "heading": "Why Minimog?",
+        "heading": "Outras Coleções",
         "heading_size": "h3",
         "subheading": "",
         "description": "",
         "header_alignment": "center",
-        "item_per_row": 3,
-        "item_gap": 30,
-        "item_gap_mobile": 10,
-        "card_style": "vertical",
-        "image_max_width": "70px",
-        "content_alignment": "center",
-        "hover_effect": "scaling-up",
-        "enable_slider": false,
-        "show_pagination": false,
-        "show_navigation": false,
+        "container": "container-fluid",
+        "color_scheme": "",
+        "layout": "layout_2",
+        "gap": 30,
         "use_scroll_mobile": true,
-        "use_grid_column_mb": false,
-        "padding_top": 100,
-        "padding_bottom": 0,
+        "mobile_gap": 10,
+        "padding_top": 50,
+        "padding_bottom": 50,
         "custom_class": "",
         "animations": "inherit"
       }
@@ -483,15 +481,51 @@
         "animations": "inherit",
         "custom_class": ""
       }
+    },
+    "product-details-tabs": {
+      "type": "product-details-tabs",
+      "blocks": {
+        "description": {
+          "type": "description",
+          "settings": {
+            "header": "Product description"
+          }
+        },
+        "tab": {
+          "type": "tab",
+          "settings": {
+            "header": "Shipping & Return",
+            "content": "<p>Shipping cost is based on weight. Just add products to your cart and use the Shipping Calculator to see the shipping price.</p><p>We want you to be 100% satisfied with your purchase. Items can be returned or exchanged within 30 days of delivery.</p>",
+            "content_page": ""
+          }
+        }
+      },
+      "block_order": [
+        "description",
+        "tab"
+      ],
+      "disabled": true,
+      "custom_css": [
+        ".m-tabs__header {justify-content: flex-start;}"
+      ],
+      "settings": {
+        "container": "container",
+        "color_scheme": "",
+        "default_open": true,
+        "padding_top": 0,
+        "padding_bottom": 50,
+        "custom_class": "",
+        "animations": "inherit"
+      }
     }
   },
   "order": [
     "breadcrumb",
     "main",
-    "product-details-tabs",
     "scrolling_promotion_MVNN6Q",
-    "icon_box_9UtNky",
+    "image_with_text_1_jqbGWP",
     "testimonials_QDpReT",
-    "collapsible_tabs_JndiBV"
+    "collapsible_tabs_JndiBV",
+    "product-details-tabs"
   ]
 }
