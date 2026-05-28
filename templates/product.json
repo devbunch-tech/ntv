@@ -398,14 +398,14 @@
         "description": "",
         "header_alignment": "center",
         "container": "w-full",
-        "color_scheme": "",
+        "color_scheme": "dark",
         "design": "testimonials-1",
         "show_stars": true,
         "autorotate": false,
         "show_navigation": false,
         "show_pagination": true,
         "star_color": "#000",
-        "item_color_scheme": "",
+        "item_color_scheme": "scheme-8ac72441-8374-4a60-8496-d8d19b299960",
         "padding_top": 50,
         "padding_bottom": 50,
         "custom_class": "",
@@ -418,7 +418,7 @@
         "item_bHzngY": {
           "type": "item",
           "settings": {
-            "header": "How long does it take to process an order?",
+            "header": "Quanto tempo leva para chegar meu pedido?",
             "text_size": "h4",
             "content": "<p>All the details you love about the original—with a fresh flared block heel and modern square toe. Expertly crafted using soft Nappa leather, this essential style molds and moves with you to keep you comfortably on your feet all day (and night). This boot uses leather sourced from a Leather Working Group-approved trader. The Leather Working Group (LWG) Audit Standards provide transparency and accountability within the leather supply chain—covering energy and water usage.</p>",
             "content_page": "",
@@ -428,7 +428,7 @@
         "item_RGMrHr": {
           "type": "item",
           "settings": {
-            "header": "Do you ship internationally?",
+            "header": "Posso trocar ou devolver?",
             "text_size": "h4",
             "content": "<p>All the details you love about the original—with a fresh flared block heel and modern square toe. Expertly crafted using soft Nappa leather, this essential style molds and moves with you to keep you comfortably on your feet all day (and night). This boot uses leather sourced from a Leather Working Group-approved trader. The Leather Working Group (LWG) Audit Standards provide transparency and accountability within the leather supply chain—covering energy and water usage.</p>",
             "content_page": "",
@@ -438,7 +438,7 @@
         "item_nceVP8": {
           "type": "item",
           "settings": {
-            "header": "What is your return policy?",
+            "header": "Quais as formas de pagamento?",
             "text_size": "h4",
             "content": "<p>All the details you love about the original—with a fresh flared block heel and modern square toe. Expertly crafted using soft Nappa leather, this essential style molds and moves with you to keep you comfortably on your feet all day (and night). This boot uses leather sourced from a Leather Working Group-approved trader. The Leather Working Group (LWG) Audit Standards provide transparency and accountability within the leather supply chain—covering energy and water usage.</p>",
             "content_page": "",
@@ -448,7 +448,7 @@
         "item_NQRQAp": {
           "type": "item",
           "settings": {
-            "header": "What are your sizing options?",
+            "header": "Tenho algum benefício se for membro do canal NTV?",
             "text_size": "h4",
             "content": "<p>All the details you love about the original—with a fresh flared block heel and modern square toe. Expertly crafted using soft Nappa leather, this essential style molds and moves with you to keep you comfortably on your feet all day (and night). This boot uses leather sourced from a Leather Working Group-approved trader. The Leather Working Group (LWG) Audit Standards provide transparency and accountability within the leather supply chain—covering energy and water usage.</p>",
             "content_page": "",
@@ -472,7 +472,7 @@
         "color_scheme": "footer",
         "image_position": "left",
         "column_gap": 100,
-        "heading": "Discover more in our FAQ",
+        "heading": "FAQ - Perguntas Frequentes",
         "heading_size": "h3",
         "subheading": "",
         "description": "",
